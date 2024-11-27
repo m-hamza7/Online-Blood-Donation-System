@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Management System</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        /* Header Styling */
+        header {
+            width: 100%;
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed; /* Keep header at the top */
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header img.logo {
+            max-width: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 10px 0;
+            display: inline-block;
+            color: white;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        nav a.btn {
+            background: black;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        /* Main Styling */
+        main {
+            margin: 120px auto 0;
+            max-width: 800px;
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main h2 {
+            color: #c0392b;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        main p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Blood Donation Management System</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/register">Sign Up</a>
+            <a href="/login">Login</a>
+            <a href="/admin" class="btn">Admin</a> <!-- Admin link -->
+        </nav>
+    </header>
+    <main>
+        <h2>About Us</h2>
+        <p>Your platform for blood donation and management.</p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h2 {
+            color: #c0392b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        form button {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        form button:hover {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Update User</h2>
+        <form method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+            
+            {% if user.role == 'Donor' %}
+            <label for="blood_type">Blood Type:</label>
+            <select id="blood_type" name="blood_type" required>
+                <option value="A+" {% if user.blood_type == 'A+' %}selected{% endif %}>A+</option>
+                <option value="A-" {% if user.blood_type == 'A-' %}selected{% endif %}>A-</option>
+                <option value="B+" {% if user.blood_type == 'B+' %}selected{% endif %}>B+</option>
+                <option value="B-" {% if user.blood_type == 'B-' %}selected{% endif %}>B-</option>
+                <option value="O+" {% if user.blood_type == 'O+' %}selected{% endif %}>O+</option>
+                <option value="O-" {% if user.blood_type == 'O-' %}selected{% endif %}>O-</option>
+                <option value="AB+" {% if user.blood_type == 'AB+' %}selected{% endif %}>AB+</option>
+                <option value="AB-" {% if user.blood_type == 'AB-' %}selected{% endif %}>AB-</option>
+            </select>
+            {% endif %}
+
+            <input type="hidden" name="role" value="{{ user.role }}">
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</body>
+</html>

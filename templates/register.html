@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <style>
+        /* Body Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, rgba(0, 150, 136, 0.8), rgba(255, 87, 34, 0.8)); /* Gradient background */
+            position: relative;
+            overflow: hidden;
+            background-size: 400% 400%; /* For animated background */
+            animation: gradientAnimation 15s ease infinite; /* Animation for background */
+        }
+
+        /* Keyframe for Background Animation */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Form Container */
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .form-group {
+            width: 48%; /* Adjusting the width of the form fields */
+            margin-bottom: 20px;
+        }
+
+        .half {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #c0392b;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: #c0392b;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hide/Show Fields for Donors or Hospitals */
+        #donor-fields, #hospital-fields {
+            display: none; /* Initially hide donor and hospital-specific fields */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form method="POST">
+            <!-- Split the form into two halves -->
+            <div class="half">
+                <!-- Left half (First 5 fields) -->
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="role" id="role" onchange="toggleFields()" required>
+                        <option value="Donor">Donor</option>
+                        <option value="Hospital">Hospital</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+                </div>
+            </div>
+
+            <!-- Right half (Next 5 fields) -->
+            <div class="half">
+                <div id="donor-fields" class="form-group">
+                    <label>Contact Info</label>
+                    <input type="text" name="contact_info">
+                </div>
+                <div id="donor-fields" class="form-group">
+                    <label>Blood Type</label>
+                    <select name="blood_type" required>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div id="hospital-fields" class="form-group">
+                    <label>Contact Info</label>
+                    <input type="text" name="contact_info">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label>State</label>
+                    <input type="text" name="state" required>
+                </div>
+                <div class="form-group">
+                    <label>Zip Code</label>
+                    <input type="text" name="zip_code" required>
+                </div>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleFields() {
+            const role = document.getElementById('role').value;
+            document.getElementById('donor-fields').style.display = role === 'Donor' ? 'block' : 'none';
+            document.getElementById('hospital-fields').style.display = role === 'Hospital' ? 'block' : 'none';
+        }
+
+        window.onload = function() {
+            toggleFields(); // Call this function to display donor/hospital fields when the page loads
+        };
+    </script>
+</body>
+</html>

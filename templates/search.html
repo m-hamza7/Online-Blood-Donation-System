@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Donors or Hospitals</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        /* Header Styling */
+        header {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: fixed; /* Keeps header at the top */
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        header .logo {
+            max-width: 50px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        /* Main Container Styling */
+        main {
+            padding: 100px 20px 20px; /* Add padding to account for fixed header */
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styling */
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+
+        /* Results Table Styling */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .results-table th, .results-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .results-table th {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            font-weight: bold;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Footer Styling */
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Search Donors</h1>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Search Form -->
+            <form action="{{ url_for('search') }}" method="post">
+                <div class="form-group">
+                    <label for="search_by">Search By:</label>
+                    <select name="search_by" id="search_by" required>
+                        <option value="blood_type">Blood Type</option>
+                        <option value="location">Location</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="search" placeholder="Enter search term" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Search</button>
+                </div>
+            </form>
+
+            {% if results %}
+            <!-- Results Section -->
+            <div class="results-container">
+                <h2>Search Results:</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Donor ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Blood Type</th>
+                            <th>City</th>
+                            <th>Contact Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.donor_id }}</td>
+                            <td>{{ result.username }}</td>
+                            <td>{{ result.name }}</td>
+                            <td>{{ result.blood_type }}</td>
+                            <td>{{ result.city }}</td>
+                            <td>{{ result.contact_info }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Online Blood Donation System</p>
+    </footer>
+</body>
+</html>
