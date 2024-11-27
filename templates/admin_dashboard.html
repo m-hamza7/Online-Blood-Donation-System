@@ -142,7 +142,8 @@
         <h1>Admin Dashboard</h1>
         <nav>
             <ul>
-                <a href="{{ url_for('admin_dashboard', view='users') }}">USERS</a>
+                <a href="{{ url_for('register')}}">+ADD USER</a>
+                <a href="{{ url_for('admin_dashboard', view='users') }}">VIEW USERS</a>
                 <a href="{{ url_for('search') }}">SEARCH</a>
                 <a href="{{ url_for('admin_dashboard', view='blood_requests') }}">BLOOD REQUESTS</a>
                 <a href="{{ url_for('admin_dashboard', view='appointments') }}">APPOINTMENTS</a>
