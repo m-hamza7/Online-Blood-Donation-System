@@ -320,7 +320,8 @@ def admin_dashboard():
                     br.hospital_id, 
                     br.blood_type, 
                     br.quantity, 
-                    br.requested_date
+                    br.requested_date,
+                    br.status
                 FROM blood_requests br
             """)
             blood_requests = cursor.fetchall()
@@ -334,7 +335,8 @@ def admin_dashboard():
                     a.donor_id, 
                     a.hospital_id, 
                     a.date, 
-                    a.time
+                    a.time,
+                    a.status
                 FROM appointments a
             """)
             appointments = cursor.fetchall()
@@ -343,21 +345,32 @@ def admin_dashboard():
         else:
             data = {}
 
-        if request.method == 'POST' and 'delete_user_id' in request.form:
-            user_id = request.form['delete_user_id']
+        if request.method == 'POST':
+        # Handle user deletion
+            if 'delete_user_id' in request.form:
+                user_id = request.form['delete_user_id']
+                cursor.execute("DELETE FROM Appointments WHERE donor_id = %s", (user_id,))
+                cursor.execute("DELETE FROM Appointments WHERE hospital_id = %s", (user_id,))
+                cursor.execute("DELETE FROM Donors WHERE donor_id = %s", (user_id,))
+                cursor.execute("DELETE FROM Hospitals WHERE hospital_id = %s", (user_id,))
+                cursor.execute("DELETE FROM Users WHERE user_id = %s", (user_id,))
+                conn.commit()
+                flash('User removed successfully!', 'success')
 
-            # Delete associated appointments first
-            cursor.execute("DELETE FROM Appointments WHERE donor_id = %s", (user_id,))
-            cursor.execute("DELETE FROM Appointments WHERE hospital_id = %s", (user_id,))
+            # Handle blood request deletion
+            elif 'delete_request_id' in request.form:
+                request_id = request.form['delete_request_id']
+                cursor.execute("DELETE FROM Blood_Requests WHERE request_id = %s", (request_id,))
+                conn.commit()
+                flash('Blood request deleted successfully!', 'success')
 
-            # Delete from Donors or Hospitals
-            cursor.execute("DELETE FROM Donors WHERE donor_id = %s", (user_id,))
-            cursor.execute("DELETE FROM Hospitals WHERE hospital_id = %s", (user_id,))
+            # Handle appointment deletion
+            elif 'delete_appointment_id' in request.form:
+                appointment_id = request.form['delete_appointment_id']
+                cursor.execute("DELETE FROM Appointments WHERE appointment_id = %s", (appointment_id,))
+                conn.commit()
+                flash('Appointment deleted successfully!', 'success')
 
-            # Then delete from Users
-            cursor.execute("DELETE FROM Users WHERE user_id = %s", (user_id,))
-            conn.commit()
-            flash('User removed successfully!', 'success')
 
         cursor.close()
         conn.close()

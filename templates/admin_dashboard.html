@@ -203,6 +203,8 @@
                     <th>Blood Type</th>
                     <th>Quantity</th>
                     <th>Requested Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -213,6 +215,14 @@
                     <td>{{ request.blood_type }}</td>
                     <td>{{ request.quantity }}</td>
                     <td>{{ request.requested_date }}</td>
+                    <td>{{request.status}}</td>
+                    <td>
+                        <form method="POST" action="/admin_dashboard">
+                            <input type="hidden" name="delete_request_id" value="{{ request.request_id }}">
+                            <button type="submit" class="btn">Delete</button>
+                        </form>
+                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -228,6 +238,8 @@
                     <th>Hospital ID</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -239,6 +251,14 @@
                     <td>{{ appointment.hospital_id }}</td>
                     <td>{{ appointment.date }}</td>
                     <td>{{ appointment.time }}</td>
+                    <td>{{appointment.status}}</td>
+                    <td>
+                        <form method="POST" action="/admin_dashboard">
+                            <input type="hidden" name="delete_appointment_id" value="{{ appointment.appointment_id }}">
+                            <button type="submit" class="btn">Delete</button>
+                        </form>
+                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>

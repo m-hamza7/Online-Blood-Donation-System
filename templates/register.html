@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-
+    
     <style>
         /* Body Styling */
         body {
@@ -130,14 +130,13 @@
         }
 
     </style>
+
 </head>
 <body>
     <div class="container">
         <h2>Register</h2>
         <form method="POST">
-            <!-- Split the form into two halves -->
             <div class="half">
-                <!-- Left half (First 5 fields) -->
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" required>
@@ -162,16 +161,15 @@
                     <input type="text" name="name" required>
                 </div>
             </div>
-
-            <!-- Right half (Next 5 fields) -->
             <div class="half">
-                <div id="donor-fields" class="form-group">
+                <!-- Donor fields -->
+                <div class="form-group donor-fields">
                     <label>Contact Info</label>
                     <input type="text" name="contact_info">
                 </div>
-                <div id="donor-fields" class="form-group">
+                <div class="form-group donor-fields">
                     <label>Blood Type</label>
-                    <select name="blood_type" required>
+                    <select name="blood_type">
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -182,7 +180,8 @@
                         <option value="AB-">AB-</option>
                     </select>
                 </div>
-                <div id="hospital-fields" class="form-group">
+                <!-- Hospital fields -->
+                <div class="form-group hospital-fields">
                     <label>Contact Info</label>
                     <input type="text" name="contact_info">
                 </div>
@@ -199,21 +198,26 @@
                     <input type="text" name="zip_code" required>
                 </div>
             </div>
-
             <button type="submit">Register</button>
         </form>
     </div>
-
     <script>
         function toggleFields() {
             const role = document.getElementById('role').value;
-            document.getElementById('donor-fields').style.display = role === 'Donor' ? 'block' : 'none';
-            document.getElementById('hospital-fields').style.display = role === 'Hospital' ? 'block' : 'none';
+            // Show/hide donor-specific fields
+            const donorFields = document.querySelectorAll('.donor-fields');
+            donorFields.forEach(field => {
+                field.style.display = role === 'Donor' ? 'block' : 'none';
+            });
+
+            // Show/hide hospital-specific fields
+            const hospitalFields = document.querySelectorAll('.hospital-fields');
+            hospitalFields.forEach(field => {
+                field.style.display = role === 'Hospital' ? 'block' : 'none';
+            });
         }
 
-        window.onload = function() {
-            toggleFields(); // Call this function to display donor/hospital fields when the page loads
-        };
+        window.onload = toggleFields;
     </script>
 </body>
 </html>
