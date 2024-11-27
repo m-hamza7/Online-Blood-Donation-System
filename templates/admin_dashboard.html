@@ -142,12 +142,10 @@
         <h1>Admin Dashboard</h1>
         <nav>
             <ul>
-                <a href="{{ url_for('register') }}">ADD USER</a> <!-- New Add User Link -->
                 <a href="{{ url_for('admin_dashboard', view='users') }}">USERS</a>
                 <a href="{{ url_for('search') }}">SEARCH</a>
                 <a href="{{ url_for('admin_dashboard', view='blood_requests') }}">BLOOD REQUESTS</a>
                 <a href="{{ url_for('admin_dashboard', view='appointments') }}">APPOINTMENTS</a>
-
             </ul>
         </nav>
     </header>
@@ -175,13 +173,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.blood_type if user.role == 'Donor' else 'N/A' }}</td>
                     <td>
-
-                       <!-- <form method="POST" action="/admin_dashboard">
-                            <input type="hidden" name="delete_user_id" value="{{ user.user_id }}">
-                            <button type="submit" class="btn">Delete</button>
-                        </form>
-
-                        <td>-->
+                        
                             <!-- Delete Form -->
                             <form method="POST" action="/admin_dashboard" style="display: inline-block;">
                                 <input type="hidden" name="delete_user_id" value="{{ user.user_id }}">

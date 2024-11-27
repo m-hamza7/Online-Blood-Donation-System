@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,110 +27,161 @@
     </header>
 
     <!-- View Profile Section -->
+     
     {% if view_profile %}
     <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
         <h2 style="color: #c0392b; text-align: center;">Your Profile Details</h2>
-    
-        {% if not edit_mode %}
-        <!-- Display Profile Details -->
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th><td style="padding: 10px;">{{ donor.name }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">Email</th><td style="padding: 10px;">{{ donor.email }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">Contact Info</th><td style="padding: 10px;">{{ donor.contact_info }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">Blood Type</th><td style="padding: 10px;">{{ donor.blood_type }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">City</th><td style="padding: 10px;">{{ donor.city }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">State</th><td style="padding: 10px;">{{ donor.state }}</td></tr>
-            <tr><th style="text-align: left; padding: 10px; background: #f5f5f5;">Zip Code</th><td style="padding: 10px;">{{ donor.zip_code }}</td></tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th>
+                <td style="padding: 10px;">{{ donor.name }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Email</th>
+                <td style="padding: 10px;">{{ donor.email }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Contact Info</th>
+                <td style="padding: 10px;">{{ donor.contact_info }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Blood Type</th>
+                <td style="padding: 10px;">{{ donor.blood_type }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">City</th>
+                <td style="padding: 10px;">{{ donor.city }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">State</th>
+                <td style="padding: 10px;">{{ donor.state }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Zip Code</th>
+                <td style="padding: 10px;">{{ donor.zip_code }}</td>
+            </tr>
         </table>
+        <!-- Edit Profile Button -->
         <div style="text-align: center; margin-top: 20px;">
-            <a href="?view_profile=true&edit_mode=true" style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 5px; font-weight: bold; transition: transform 0.3s;">Edit Details</a>
+            <a href="?edit_profile=true" style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">Edit Profile</a>
         </div>
-        {% else %}
-        <!-- Edit Profile Form -->
-        <form method="POST" action="/donor_profile?view_profile=true">
-            <input type="hidden" name="edit_mode" value="true">
-            <div style="margin-bottom: 10px;">
-                <label for="name" style="display: block; font-weight: bold;">Name</label>
-                <input type="text" id="name" name="name" value="{{ donor.name }}" style="width: 100%; padding: 10px;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="email" style="display: block; font-weight: bold;">Email</label>
-                <input type="email" id="email" name="email" value="{{ donor.email }}" style="width: 100%; padding: 10px;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="contact_info" style="display: block; font-weight: bold;">Contact Info</label>
-                <input type="text" id="contact_info" name="contact_info" value="{{ donor.contact_info }}" style="width: 100%; padding: 10px;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="blood_type" style="display: block; font-weight: bold;">Blood Type</label>
-                <select id="blood_type" name="blood_type" style="width: 100%; padding: 10px;">
-                    {% for blood in ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] %}
-                    <option value="{{ blood }}" {% if blood == donor.blood_type %}selected{% endif %}>{{ blood }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="city" style="display: block; font-weight: bold;">City</label>
-                <input type="text" id="city" name="city" value="{{ donor.city }}" style="width: 100%; padding: 10px;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="state" style="display: block; font-weight: bold;">State</label>
-                <input type="text" id="state" name="state" value="{{ donor.state }}" style="width: 100%; padding: 10px;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="zip_code" style="display: block; font-weight: bold;">Zip Code</label>
-                <input type="text" id="zip_code" name="zip_code" value="{{ donor.zip_code }}" style="width: 100%; padding: 10px;">
-            </div>
-            <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Save Changes</button>
-        </form>
-        {% endif %}
     </section>
-    
     {% endif %}
 
-    <!-- Blood Requests Table -->
-    <section style="padding: 20px; max-width: 1000px; margin: auto;">
-        <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
-        {% if blood_requests %}
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
-                <thead>
-                    <tr>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in blood_requests %}
-                    
-                    <tr>
-                        <td style="padding: 10px;">{{ request.blood_type }}</td>
-                        <td style="padding: 10px;">{{ request.quantity }}</td>
-                        <td style="padding: 10px;">{{ request.requested_date }}</td>
-                        <td style="padding: 10px;">{{ request.name }}</td>
-                        <td style="padding: 10px;">{{ request.city }}</td>
-                        <td style="padding: 10px;">
-                            <form method="POST">
-                                <label for="date">Date:</label>
-                                <input type="date" name="date" required>
-                                <label for="time">Time:</label>
-                                <input type="time" name="time" required>
-                                <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
-                                <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
-                            </form>
-                        </td>
-                    </tr>
-                    
-                    {% endfor %}
-                </tbody>
+    <!-- Edit Profile Section -->
+    <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+        {% if edit_profile %}
+        <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
+        <form method="POST">
+            <input type="hidden" name="action" value="edit_profile">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <tr>
+                    <th style="text-align: left; padding: 10px;">Name</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name="name" value="{{ donor.name }}" required style="width: 100%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">Email</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name=email value="{{ donor.email }}" required style="width: 100%; padding: 8px;%"</td>
+                    </td>  
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">Contact Info</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name="contact_info" value="{{ donor.contact_info }}" required style="width: 100%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">Blood Type</th>
+                    <td style="padding: 10px;">
+                        <select name="blood_type" required style="width: 100%; padding: 8px;">
+                            <option value="A+" {% if donor.blood_type == 'A+' %}selected{% endif %}>A+</option>
+                            <option value="A-" {% if donor.blood_type == 'A-' %}selected{% endif %}>A-</option>
+                            <option value="B+" {% if donor.blood_type == 'B+' %}selected{% endif %}>B+</option>
+                            <option value="B-" {% if donor.blood_type == 'B-' %}selected{% endif %}>B-</option>
+                            <option value="O+" {% if donor.blood_type == 'O+' %}selected{% endif %}>O+</option>
+                            <option value="O-" {% if donor.blood_type == 'O-' %}selected{% endif %}>O-</option>
+                            <option value="AB+" {% if donor.blood_type == 'AB+' %}selected{% endif %}>AB+</option>
+                            <option value="AB-" {% if donor.blood_type == 'AB-' %}selected{% endif %}>AB-</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">City</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name="city" value="{{ donor.city }}" required style="width: 100%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">State</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name="state" value="{{ donor.state }}" required style="width: 100%; padding: 8px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px;">Zip Code</th>
+                    <td style="padding: 10px;">
+                        <input type="text" name="zip_code" value="{{ donor.zip_code }}" required style="width: 100%; padding: 8px;">
+                    </td>
+                </tr>
             </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
+                <a href="/donor_profile?view_profile=true" style="margin-left: 10px; text-decoration: none; color: #c0392b;">Cancel</a>
+            </div>
+        </form>
         {% else %}
-            <p style="text-align: center;">No matching blood requests found.</p>
+        <!--<div style="text-align: center; margin-top: 20px;">
+            <a href="/donor_profile?edit_profile=true" style="background: #c0392b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Edit Profile</a>
+        </div>-->
         {% endif %}
-    </section>
+    
+        <!-- Blood Requests Table -->
+        <section style="padding: 20px; max-width: 1000px; margin: auto;">
+            <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
+            {% if blood_requests %}
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in blood_requests %}
+                        
+                        <tr>
+                            <td style="padding: 10px;">{{ request.blood_type }}</td>
+                            <td style="padding: 10px;">{{ request.quantity }}</td>
+                            <td style="padding: 10px;">{{ request.requested_date }}</td>
+                            <td style="padding: 10px;">{{ request.name }}</td>
+                            <td style="padding: 10px;">{{ request.city }}</td>
+                            <td style="padding: 10px;">
+                                <form method="POST">
+                                    <label for="date">Date:</label>
+                                    <input type="date" name="date" required>
+                                    <label for="time">Time:</label>
+                                    <input type="time" name="time" required>
+                                    <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
+                                    <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
+                                </form>
+                            </td>
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="text-align: center;">No matching blood requests found.</p>
+            {% endif %}
+        </section>
+    
 
     <footer style="text-align: center; padding: 20px; background: #c0392b; color: white;">
         <p>&copy; 2024 Online Blood Donation System</p>
