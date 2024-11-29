@@ -126,7 +126,7 @@
 
         table th {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
-            color: white;
+            color: Black;
         }
 
         table tr:hover {
@@ -155,6 +155,7 @@
 
         /* Footer Styling */
         footer {
+            
             text-align: center;
             padding: 20px;
             background: #333;
@@ -168,127 +169,194 @@
         <h1>Hospital Dashboard: </h1>
         <h1>{{ hospital.hospital_name }} - {{ hospital.hospital_city }}</h1>
         <a href="{{ url_for('search') }}">Search Donors</a>
+        <a href="?view_profile=true">View Profile</a>
     </header>
 
     <main>
-        <!-- Blood Request Form -->
-        <section>
-            <h2>Make a Blood Request</h2>
+
+        {% if view_profile %}
+        <section  style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <h2>Hospital Profile</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th>
+                    <td style="padding: 10px;">{{ hospital.hospital_name }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">City</th>
+                    <td style="padding: 10px;">{{ hospital.hospital_city }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Email</th>
+                    <td style="padding: 10px;">{{ hospital.h_email }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">State</th>
+                    <td style="padding: 10px;">{{ hospital.hospital_state }}</td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="?edit_profile=true" class="btn" style="background-color: #2ecc71; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Edit Profile</a>
+            </div>
+        </section>
+        {% endif %}
+
+        {% if edit_profile %}
+        <!-- Edit Profile Section -->
+        <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); margin-top: 20px;">
+            <h2>Edit Hospital Profile</h2>
             <form method="POST">
-                <label for="blood_type">Blood Type:</label>
-                <select name="blood_type" id="blood_type" required>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                </select>
-                <label for="quantity">Quantity (in units):</label>
-                <input type="number" name="quantity" id="quantity" min="1" required>
-                <button type="submit" class="btn">Submit Request</button>
+                <label for="hospital_name">Name</label>
+                <input type="text" id="hospital_name" name="hospital_name" value="{{ hospital.hospital_name }}" required>
+        
+                <label for="hospital_city">City</label>
+                <input type="text" id="hospital_city" name="hospital_city" value="{{ hospital.hospital_city }}" required>
+        
+                <label for="h_email">Email</label>
+                <input type="email" id="h_email" name="h_email" value="{{ hospital.h_email }}" required>
+        
+                <label for="hospital_state">State</label>
+                <input type="text" id="hospital_state" name="hospital_state" value="{{ hospital.hospital_state }}" required>
+        
+                <button type="submit" class="btn" style="background-color: #3498db; color: white;">Save Changes</button>
             </form>
         </section>
-
-        <!-- Appointments Table -->
-        <!-- Appointments Table -->
-<section>
-    <h2>Scheduled Appointments</h2>
-    {% if appointments %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Donor Name</th>
-                    <th>Blood Type</th>
-                    <th>Contact Info</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in appointments %}
-                    <tr>
-                        <td>{{ appointment.donor_name }}</td>
-                        <td>{{ appointment.blood_type }}</td>
-                        <td>{{ appointment.contact_info }}</td>
-                        <td>{{ appointment.date }}</td>
-                        <td>{{ appointment.time }}</td>
-                        <td>
-                            <form method="POST" style="display:inline;">
-                                <input type="hidden" name="appointment_id" value="{{ appointment.appointment_id }}">
-                                <input type="hidden" name="request_id" value="{{ appointment.request_id }}">
-                                <button type="submit" class="btn" style="background-color: #2ecc71; color: white;">Manage</button>
-                            </form>
-                            <form method="POST" style="display:inline;">
-                                <input type="hidden" name="reject_appointment_id" value="{{ appointment.appointment_id }}">
-                                <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Reject</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No appointments found.</p>
-    {% endif %}
-</section>
-
-<!-- Existing Blood Requests Table -->
-<section>
-    <h2>Existing Blood Requests</h2>
-    {% if blood_requests %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Request ID</th>
-                    <th>Blood Type</th>
-                    <th>Quantity</th>
-                    <th>Request Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in blood_requests %}
-                    <tr>
-                        <td>{{ request.request_id }}</td>
-                        <td>{{ request.blood_type }}</td>
-                        <td>{{ request.quantity }}</td>
-                        <td>{{ request.requested_date }}</td>
-                        <td>{{ request.status }}</td>
-                        <td>
-                            {% if request.status == 'Open' %}
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="delete_request_id" value="{{ request.request_id }}">
-                                    <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Delete</button>
-                                </form>
-                            {% else %}
-                                <span style="color: #bbb;">N/A</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No open blood requests found.</p>
-    {% endif %}
-</section>
+        {% endif %}
+        
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {%if not view_profile%}
+        <!-- Blood Request Form -->
+                <section>
+                    <h2>Make a Blood Request</h2>
+                    <form method="POST">
+                        <label for="blood_type">Blood Type:</label>
+                        <select name="blood_type" id="blood_type" required>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <label for="quantity">Quantity (in units):</label>
+                        <input type="number" name="quantity" id="quantity" min="1" required>
+                        <button type="submit" class="btn">Submit Request</button>
+                    </form>
+                </section>
+            
+                <!-- Appointments Table -->
+        <section>
+            <h2>Scheduled Appointments</h2>
+            {% if appointments %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donor Name</th>
+                            <th>Blood Type</th>
+                            <th>Contact Info</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                            <tr>
+                                <td>{{ appointment.donor_name }}</td>
+                                <td>{{ appointment.blood_type }}</td>
+                                <td>{{ appointment.contact_info }}</td>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.time }}</td>
+                                <td>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="appointment_id" value="{{ appointment.appointment_id }}">
+                                        <input type="hidden" name="request_id" value="{{ appointment.request_id }}">
+                                        <button type="submit" class="btn" style="background-color: #2ecc71; color: white;">Manage</button>
+                                    </form>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="reject_appointment_id" value="{{ appointment.appointment_id }}">
+                                        <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Reject</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No appointments found.</p>
+            {% endif %}
+        </section>
+
+        <!-- Existing Blood Requests Table -->
+        <section>
+            <h2>Existing Blood Requests</h2>
+            {% if blood_requests %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Blood Type</th>
+                            <th>Quantity</th>
+                            <th>Request Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in blood_requests %}
+                            <tr>
+                                <td>{{ request.request_id }}</td>
+                                <td>{{ request.blood_type }}</td>
+                                <td>{{ request.quantity }}</td>
+                                <td>{{ request.requested_date }}</td>
+                                <td>{{ request.status }}</td>
+                                <td>
+                                    {% if request.status == 'Open' %}
+                                        <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="delete_request_id" value="{{ request.request_id }}">
+                                            <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Delete</button>
+                                        </form>
+                                    {% else %}
+                                        <span style="color: #bbb;">N/A</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No open blood requests found.</p>
+            {% endif %}
+        </section>
+        
         <!-- Logout Button -->
         <div class="Logout-button">
             <a href="/logout" class="Logout-button">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
+ {%endif%}
     </main>
 
     <footer>
-        <p>&copy; 2024 Online Blood Donation System</p>
+        <p>&copy;Online Blood Donation System</p>
     </footer>
 </body>
 </html>

@@ -544,7 +544,6 @@ def update_user():
     
     
     
-    
 @app.route('/donor_profile', methods=['GET', 'POST'])
 def donor_profile():
     if 'loggedin' in session and session['role'] == 'Donor':
@@ -555,7 +554,7 @@ def donor_profile():
         cursor.execute("""
             SELECT d.donor_id, u.email, d.name, d.contact_info, d.blood_type, l.city, l.state, l.zip_code
             FROM Donors d
-            JOIN Users u on u.user_id = d.user_id
+            JOIN Users u ON d.user_id = u.user_id
             JOIN Locations l ON d.location_id = l.location_id
             WHERE d.user_id = %s
         """, (user_id,))
@@ -567,66 +566,65 @@ def donor_profile():
 
         view_profile = request.args.get('view_profile') == 'true'
         edit_profile = request.args.get('edit_profile') == 'true'
-        
+
         if request.method == 'POST' and request.form.get('action') == 'edit_profile':
+            # Handle profile updates
             name = request.form['name']
-            email=request.form['email']
-            
+            email = request.form['email']
             contact_info = request.form['contact_info']
             blood_type = request.form['blood_type']
             city = request.form['city']
             state = request.form['state']
             zip_code = request.form['zip_code']
 
-            # Update donor details
             cursor.execute("""
                 UPDATE Donors d
-                JOIN Users u on d.user_id = u.user_id
+                JOIN Users u ON d.user_id = u.user_id
                 JOIN Locations l ON d.location_id = l.location_id
-                SET d.name = %s,u.email=%s ,d.contact_info = %s,d.blood_type=%s, l.city = %s, l.state = %s, l.zip_code = %s
+                SET d.name = %s, u.email = %s, d.contact_info = %s, d.blood_type = %s, l.city = %s, l.state = %s, l.zip_code = %s
                 WHERE d.user_id = %s
-            """, (name, email,contact_info,blood_type, city, state, zip_code, user_id))
+            """, (name, email, contact_info, blood_type, city, state, zip_code, user_id))
             conn.commit()
             flash('Profile updated successfully!', 'success')
             return redirect('/donor_profile?view_profile=true')
 
         # Fetch blood requests
-        cursor.execute("""
-            SELECT br.blood_type, br.quantity, br.requested_date, h.name, l.city, l.state
-            FROM Blood_Requests br
-            JOIN Hospitals h ON br.hospital_id = h.hospital_id
-            JOIN Locations l ON h.location_id = l.location_id
-            WHERE br.blood_type = %s AND br.status = 'Pending'
-        """, (donor['blood_type'],))
+        if donor['blood_type'] == 'O-':
+            # Universal donor: fetch all requests matching the city
+            cursor.execute("""
+                SELECT br.blood_type, br.quantity, br.requested_date, h.name, l.city, br.hospital_id
+                FROM blood_requests br
+                JOIN Hospitals h ON br.hospital_id = h.hospital_id
+                JOIN Locations l ON h.location_id = l.location_id
+                WHERE l.city = %s AND br.status = 'Open'
+            """, (donor['city'],))
+        else:
+            # Match both blood type and city for other donors
+            cursor.execute("""
+                SELECT br.blood_type, br.quantity, br.requested_date, h.name, l.city, br.hospital_id
+                FROM blood_requests br
+                JOIN Hospitals h ON br.hospital_id = h.hospital_id
+                JOIN Locations l ON h.location_id = l.location_id
+                WHERE br.blood_type = %s AND l.city = %s AND br.status = 'Open'
+            """, (donor['blood_type'], donor['city']))
+
         blood_requests = cursor.fetchall()
-        cursor.execute(
-            """
-            SELECT br.blood_type, br.quantity, br.requested_date, h.name, l.city, br.hospital_id
-            FROM blood_requests br
-            JOIN Hospitals h ON br.hospital_id = h.hospital_id
-            JOIN Locations l ON h.location_id = l.location_id
-            WHERE br.blood_type = %s AND l.city = %s AND br.status = 'Open'
-            """,
-            (donor['blood_type'], donor['city'])
-        )
-        blood_requests = cursor.fetchall()
-              
-        # If POST request, handle appointment booking
-        if request.method == 'POST':
+
+        # Handle appointment booking
+        if request.method == 'POST' and 'hospital_id' in request.form:
             hospital_id = request.form['hospital_id']
             date = request.form['date']
             time = request.form['time']
 
-            cursor.execute(
-                "INSERT INTO Appointments (donor_id, hospital_id, date, time) VALUES (%s, %s, %s, %s)",
-                (donor['donor_id'], hospital_id, date, time)
-            )
+            cursor.execute("""
+                INSERT INTO Appointments (donor_id, hospital_id, date, time)
+                VALUES (%s, %s, %s, %s)
+            """, (donor['donor_id'], hospital_id, date, time))
             conn.commit()
             flash('Appointment booked successfully!', 'success')
 
         cursor.close()
         conn.close()
-      #  conn.close()
 
         return render_template(
             'donor_profile.html',
@@ -638,6 +636,7 @@ def donor_profile():
     else:
         flash('You are not logged in or unauthorized to access this page.', 'danger')
         return redirect('/login')
+
 
     ##
 #@app.route('/donor_profile', methods=['GET', 'POST'])
@@ -918,8 +917,9 @@ def hospital_dashboard():
 
         # Fetch hospital details
         cursor.execute("""
-            SELECT h.hospital_id, h.name AS hospital_name, l.city AS hospital_city
+            SELECT h.hospital_id, h.name AS hospital_name,l.state AS hospital_state, l.city AS hospital_city, h.location_id, u.email as h_email
             FROM hospitals h
+            JOIN users u ON h.user_id = u.user_id
             JOIN locations l ON h.location_id = l.location_id
             WHERE h.user_id = %s
         """, (session['user_id'],))
@@ -928,6 +928,40 @@ def hospital_dashboard():
         if not hospital:
             flash('You are not registered as a hospital.', 'danger')
             return redirect('/')
+
+        # Check if the request is for viewing the profile
+        edit_profile = request.args.get('edit_profile') == 'true'
+
+        if edit_profile:
+            if request.method == 'POST':
+                # Update hospital information
+                hospital_name = request.form['hospital_name']
+                hospital_city = request.form['hospital_city']
+                h_email = request.form['h_email']
+                hospital_state = request.form['hospital_state']
+
+                cursor.execute("""
+                    UPDATE hospitals h
+                    JOIN locations l ON h.location_id = l.location_id
+                    JOIN users u ON h.user_id = u.user_id
+                    SET h.name = %s, l.city = %s, u.email = %s, l.state = %s
+                    WHERE h.hospital_id = %s
+                """, (hospital_name, hospital_city, h_email, hospital_state, hospital['hospital_id']))
+                conn.commit()
+                flash('Profile updated successfully!', 'success')
+                return redirect('/hospital_dashboard?view_profile=true')
+
+            return render_template('hospital_dashboard.html', hospital=hospital, edit_profile=True)
+
+        # Check if the request is for viewing the profile
+        view_profile = request.args.get('view_profile') == 'true'
+
+        if view_profile:
+            return render_template('hospital_dashboard.html', hospital=hospital, view_profile=True)
+
+        if view_profile:
+            # Render only the hospital profile
+            return render_template('hospital_dashboard.html', hospital=hospital, view_profile=True)
 
         hospital_id = hospital['hospital_id']
 
@@ -990,7 +1024,7 @@ def hospital_dashboard():
             FROM appointments a
             JOIN donors d ON a.donor_id = d.donor_id
             JOIN blood_requests br ON br.hospital_id = a.hospital_id AND br.blood_type = d.blood_type
-            WHERE a.hospital_id = %s AND a.status = 'pending' AND br.status = 'Open'
+            WHERE a.hospital_id = %s AND a.status = 'Pending' AND br.status = 'Open'
         """, (hospital_id,))
         appointments = cursor.fetchall()
 
@@ -1009,7 +1043,8 @@ def hospital_dashboard():
             'hospital_dashboard.html',
             appointments=appointments,
             blood_requests=blood_requests,
-            hospital=hospital
+            hospital=hospital,
+            view_profile=False
         )
     else:
         flash('Unauthorized access!', 'danger')
