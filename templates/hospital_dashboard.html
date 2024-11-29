@@ -165,7 +165,8 @@
 <body>
     <header>
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-        <h1>Hospital Dashboard</h1>
+        <h1>Hospital Dashboard: </h1>
+        <h1>{{ hospital.hospital_name }} - {{ hospital.hospital_city }}</h1>
         <a href="{{ url_for('search') }}">Search Donors</a>
     </header>
 

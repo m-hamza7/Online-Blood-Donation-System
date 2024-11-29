@@ -917,7 +917,12 @@ def hospital_dashboard():
         cursor = conn.cursor(dictionary=True)
 
         # Fetch the hospital_id using the user_id stored in the session
-        cursor.execute("SELECT hospital_id FROM hospitals WHERE user_id = %s", (session['user_id'],))
+        cursor.execute("""
+            SELECT h.hospital_id, h.name AS hospital_name, l.city AS hospital_city
+            FROM hospitals h
+            JOIN locations l ON h.location_id = l.location_id
+            WHERE h.user_id = %s
+        """, (session['user_id'],))
         hospital = cursor.fetchone()
 
         if not hospital:
@@ -984,7 +989,8 @@ def hospital_dashboard():
         return render_template(
             'hospital_dashboard.html',
             appointments=appointments,
-            blood_requests=blood_requests
+            blood_requests=blood_requests,
+            hospital=hospital
         )
     else:
         flash('Unauthorized access!', 'danger')
