@@ -2,25 +2,23 @@
 <html lang="en">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
-<body>
-    <div class="container">
-        <h1>Admin Login</h1>
-        <form method="POST" action="/admin">
-            <div>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+<body style="font-family: 'Poppins', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <div class="container" style="max-width: 400px; margin: 50px auto; padding: 20px; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h1 style="text-align: center; font-size: 24px; color: #333;">Admin Login</h1>
+        <form method="POST" action="/admin" style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="username" style="font-size: 16px; color: #555;">Username:</label>
+                <input type="text" id="username" name="username" required style="padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label for="password" style="font-size: 16px; color: #555;">Password:</label>
+                <input type="password" id="password" name="password" required style="padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" style=" width: 100%;padding: 12px;background: linear-gradient(90deg, #e74c3c, #c0392b);color: white;font-size: 16px;font-weight: bold;border: none;border-radius: 5px;cursor: pointer;transition: background 0.3s ease;">Login</button>
         </form>
     </div>
 </body>

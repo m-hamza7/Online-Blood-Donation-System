@@ -916,7 +916,7 @@ def hospital_dashboard():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Fetch the hospital_id using the user_id stored in the session
+        # Fetch hospital details
         cursor.execute("""
             SELECT h.hospital_id, h.name AS hospital_name, l.city AS hospital_city
             FROM hospitals h
@@ -929,10 +929,10 @@ def hospital_dashboard():
             flash('You are not registered as a hospital.', 'danger')
             return redirect('/')
 
-        hospital_id = hospital['hospital_id']  # Extract the correct hospital_id
+        hospital_id = hospital['hospital_id']
 
         if request.method == 'POST':
-            # Handling blood request submission
+            # Handle new blood request
             if 'blood_type' in request.form:
                 blood_type = request.form['blood_type']
                 quantity = request.form['quantity']
@@ -945,7 +945,7 @@ def hospital_dashboard():
                 conn.commit()
                 flash('Blood request submitted successfully!', 'success')
 
-            # Handling appointment management
+            # Handle appointment management
             elif 'appointment_id' in request.form:
                 appointment_id = request.form['appointment_id']
                 request_id = request.form['request_id']
@@ -955,31 +955,50 @@ def hospital_dashboard():
                     "UPDATE appointments SET status = 'Confirmed' WHERE appointment_id = %s", (appointment_id,)
                 )
 
-                # Update the status of the blood request to 'Fulfilled'
+                # Update blood request status to 'Fulfilled'
                 cursor.execute(
                     "UPDATE blood_requests SET status = 'Fulfilled' WHERE request_id = %s", (request_id,)
                 )
                 conn.commit()
-                flash('Appointment managed successfully! Blood request marked as fulfilled.', 'success')
+                flash('Appointment managed successfully!', 'success')
 
-        # Fetch appointments scheduled by donors for this hospital
-               # Fetch appointments scheduled by donors for this hospital
+            # Handle appointment rejection
+            elif 'reject_appointment_id' in request.form:
+                reject_appointment_id = request.form['reject_appointment_id']
+
+                # Update appointment status to 'Cancelled'
+                cursor.execute(
+                    "UPDATE appointments SET status = 'Cancelled' WHERE appointment_id = %s", (reject_appointment_id,)
+                )
+                conn.commit()
+                flash('Appointment rejected successfully!', 'success')
+
+            # Handle blood request deletion
+            elif 'delete_request_id' in request.form:
+                delete_request_id = request.form['delete_request_id']
+
+                # Delete the blood request if it is open
+                cursor.execute(
+                    "DELETE FROM blood_requests WHERE request_id = %s AND status = 'Open'", (delete_request_id,)
+                )
+                conn.commit()
+                flash('Blood request deleted successfully.', 'success')
+
+        # Fetch appointments for this hospital
         cursor.execute("""
             SELECT DISTINCT a.appointment_id, d.name AS donor_name, a.date, a.time, d.contact_info, d.blood_type, br.request_id
-            FROM Appointments a
-            JOIN Donors d ON a.donor_id = d.donor_id
+            FROM appointments a
+            JOIN donors d ON a.donor_id = d.donor_id
             JOIN blood_requests br ON br.hospital_id = a.hospital_id AND br.blood_type = d.blood_type
             WHERE a.hospital_id = %s AND a.status = 'pending' AND br.status = 'Open'
-        """, (hospital_id,)) 
+        """, (hospital_id,))
         appointments = cursor.fetchall()
 
-
-
-        # Fetch open blood requests made by the hospital
+        # Fetch open blood requests made by this hospital
         cursor.execute("""
             SELECT request_id, blood_type, quantity, requested_date, status
             FROM blood_requests
-            WHERE hospital_id = %s AND status = 'Open'
+            WHERE hospital_id = %s
         """, (hospital_id,))
         blood_requests = cursor.fetchall()
 

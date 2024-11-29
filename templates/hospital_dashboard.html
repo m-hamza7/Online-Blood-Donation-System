@@ -193,74 +193,91 @@
         </section>
 
         <!-- Appointments Table -->
-        <section>
-            <h2>Scheduled Appointments</h2>
-            {% if appointments %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donor Name</th>
-                            <th>Blood Type</th>
-                            <th>Contact Info</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for appointment in appointments %}
-                            <tr>
-                                <td>{{ appointment.donor_name }}</td>
-                                <td>{{ appointment.blood_type }}</td>
-                                <td>{{ appointment.contact_info }}</td>
-                                <td>{{ appointment.date }}</td>
-                                <td>{{ appointment.time }}</td>
-                                <td>
-                                    <form method="POST">
-                                        <input type="hidden" name="appointment_id" value="{{ appointment.appointment_id }}">
-                                        <input type="hidden" name="request_id" value="{{ appointment.request_id }}">
-                                        <button type="submit" class="btn">Mark as Managed</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No appointments found.</p>
-            {% endif %}
-        </section>
+        <!-- Appointments Table -->
+<section>
+    <h2>Scheduled Appointments</h2>
+    {% if appointments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Name</th>
+                    <th>Blood Type</th>
+                    <th>Contact Info</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.donor_name }}</td>
+                        <td>{{ appointment.blood_type }}</td>
+                        <td>{{ appointment.contact_info }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="appointment_id" value="{{ appointment.appointment_id }}">
+                                <input type="hidden" name="request_id" value="{{ appointment.request_id }}">
+                                <button type="submit" class="btn" style="background-color: #2ecc71; color: white;">Manage</button>
+                            </form>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="reject_appointment_id" value="{{ appointment.appointment_id }}">
+                                <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No appointments found.</p>
+    {% endif %}
+</section>
 
-        <!-- Existing Blood Requests -->
-        <section>
-            <h2>Existing Blood Requests</h2>
-            {% if blood_requests %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Request ID</th>
-                            <th>Blood Type</th>
-                            <th>Quantity</th>
-                            <th>Request Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for request in blood_requests %}
-                            <tr>
-                                <td>{{ request.request_id }}</td>
-                                <td>{{ request.blood_type }}</td>
-                                <td>{{ request.quantity }}</td>
-                                <td>{{ request.requested_date }}</td>
-                                <td>{{ request.status }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No open blood requests found.</p>
-            {% endif %}
-        </section>
+<!-- Existing Blood Requests Table -->
+<section>
+    <h2>Existing Blood Requests</h2>
+    {% if blood_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Blood Type</th>
+                    <th>Quantity</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in blood_requests %}
+                    <tr>
+                        <td>{{ request.request_id }}</td>
+                        <td>{{ request.blood_type }}</td>
+                        <td>{{ request.quantity }}</td>
+                        <td>{{ request.requested_date }}</td>
+                        <td>{{ request.status }}</td>
+                        <td>
+                            {% if request.status == 'Open' %}
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="delete_request_id" value="{{ request.request_id }}">
+                                    <button type="submit" class="btn" style="background-color: #e74c3c; color: white;">Delete</button>
+                                </form>
+                            {% else %}
+                                <span style="color: #bbb;">N/A</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No open blood requests found.</p>
+    {% endif %}
+</section>
+
 
         <!-- Logout Button -->
         <div class="Logout-button">
