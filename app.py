@@ -612,11 +612,6 @@ def search():
 
     return render_template('search.html')
 
-# Appointment Scheduling
-@app.route('/appointments')
-def appointments():
-    return render_template('appointments.html')
-
 # Logout
 @app.route('/logout')
 def logout():
