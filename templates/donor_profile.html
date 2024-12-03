@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,31 +5,113 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donor Profile</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        header, footer {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        header img {
+            height: 50px;
+            vertical-align: middle;
+        }
+        section {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #c0392b;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: bold;
+            padding: 5px 15px;
+            background: green;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        header a:hover {
+            background: #555;
+        }
+        button {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+        .articles img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .articles h3 {
+            color: #c0392b;
+            margin: 10px 0;
+        }
+        .articles p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .articles a {
+            color: #c0392b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .articles a:hover {
+            text-decoration: underline;
+        }
+        .Logout-button a {
+            background: #c0392b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .Logout-button a:hover {
+            background: #e74c3c;
+        }
+    </style>
 </head>
-<body style="margin: 0; font-family: 'Poppins', sans-serif; background: #f8f9fa; color: #333;">
+<body>
 
     <!-- Header -->
-    <header style="position: sticky; top: 0; background: linear-gradient(90deg, #c0392b, #e74c3c); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000;">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 50px; vertical-align: middle;">
-        <h1 style="margin: 10px 0;">Welcome, {{ donor.name }}</h1>
-        <p style="margin: 5px 0; font-size: 16px; color: #ffebee;">Blood Type: {{ donor.blood_type }}</p>
-        <p style="margin: 5px 0; font-size: 16px; color: #ffebee;">City: {{ donor.city }}</p>
-        <div style="margin-top: 15px;">
-            <a href="?view_profile=true" style="text-decoration: none; background: #fff; color: #c0392b; padding: 10px 20px; border-radius: 20px; font-weight: bold; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
-                <i class="fas fa-user"></i> View Profile
-            </a>
-            <a href="/logout" style="text-decoration: none; background: #fff; color: #c0392b; padding: 10px 20px; border-radius: 20px; font-weight: bold; margin-left: 15px; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
+    <header>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        <h1>Welcome, {{ donor.name }}</h1>
+        <p>Blood Type: {{ donor.blood_type }}</p>
+        <p>City: {{ donor.city }}</p>
+        <a href="?view_profile=true">View Profile</a>
+        
     </header>
-
+<main>
     <!-- View Profile Section -->
-     
     {% if view_profile %}
-    <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-        <h2 style="color: #c0392b; text-align: center;">Your Profile Details</h2>
+    <section>
+        <h2>Your Profile Details</h2>
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <!-- Profile details table here -->
             <tr>
                 <th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th>
                 <td style="padding: 10px;">{{ donor.name }}</td>
@@ -61,130 +141,192 @@
                 <td style="padding: 10px;">{{ donor.zip_code }}</td>
             </tr>
         </table>
-        <!-- Edit Profile Button -->
         <div style="text-align: center; margin-top: 20px;">
             <a href="?edit_profile=true" style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">Edit Profile</a>
         </div>
     </section>
     {% endif %}
 
-    <!-- Edit Profile Section -->
-    <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-        {% if edit_profile %}
-        <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
-        <form method="POST">
-            <input type="hidden" name="action" value="edit_profile">
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                <tr>
-                    <th style="text-align: left; padding: 10px;">Name</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name="name" value="{{ donor.name }}" required style="width: 100%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">Email</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name=email value="{{ donor.email }}" required style="width: 100%; padding: 8px;%"</td>
-                    </td>  
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">Contact Info</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name="contact_info" value="{{ donor.contact_info }}" required style="width: 100%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">Blood Type</th>
-                    <td style="padding: 10px;">
-                        <select name="blood_type" required style="width: 100%; padding: 8px;">
-                            <option value="A+" {% if donor.blood_type == 'A+' %}selected{% endif %}>A+</option>
-                            <option value="A-" {% if donor.blood_type == 'A-' %}selected{% endif %}>A-</option>
-                            <option value="B+" {% if donor.blood_type == 'B+' %}selected{% endif %}>B+</option>
-                            <option value="B-" {% if donor.blood_type == 'B-' %}selected{% endif %}>B-</option>
-                            <option value="O+" {% if donor.blood_type == 'O+' %}selected{% endif %}>O+</option>
-                            <option value="O-" {% if donor.blood_type == 'O-' %}selected{% endif %}>O-</option>
-                            <option value="AB+" {% if donor.blood_type == 'AB+' %}selected{% endif %}>AB+</option>
-                            <option value="AB-" {% if donor.blood_type == 'AB-' %}selected{% endif %}>AB-</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">City</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name="city" value="{{ donor.city }}" required style="width: 100%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">State</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name="state" value="{{ donor.state }}" required style="width: 100%; padding: 8px;">
-                    </td>
-                </tr>
-                <tr>
-                    <th style="text-align: left; padding: 10px;">Zip Code</th>
-                    <td style="padding: 10px;">
-                        <input type="text" name="zip_code" value="{{ donor.zip_code }}" required style="width: 100%; padding: 8px;">
-                    </td>
-                </tr>
+ <!-- Edit Profile Section -->
+ <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    {% if edit_profile %}
+    <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="edit_profile">
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <tr>
+                <th style="text-align: left; padding: 10px;">Name</th>
+                <td style="padding: 10px;">
+                    <input type="text" name="name" value="{{ donor.name }}" required style="width: 100%; padding: 8px;">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">Email</th>
+                <td style="padding: 10px;"><input type="text" name=email value="{{ donor.email }}" required style="width: 100%; padding: 8px;"></td>
+                </td>  
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">Contact Info</th>
+                <td style="padding: 10px;">
+                    <input type="text" name="contact_info" value="{{ donor.contact_info }}" required style="width: 100%; padding: 8px;">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">Blood Type</th>
+                <td style="padding: 10px;">
+                    <select name="blood_type" required style="width: 100%; padding: 8px;">
+                        <option value="A+" {% if donor.blood_type == 'A+' %}selected{% endif %}>A+</option>
+                        <option value="A-" {% if donor.blood_type == 'A-' %}selected{% endif %}>A-</option>
+                        <option value="B+" {% if donor.blood_type == 'B+' %}selected{% endif %}>B+</option>
+                        <option value="B-" {% if donor.blood_type == 'B-' %}selected{% endif %}>B-</option>
+                        <option value="O+" {% if donor.blood_type == 'O+' %}selected{% endif %}>O+</option>
+                        <option value="O-" {% if donor.blood_type == 'O-' %}selected{% endif %}>O-</option>
+                        <option value="AB+" {% if donor.blood_type == 'AB+' %}selected{% endif %}>AB+</option>
+                        <option value="AB-" {% if donor.blood_type == 'AB-' %}selected{% endif %}>AB-</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">City</th>
+                <td style="padding: 10px;">
+                    <input type="text" name="city" value="{{ donor.city }}" required style="width: 100%; padding: 8px;">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">State</th>
+                <td style="padding: 10px;">
+                    <input type="text" name="state" value="{{ donor.state }}" required style="width: 100%; padding: 8px;">
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px;">Zip Code</th>
+                <td style="padding: 10px;">
+                    <input type="text" name="zip_code" value="{{ donor.zip_code }}" required style="width: 100%; padding: 8px;">
+                </td>
+            </tr>
+        </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
+            <a href="/donor_profile?view_profile=true" style="margin-left: 10px; text-decoration: none; color: #c0392b;">Cancel</a>
+        </div>
+    </form>
+    {% else %}
+    <!--<div style="text-align: center; margin-top: 20px;">
+        <a href="/donor_profile?edit_profile=true" style="background: #c0392b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Edit Profile</a>
+    </div>-->
+    {% endif %}
+
+    <!-- Blood Requests Table -->
+    <section style="padding: 20px; max-width: 1000px; margin: auto;">
+        <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
+        {% if blood_requests %}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                <thead>
+                    <tr>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
+                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in blood_requests %}
+                    
+                    <tr>
+                        <td style="padding: 10px;">{{ request.blood_type }}</td>
+                        <td style="padding: 10px;">{{ request.quantity }}</td>
+                        <td style="padding: 10px;">{{ request.requested_date }}</td>
+                        <td style="padding: 10px;">{{ request.name }}</td>
+                        <td style="padding: 10px;">{{ request.city }}</td>
+                        <td style="padding: 10px;">
+                            <form method="POST">
+                                <label for="date">Date:</label>
+                                <input type="date" name="date" required>
+                                <label for="time">Time:</label>
+                                <input type="time" name="time" required>
+                                <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
+                                <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
+                            </form>
+                        </td>
+                    </tr>
+                    
+                    {% endfor %}
+                </tbody>
             </table>
-            <div style="text-align: center; margin-top: 20px;">
-                <button type="submit" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
-                <a href="/donor_profile?view_profile=true" style="margin-left: 10px; text-decoration: none; color: #c0392b;">Cancel</a>
-            </div>
-        </form>
         {% else %}
-        <!--<div style="text-align: center; margin-top: 20px;">
-            <a href="/donor_profile?edit_profile=true" style="background: #c0392b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Edit Profile</a>
-        </div>-->
+            <p style="text-align: center;">No matching blood requests found.</p>
         {% endif %}
+    </section>
+
+
+
+    <section>
+        <h2>Notifications</h2>
+        {% if notifications %}
+            <ul>
+                {% for notification in notifications %}
+                    <li>
+                        <strong>{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</strong>: 
+                        {{ notification.message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No notifications at this time.</p>
+        {% endif %}
+    </section>
     
-        <!-- Blood Requests Table -->
-        <section style="padding: 20px; max-width: 1000px; margin: auto;">
-            <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
-            {% if blood_requests %}
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
-                    <thead>
-                        <tr>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for request in blood_requests %}
-                        
-                        <tr>
-                            <td style="padding: 10px;">{{ request.blood_type }}</td>
-                            <td style="padding: 10px;">{{ request.quantity }}</td>
-                            <td style="padding: 10px;">{{ request.requested_date }}</td>
-                            <td style="padding: 10px;">{{ request.name }}</td>
-                            <td style="padding: 10px;">{{ request.city }}</td>
-                            <td style="padding: 10px;">
-                                <form method="POST">
-                                    <label for="date">Date:</label>
-                                    <input type="date" name="date" required>
-                                    <label for="time">Time:</label>
-                                    <input type="time" name="time" required>
-                                    <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
-                                    <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
-                                </form>
-                            </td>
-                        </tr>
-                        
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p style="text-align: center;">No matching blood requests found.</p>
-            {% endif %}
-        </section>
-    
-    </body>
-        <footer style="text-align: center;position: sticky; bottom:0; padding: 20px;background: #333;color: white;">
-            <p>&copy; 2024 Online Blood Donation System</p>
-        </footer>
+    <!-- Articles Section -->
+    <section class="articles">
+        <h2>Informative Articles & Resources</h2>
         
+        <!-- Article 1 -->
+        <div>
+            <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Blood Donation">
+            <h3>The Importance of Regular Blood Donation</h3>
+            <p>Discover why donating blood is not only a gift of life to others but also a healthy practice for you. Regular donation helps reduce iron overload and keeps your body healthy.</p>
+            <a href="https://www.redcrossblood.org/donate-blood/blood-donation-process.html" target="_blank">Read More</a>
+        </div>
+
+        <!-- Article 2 -->
+        <div>
+            <img src="{{ url_for('static', filename='bg_img2.jpg') }}" alt="Health Benefits">
+            <h3>Health Benefits of Donating Blood</h3>
+            <p>Donating blood helps you stay healthier by maintaining balanced iron levels. Learn how regular donations can positively impact your health.</p>
+            <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Learn More</a>
+        </div>
+
+        <!-- Article 3 -->
+        <div>
+            <img src="{{ url_for('static', filename='home_image.jpg') }}" alt="Universal Donor">
+            <h3>Are You a Universal Donor?</h3>
+            <p>If you have O-negative blood type, you are a universal donor. Find out how you can make a significant difference in emergency situations.</p>
+            <a href="https://www.blood.co.uk/" target="_blank">Discover More</a>
+        </div>
+    </section>
+
+    <!-- Donation Tips Section -->
+    <section>
+        <h2>Quick Tips for Donors</h2>
+        <ul style="font-size: 16px; line-height: 1.8;">
+            <li>Stay hydrated before and after your donation.</li>
+            <li>Have a light, iron-rich snack an hour before donating.</li>
+            <li>Avoid caffeine and alcohol before donation.</li>
+            <li>Rest for a few minutes post-donation to ensure you're feeling well.</li>
+        </ul>
+    </section>
+    <div class="Logout-button">
+        <a href="/logout" class="Logout-button">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+
+</main>   
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Online Blood Donation System</p>
+    </footer>
+</body>
 </html>

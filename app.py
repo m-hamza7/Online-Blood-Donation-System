@@ -352,7 +352,13 @@ def donor_profile():
         if not donor:
             flash('No donor details found for this user.', 'danger')
             return redirect('/index')
-
+        cursor.execute("""
+            SELECT message, created_at
+            FROM notifications
+            WHERE donor_id = %s
+            ORDER BY created_at DESC
+        """, (donor['donor_id'],))
+        notifications = cursor.fetchall()   
         view_profile = request.args.get('view_profile') == 'true'
         edit_profile = request.args.get('edit_profile') == 'true'
 
@@ -420,7 +426,8 @@ def donor_profile():
             donor=donor,
             blood_requests=blood_requests,
             view_profile=view_profile,
-            edit_profile=edit_profile
+            edit_profile=edit_profile,
+            notifications=notifications
         )
     else:
         flash('You are not logged in or unauthorized to access this page.', 'danger')
@@ -517,7 +524,17 @@ def hospital_dashboard():
                 )
                 conn.commit()
                 flash('Appointment managed successfully!', 'success')
+                cursor.execute("""
+                    SELECT donor_id FROM appointments WHERE appointment_id = %s
+                """, (appointment_id,))
+                donor_id = cursor.fetchone()['donor_id']
+                message = "Your appointment with hospital {} has been confirmed, You can visit the Hospital.".format(hospital['hospital_name'])
 
+                cursor.execute("""
+                    INSERT INTO notifications (donor_id, message) VALUES (%s, %s)
+                """, (donor_id, message))
+                conn.commit()
+                flash('Appointment managed successfully and notification sent to the donor!', 'success')
             # Handle appointment rejection
             elif 'reject_appointment_id' in request.form:
                 reject_appointment_id = request.form['reject_appointment_id']
@@ -528,6 +545,17 @@ def hospital_dashboard():
                 )
                 conn.commit()
                 flash('Appointment rejected successfully!', 'success')
+                cursor.execute("""
+                    SELECT donor_id FROM appointments WHERE appointment_id = %s
+                """, (reject_appointment_id,))
+                donor_id = cursor.fetchone()['donor_id']
+                message = "Your appointment with hospital {} has been rejected, please select different time and date.".format(hospital['hospital_name'])
+
+                cursor.execute("""
+                    INSERT INTO notifications (donor_id, message) VALUES (%s, %s)
+                """, (donor_id, message))
+                conn.commit()
+                flash('Appointment rejected and notification sent to the donor!', 'success')
 
             # Handle blood request deletion
             elif 'delete_request_id' in request.form:
