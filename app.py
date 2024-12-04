@@ -151,7 +151,7 @@ def login():
             elif user['role'] == 'Hospital':
                 return redirect('/hospital_dashboard')
         else:
-            flash('Invalid username or password!', 'danger')
+            flash(f'Invalid username or password!', 'danger')
 
     return render_template('login.html')
 
@@ -184,6 +184,24 @@ def admin_dashboard():
         view = request.args.get('view', 'users')  # Default view is 'users'
         viewbr= request.args.get('view','blood_requests')
         viewapp=request.args.get('view','appointments')
+        donors = []
+        chat = []
+        if request.method == 'POST' and 'send_reply' in request.form:
+           message = request.form['message']
+           donor_id = request.form['donor_id']
+           if donor_id and message.strip():
+        # Insert the admin reply into the messages table
+              cursor.execute("""
+                  INSERT INTO messages (donor_id, sender_role, content)
+                  VALUES (%s, 'Admin', %s)
+              """, (donor_id, message))
+              conn.commit()
+              flash('Reply sent to donor!', 'success')
+           else:
+              flash('Failed to send reply. Ensure donor is selected and the message is not empty.', 'danger')
+
+           return redirect(f'/admin_dashboard?view=donor_chats&donor_id={donor_id}')
+
         if view == 'users':
             # Fetch registered users
             cursor.execute("""
@@ -264,7 +282,7 @@ def admin_dashboard():
         cursor.close()
         conn.close()
 
-        return render_template('admin_dashboard.html', view=view, **data)
+        return render_template('admin_dashboard.html', view=view, **data,donors=donors,chat=chat)
 
     else:
         flash('Unauthorized access!', 'danger')
@@ -354,6 +372,31 @@ def donor_profile():
         if not donor:
             flash('No donor details found for this user.', 'danger')
             return redirect('/index')
+        
+        donor_id = donor['donor_id']
+        contact_admin = request.args.get('contact_admin') == 'true'
+        chat = []
+
+        if contact_admin:
+            # Fetch chat messages
+            cursor.execute("""
+                SELECT sender_role, content, timestamp
+                FROM messages
+                WHERE donor_id = %s
+                ORDER BY timestamp ASC
+            """, (donor_id,))
+            chat = cursor.fetchall()
+
+            # Handle new message
+            if request.method == 'POST' and 'send_message' in request.form:
+                message = request.form['message']
+                cursor.execute("""
+                    INSERT INTO messages (donor_id, sender_role, content)
+                    VALUES (%s, 'Donor', %s)
+                """, (donor_id, message))
+                conn.commit()
+                flash('Message sent to admin!', 'success')
+                return redirect('/donor_profile?contact_admin=true')
         cursor.execute("""
             SELECT message, created_at
             FROM notifications
@@ -361,9 +404,20 @@ def donor_profile():
             ORDER BY created_at DESC
         """, (donor['donor_id'],))
         notifications = cursor.fetchall()   
+        view_appointments = request.args.get('view_appointments') == 'true'
         view_profile = request.args.get('view_profile') == 'true'
         edit_profile = request.args.get('edit_profile') == 'true'
-
+        appointments = []
+        if view_appointments:
+            cursor.execute("""
+                SELECT a.appointment_id, h.name AS hospital_name, a.date, a.time, a.status, d.blood_type
+                FROM Appointments a
+                JOIN Hospitals h ON a.hospital_id = h.hospital_id
+                JOIN Donors d ON a.donor_id = d.donor_id
+                WHERE a.donor_id = %s
+                ORDER BY a.date DESC, a.time DESC
+            """, (donor['donor_id'],))
+            appointments = cursor.fetchall() 
         if request.method == 'POST' and request.form.get('action') == 'edit_profile':
             # Handle profile updates
             name = request.form['name']
@@ -429,6 +483,10 @@ def donor_profile():
             blood_requests=blood_requests,
             view_profile=view_profile,
             edit_profile=edit_profile,
+            view_appointments=view_appointments,
+            appointments=appointments,
+            contact_admin=contact_admin,
+            chat=chat,
             notifications=notifications
         )
     else:
@@ -646,7 +704,7 @@ def search():
 @app.route('/logout')
 def logout():
     session.clear()
-    flash('You have been logged out.', 'info')
+    flash(f'You have been logged out.', 'info')
     return redirect('/index')
 
 if __name__ == '__main__':

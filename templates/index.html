@@ -21,7 +21,7 @@
             color: white;
             padding: 20px;
             text-align: center;
-            position: fixed; /* Keep header at the top */
+            position: fixed;
             top: 0;
             left: 0;
             z-index: 10;
@@ -68,7 +68,7 @@
         /* Main Styling */
         main {
             margin: 120px auto 0;
-            max-width: 800px;
+            max-width: 1000px;
             text-align: center;
             padding: 20px;
             background: white;
@@ -78,25 +78,67 @@
 
         main h2 {
             color: #c0392b;
-            font-size: 20px;
-            margin-bottom: 15px;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
-        main p {
-            font-size: 16px;
-            color: #555;
-            line-height: 1.6;
+        .article-section {
+            margin: 20px auto;
+            text-align: left;
         }
+
+        .article {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .article img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .article-content {
+            flex-grow: 1;
+        }
+
+        .article-content h3 {
+            color: #c0392b;
+            margin: 0 0 10px;
+        }
+
+        .article-content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0 0 10px;
+        }
+
+        .article-content a {
+            color: #c0392b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+
         footer {
-            position: fixed;
-            bottom:0;
+            position: relative;
+            bottom: 0;
             text-align: center;
             padding: 20px;
             background: linear-gradient(90deg, #514556, #010101, #514556);
             color: white;
-            right:0;
-            left:0;
-            z-index:10;
+            right: 0;
+            left: 0;
+            z-index: 10;
         }
     </style>
 </head>
@@ -108,15 +150,59 @@
             <a href="/">Home</a>
             <a href="/register">Sign Up</a> 
             <a href="/login">Login</a>
-            <a href="/admin" class="btn">Admin</a> <!-- login for Admin -->
+            <a href="/admin" class="btn">Admin</a>
         </nav>
     </header>
+
     <main>
-        
-        <!--<h2>About Us</h2>-->
-        <footer>
-        <p>&copy;Your platform for blood donation and management.</p>
-        </footer>
-    </main> 
+        <h2>Welcome to the Blood Donation Management System</h2>
+        <p>Connecting donors and hospitals to save lives. Together, we can make a difference!</p>
+
+        <section class="article-section">
+            <!-- Article 1 -->
+            <div class="article">
+                <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Donate Blood">
+                <div class="article-content">
+                    <h3>Why Donate Blood?</h3>
+                    <p>Blood donation is a life-saving act that helps patients in need. Discover the importance of donating blood and how it benefits both the donor and the recipient.</p>
+                    <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Read More</a>
+                </div>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="article">
+                <img src="{{ url_for('static', filename='health_benefits.jpg') }}" alt="Health Benefits">
+                <div class="article-content">
+                    <h3>Health Benefits of Blood Donation</h3>
+                    <p>Did you know that donating blood can help improve your heart health and reduce iron levels? Learn more about the health benefits for donors.</p>
+                    <a href="https://www.redcrossblood.org/" target="_blank">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Article 3 -->
+            <div class="article">
+                <img src="{{ url_for('static', filename='blood_types.jpg') }}" alt="Blood Types">
+                <div class="article-content">
+                    <h3>Know Your Blood Type</h3>
+                    <p>Every blood type plays a critical role in saving lives. Find out which blood types are in high demand and how you can contribute.</p>
+                    <a href="https://www.blood.co.uk/" target="_blank">Discover More</a>
+                </div>
+            </div>
+
+            <!-- Article 4 -->
+            <div class="article">
+                <img src="{{ url_for('static', filename='universal_donor.jpg') }}" alt="Universal Donor">
+                <div class="article-content">
+                    <h3>Are You a Universal Donor?</h3>
+                    <p>If you have O-negative blood type, you are a universal donor. Learn how your blood can save lives in emergencies.</p>
+                    <a href="https://www.nhsbt.nhs.uk/" target="_blank">Find Out More</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Blood Donation Management System. Saving lives, one donation at a time.</p>
+    </footer>
 </body>
 </html>

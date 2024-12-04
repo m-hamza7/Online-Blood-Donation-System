@@ -147,11 +147,53 @@
                 <a href="{{ url_for('search') }}">SEARCH</a>
                 <a href="{{ url_for('admin_dashboard', view='blood_requests') }}">BLOOD REQUESTS</a>
                 <a href="{{ url_for('admin_dashboard', view='appointments') }}">APPOINTMENTS</a>
+                <a href="{{ url_for('admin_dashboard', view='donor_chats') }}">CHAT</a>
             </ul>
         </nav>
     </header>
 
     <main>
+        {% if view == 'donor_chats' %}
+        <h2>Donor Messages</h2>
+        <div>
+            <!-- Dropdown to select a donor -->
+            <form method="GET" style="margin-bottom: 20px;">
+                <input type="hidden" name="view" value="donor_chats">
+                <label for="donor_id">Select Donor:</label>
+                <select name="donor_id" id="donor_id" required>
+                    {% for donor in donors %}
+                    <option value="{{ donor.donor_id }}" {% if donor_id == donor.donor_id %}selected{% endif %}>
+                        {{ donor.name }} ({{ donor.email }})
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="margin-left: 10px;">View Chat</button>
+            </form>
+        
+            <!-- Chat box -->
+            {% if chat %}
+            <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; margin-bottom: 20px;">
+                {% for message in chat %}
+                <div style="margin-bottom: 10px;">
+                    <strong>{{ 'Donor' if message.sender_role == 'Donor' else 'Admin' }}:</strong>
+                    {{ message.content }}
+                    <span style="color: #aaa; font-size: 12px;">({{ message.timestamp }})</span>
+                </div>
+                {% endfor %}
+            </div>
+        
+            <!-- Reply form -->
+            <form method="POST">
+                <textarea name="message" rows="4" style="width: 100%; padding: 10px;" placeholder="Reply to donor..." required></textarea>
+                <input type="hidden" name="donor_id" value="{{ donor_id }}">
+                <button type="submit" name="send_reply" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Send Reply</button>
+            </form>
+            {% else %}
+            <p style="text-align: center;">Select a donor to view chat messages.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
         {% if view == 'users' %}
         <h2>Registered Users</h2>
         <table>
@@ -233,7 +275,6 @@
             <thead>
                 <tr>
                     <th>Appointment ID</th>
-                
                     <th>Donor ID</th>
                     <th>Hospital ID</th>
                     <th>Date</th>
