@@ -182,7 +182,8 @@ def admin_dashboard():
 
         # Determine the view to display
         view = request.args.get('view', 'users')  # Default view is 'users'
-
+        viewbr= request.args.get('view','blood_requests')
+        viewapp=request.args.get('view','appointments')
         if view == 'users':
             # Fetch registered users
             cursor.execute("""
@@ -250,14 +251,15 @@ def admin_dashboard():
                 cursor.execute("DELETE FROM Blood_Requests WHERE request_id = %s", (request_id,))
                 conn.commit()
                 flash('Blood request deleted successfully!', 'success')
-
+                print(view)
+                return render_template('admin_dashboard.html', view=viewbr, **data)
             # Handle appointment deletion
             elif 'delete_appointment_id' in request.form:
                 appointment_id = request.form['delete_appointment_id']
                 cursor.execute("DELETE FROM Appointments WHERE appointment_id = %s", (appointment_id,))
                 conn.commit()
                 flash('Appointment deleted successfully!', 'success')
-
+                return render_template('admin_dashboard.html', view=viewapp, **data)
 
         cursor.close()
         conn.close()
