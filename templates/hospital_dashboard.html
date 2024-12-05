@@ -163,7 +163,7 @@
 
         }
         footer {
-            position: fixed;
+            position: realtive;
             bottom:0;
             text-align: center;
             padding: 20px;
@@ -182,10 +182,31 @@
         <h1>{{ hospital.hospital_name }} - {{ hospital.hospital_city }}</h1>
         <a href="{{ url_for('search') }}">Search Donors</a>
         <a href="?view_profile=true">View Profile</a>
+       <!-- <a href="/hospital_dashboard?view=chat" style="text-decoration: none; background: #27ae60; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">Chat with Admin</a>-->
     </header>
 
     <main>
-
+        {% if view == 'chat' %}
+        <section style="margin: 20px auto; max-width: 800px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #c0392b; text-align: center;">Chat with Admin</h2>
+            <div style="max-height: 400px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9; margin-bottom: 20px;">
+                {% for message in chat %}
+                <div style="margin-bottom: 20px; display: flex; justify-content: {% if message.sender_role == 'Hospital' %}flex-end{% else %}flex-start{% endif %};">
+                    <div style="max-width: 70%; padding: 10px; border-radius: 10px; background: {% if message.sender_role == 'Hospital' %}#c0392b{% else %}#eaeaea{% endif %}; color: {% if message.sender_role == 'Hospital' %}white{% else %}#333{% endif %}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                        <strong>{{ 'You' if message.sender_role == 'Hospital' else 'Admin' }}</strong>:<br>
+                        {{ message.content }}
+                        <div style="text-align: right; font-size: 12px; color: #aaa; margin-top: 5px;">{{ message.timestamp }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST">
+                <textarea name="message" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;" placeholder="Type your message..." required></textarea>
+                <button type="submit" name="send_message" style="margin-top: 10px; background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Send Message</button>
+            </form>
+        </section>
+        {% endif %}
+        
         {% if view_profile %}
         <section  style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
             <h2>Hospital Profile</h2>

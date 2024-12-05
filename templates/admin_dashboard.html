@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        /* General Body Styling */
+        
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -154,10 +154,35 @@
     </header>
 
     <main>
+        {% if view == 'hospital_chats' %}
+<h2 style="text-align: center; color: #c0392b;">Hospital Messages</h2>
+<div style="margin: 20px auto; max-width: 800px;">
+    <!-- Dropdown to select a hospital -->
+    <form method="GET" style="margin-bottom: 20px; text-align: center;">
+        <input type="hidden" name="view" value="hospital_chats">
+        <label for="hospital_id" style="font-weight: bold; color: #555;">Select Hospital:</label>
+        <select name="hospital_id" id="hospital_id" required>
+            <option value="" disabled selected>Select a hospital</option>
+            {% for hospital in hospitals %}
+            <option value="{{ hospital.hospital_id }}" {% if hospital_id == hospital.hospital_id %}selected{% endif %}>
+                {{ hospital.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit" style="margin-left: 10px; background: #c0392b; color: white;">View Chat</button>
+    </form>
+    {% if chat %}
+    <div>
+        <!-- Chat messages and reply form go here, similar to donor_chats -->
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
         {% if view == 'donor_chats' %}
 <h2 style="text-align: center; color: #c0392b;">Donor Messages</h2>
 <div style="margin: 20px auto; max-width: 800px;">
-
+    
     <!-- Dropdown to select a donor -->
     <form method="GET" style="margin-bottom: 20px; text-align: center;">
         <input type="hidden" name="view" value="donor_chats">

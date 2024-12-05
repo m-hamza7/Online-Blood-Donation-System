@@ -188,8 +188,26 @@ def admin_dashboard():
         donors = []
         chat = []
         data={}
+        if view == 'hospital_chats':
+        # Fetch all hospitals who have sent messages
+           cursor.execute("""
+               SELECT DISTINCT h.hospital_id, h.name
+               FROM hospitals h
+               JOIN messages m ON h.hospital_id = m.hospital_id
+           """)
+           hospitals = cursor.fetchall()
 
-        if view == 'donor_chats':
+    # If a hospital is selected, fetch their chat messages
+           if hospital_id:
+              cursor.execute("""
+                  SELECT sender_role, content, timestamp
+                  FROM messages
+                  WHERE hospital_id = %s
+                  ORDER BY timestamp ASC
+              """, (hospital_id,))
+              chat = cursor.fetchall()
+
+        elif view == 'donor_chats':
             # Fetch all donors who have sent messages
             cursor.execute("""
                 SELECT DISTINCT d.donor_id, d.name
@@ -541,7 +559,31 @@ def hospital_dashboard():
 
         # Check if the request is for viewing the profile
         edit_profile = request.args.get('edit_profile') == 'true'
+        hospital_id = hospital['hospital_id']
+        view = request.args.get('view', 'appointments')  # Default view is appointments
+        chat = []
+        if view == 'chat':
+            # Fetch chat messages for this hospital
+            cursor.execute("""
+                SELECT sender_role, content, timestamp
+                FROM messages
+                WHERE hospital_id = %s
+                ORDER BY timestamp ASC
+            """, (hospital_id,))
+            chat = cursor.fetchall()
 
+            # Handle sending a message
+            if request.method == 'POST' and 'send_message' in request.form:
+                message_content = request.form['message']
+                if message_content.strip():
+                    cursor.execute("""
+                        INSERT INTO messages (hospital_id, sender_role, content)
+                        VALUES (%s, 'Hospital', %s)
+                    """, (hospital_id, message_content))
+                    conn.commit()
+                    flash('Message sent to Admin!', 'success')
+                else:
+                    flash('Message cannot be empty.', 'danger')
         if edit_profile:
             if request.method == 'POST':
                 # Update hospital information
@@ -675,6 +717,8 @@ def hospital_dashboard():
             appointments=appointments,
             blood_requests=blood_requests,
             hospital=hospital,
+            chat=chat,
+            view=view,
             view_profile=False
         )
     else:
