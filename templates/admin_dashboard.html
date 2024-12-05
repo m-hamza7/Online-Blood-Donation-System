@@ -132,7 +132,8 @@
             padding: 20px;
             background: linear-gradient(90deg, #514556, #010101, #514556);
             color: white;
-            position: relative;
+            position: sticky;
+            right:0;
         }
     </style>
 </head>
@@ -154,45 +155,51 @@
 
     <main>
         {% if view == 'donor_chats' %}
-        <h2>Donor Messages</h2>
-        <div>
-            <!-- Dropdown to select a donor -->
-            <form method="GET" style="margin-bottom: 20px;">
-                <input type="hidden" name="view" value="donor_chats">
-                <label for="donor_id">Select Donor:</label>
-                <select name="donor_id" id="donor_id" required>
-                    {% for donor in donors %}
-                    <option value="{{ donor.donor_id }}" {% if donor_id == donor.donor_id %}selected{% endif %}>
-                        {{ donor.name }} ({{ donor.email }})
-                    </option>
-                    {% endfor %}
-                </select>
-                <button type="submit" style="margin-left: 10px;">View Chat</button>
-            </form>
-        
-            <!-- Chat box -->
-            {% if chat %}
-            <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; margin-bottom: 20px;">
-                {% for message in chat %}
-                <div style="margin-bottom: 10px;">
-                    <strong>{{ 'Donor' if message.sender_role == 'Donor' else 'Admin' }}:</strong>
-                    {{ message.content }}
-                    <span style="color: #aaa; font-size: 12px;">({{ message.timestamp }})</span>
-                </div>
-                {% endfor %}
+<h2 style="text-align: center; color: #c0392b;">Donor Messages</h2>
+<div style="margin: 20px auto; max-width: 800px;">
+
+    <!-- Dropdown to select a donor -->
+    <form method="GET" style="margin-bottom: 20px; text-align: center;">
+        <input type="hidden" name="view" value="donor_chats">
+        <label for="donor_id" style="font-weight: bold; color: #555;">Select Donor:</label>
+        <select name="donor_id" id="donor_id" required style="width: 50%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <option value="" disabled selected>Select a donor</option>
+            {% for donor in donors %}
+            <option value="{{ donor.donor_id }}" {% if donor_id == donor.donor_id %}selected{% endif %}>
+                {{ donor.name }} ({{ donor.email }})
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit" style="margin-left: 10px; background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">View Chat</button>
+    </form>
+
+    <!-- Chat box -->
+    {% if chat %}
+    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+        {% for message in chat %}
+        <div style="margin-bottom: 20px; display: flex; justify-content: {% if message.sender_role == 'Admin' %}flex-end{% else %}flex-start{% endif %};">
+            <div style="max-width: 70%; padding: 10px; border-radius: 10px; background: {% if message.sender_role == 'Admin' %}#c0392b{% else %}#eaeaea{% endif %}; color: {% if message.sender_role == 'Admin' %}white{% else %}#333{% endif %}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                <strong>{{ 'Admin' if message.sender_role == 'Admin' else 'Donor' }}</strong>:<br>
+                {{ message.content }}
+                <div style="text-align: right; font-size: 12px; color: #aaa; margin-top: 5px;">{{ message.timestamp }}</div>
             </div>
-        
-            <!-- Reply form -->
-            <form method="POST">
-                <textarea name="message" rows="4" style="width: 100%; padding: 10px;" placeholder="Reply to donor..." required></textarea>
-                <input type="hidden" name="donor_id" value="{{ donor_id }}">
-                <button type="submit" name="send_reply" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Send Reply</button>
-            </form>
-            {% else %}
-            <p style="text-align: center;">Select a donor to view chat messages.</p>
-            {% endif %}
         </div>
-        {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Reply form -->
+    <form method="POST" style="margin-top: 10px;">
+        <textarea name="message" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" placeholder="Reply to donor..." required></textarea>
+        <input type="hidden" name="donor_id" value="{{ donor_id }}">
+        <button type="submit" name="send_reply" style="margin-top: 10px; background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Send Reply</button>
+    </form>
+    {% else %}
+    <p style="text-align: center; color: #666;">Select a donor to view chat messages.</p>
+    {% endif %}
+</div>
+{% endif %}
+
+
 
         {% if view == 'users' %}
         <h2>Registered Users</h2>

@@ -184,25 +184,31 @@ def admin_dashboard():
         view = request.args.get('view', 'users')  # Default view is 'users'
         viewbr= request.args.get('view','blood_requests')
         viewapp=request.args.get('view','appointments')
+        donor_id = request.args.get('donor_id')
         donors = []
         chat = []
-        if request.method == 'POST' and 'send_reply' in request.form:
-           message = request.form['message']
-           donor_id = request.form['donor_id']
-           if donor_id and message.strip():
-        # Insert the admin reply into the messages table
-              cursor.execute("""
-                  INSERT INTO messages (donor_id, sender_role, content)
-                  VALUES (%s, 'Admin', %s)
-              """, (donor_id, message))
-              conn.commit()
-              flash('Reply sent to donor!', 'success')
-           else:
-              flash('Failed to send reply. Ensure donor is selected and the message is not empty.', 'danger')
+        data={}
 
-           return redirect(f'/admin_dashboard?view=donor_chats&donor_id={donor_id}')
+        if view == 'donor_chats':
+            # Fetch all donors who have sent messages
+            cursor.execute("""
+                SELECT DISTINCT d.donor_id, d.name
+                FROM donors d
+                JOIN messages m ON d.donor_id = m.donor_id
+            """)
+            donors = cursor.fetchall()
 
-        if view == 'users':
+            # If a donor is selected, fetch their chat messages
+            if donor_id:
+                cursor.execute("""
+                    SELECT sender_role, content, timestamp AS timestamp
+                    FROM messages
+                    WHERE donor_id = %s
+                    ORDER BY timestamp ASC
+                """, (donor_id,))
+                chat = cursor.fetchall()
+
+        elif view == 'users':
             # Fetch registered users
             cursor.execute("""
                 SELECT 
@@ -250,7 +256,22 @@ def admin_dashboard():
 
         else:
             data = {}
+        if request.method == 'POST' and 'send_reply' in request.form:
+            message = request.form['message']
+            donor_id = request.form['donor_id']
+            if donor_id and message.strip():
+                # Insert the admin reply into the messages table
+                cursor.execute("""
+                    INSERT INTO messages (donor_id, sender_role, content)
+                    VALUES (%s, 'Admin', %s)
+                """, (donor_id, message))
+                conn.commit()
+                flash('Reply sent to donor!', 'success')
+            else:
+                flash('Failed to send reply. Ensure donor is selected and the message is not empty.', 'danger')
 
+            return redirect(f'/admin_dashboard?view=donor_chats&donor_id={donor_id}')
+        
         if request.method == 'POST':
         # Handle user deletion
             if 'delete_user_id' in request.form:
@@ -282,7 +303,7 @@ def admin_dashboard():
         cursor.close()
         conn.close()
 
-        return render_template('admin_dashboard.html', view=view, **data,donors=donors,chat=chat)
+        return render_template('admin_dashboard.html', view=view,donors=donors,chat=chat,donor_id=donor_id,**data)
 
     else:
         flash('Unauthorized access!', 'danger')
