@@ -185,12 +185,15 @@ def login():
                     return redirect('/hospital_dashboard')
             else:
                 # Log failed login attempt manually
-                cursor.execute(
-                    "INSERT INTO Logs (user_id, event_type, description) VALUES (%s, %s, %s)",
+                try:
+                    cursor.execute("INSERT INTO Logs (user_id, event_type, description) VALUES (%s, %s, %s)",
                     (None, 'Login', f"Failed login attempt for username: {username}.")
-                )
-                conn.commit()
-                flash('Invalid username or password!', 'danger')
+                                 )
+                    conn.commit()
+                    print("Log inserted successfully.")  # Debugging
+                except mysql.connector.Error as err:
+                    print(f"Error inserting log: {err}")
+
 
         except mysql.connector.Error as db_error:
             # Handle database errors
@@ -242,6 +245,7 @@ def admin_dashboard():
         viewbr= request.args.get('view','blood_requests')
         viewapp=request.args.get('view','appointments')
         donor_id = request.args.get('donor_id')
+        user_status = request.args.get('status', 'active')
         donors = []
         chat = []
         data={}
@@ -284,22 +288,39 @@ def admin_dashboard():
                 chat = cursor.fetchall()
 
         elif view == 'users':
-            # Fetch registered users
-            cursor.execute("""
-                SELECT 
-                    u.user_id, 
-                    u.username, 
-                    u.role, 
-                    COALESCE(d.name, h.name) AS name, 
-                    d.blood_type,
-                    u.active
-                FROM Users u
-                LEFT JOIN Donors d ON u.user_id = d.user_id
-                LEFT JOIN Hospitals h ON u.user_id = h.user_id
-                where u.active = 1
-            """)
-            registered_users = cursor.fetchall()
-            data = {'registered_users': registered_users}
+            # Fetch users based on status
+            if user_status == 'active':
+                cursor.execute("""
+                    SELECT 
+                        u.user_id, 
+                        u.username, 
+                        u.role, 
+                        COALESCE(d.name, h.name) AS name, 
+                        d.blood_type,
+                        u.active
+                    FROM Users u
+                    LEFT JOIN Donors d ON u.user_id = d.user_id
+                    LEFT JOIN Hospitals h ON u.user_id = h.user_id
+                    WHERE u.active = 1
+                """)
+                active_users = cursor.fetchall()
+                data['registered_users'] = active_users
+            elif user_status == 'inactive':
+                cursor.execute("""
+                    SELECT 
+                        u.user_id, 
+                        u.username, 
+                        u.role, 
+                        COALESCE(d.name, h.name) AS name, 
+                        d.blood_type,
+                        u.active
+                    FROM Users u
+                    LEFT JOIN Donors d ON u.user_id = d.user_id
+                    LEFT JOIN Hospitals h ON u.user_id = h.user_id
+                    WHERE u.active = 0
+                """)
+                inactive_users = cursor.fetchall()
+                data['registered_users'] = inactive_users
 
         elif view == 'blood_requests':
             # Fetch all blood requests
@@ -357,7 +378,7 @@ def admin_dashboard():
                 cursor.execute("UPDATE Donors SET active = 0 WHERE user_id = %s", (user_id,))
                 cursor.execute("UPDATE Hospitals SET active = 0 WHERE user_id = %s", (user_id,))
                 conn.commit()
-                flash('User deactivated successfully!, ', 'success')
+                flash('User deactivated successfully!,kindly refresh ', 'success')
         
             # Handle blood request soft deletion
             elif 'delete_request_id' in request.form:
@@ -373,11 +394,18 @@ def admin_dashboard():
                 conn.commit()
                 flash('Appointment deactivated successfully!, kindly refresh', 'success')
                 return render_template('admin_dashboard.html', view=viewapp, **data)
+            elif 'activate_user' in request.form:
+                user_id = request.form['activate_user']
+                cursor.execute("UPDATE Users SET active = 1 WHERE user_id = %s", (user_id,))
+                cursor.execute("UPDATE Donors SET active = 1 WHERE user_id = %s", (user_id,))
+                cursor.execute("UPDATE Hospitals SET active = 1 WHERE user_id = %s", (user_id,))
+                conn.commit()
+                flash('user activated successfully!,Kindly refresh', 'success')
 
         cursor.close()
         conn.close()
 
-        return render_template('admin_dashboard.html', view=view,donors=donors,chat=chat,donor_id=donor_id,**data)
+        return render_template('admin_dashboard.html', view=view,donors=donors,chat=chat,user_status=user_status,donor_id=donor_id,**data)
 
     else:
         flash('Unauthorized access!', 'danger')
