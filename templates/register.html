@@ -4,57 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    
     <style>
         /* Body Styling */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #e74c3c); /* Blood donation theme gradient */
+            background-size: 400% 400%; /* For animated background */
+            animation: gradientAnimation 15s ease infinite; /* Background animation */
+            min-height: 100vh; /* Ensure the body takes full viewport height */
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(45deg, rgba(0, 150, 136, 0.8), rgba(255, 87, 34, 0.8)); /* Gradient background */
-            position: relative;
-            overflow: hidden;
-            background-size: 400% 400%; /* For animated background */
-            animation: gradientAnimation 15s ease infinite; /* Animation for background */
+            align-items: flex-start; /* Align to the top to enable scrolling */
         }
 
-        /* Keyframe for Background Animation */
         @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Form Container */
         .container {
-            background-color: rgba(255, 255, 255, 0.9); /* White background with some transparency */
+            background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1000px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 700px;
+            margin: 40px 0; /* Add margin for spacing from top/bottom */
             text-align: center;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
         }
 
         h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
-            color: #333;
+            color: #c0392b;
             text-transform: uppercase;
-            width: 100%;
+            font-weight: bold;
         }
 
         label {
@@ -66,21 +54,21 @@
         }
 
         .form-group {
-            width: 48%; /* Adjusting the width of the form fields */
+            width: 100%;
             margin-bottom: 20px;
         }
 
-        .half {
+        .form-half {
             display: flex;
             flex-wrap: wrap;
-            width: 100%;
+            gap: 20px;
             justify-content: space-between;
         }
 
         input, select {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
+            margin-top: 5px;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
@@ -88,55 +76,89 @@
         }
 
         input:focus, select:focus {
-            border-color: #c0392b;
+            border-color: #e74c3c;
             outline: none;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            background: linear-gradient(90deg, #ff6b6b, #e74c3c);
             color: white;
             font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
 
         button:hover {
-            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            background: linear-gradient(90deg, #e74c3c, #ff6b6b);
+            transform: scale(1.05);
         }
 
         .footer {
             margin-top: 20px;
             font-size: 14px;
-            color: #777;
+            color: #555;
         }
 
         .footer a {
             text-decoration: none;
-            color: #c0392b;
+            color: #e74c3c;
         }
 
         .footer a:hover {
             text-decoration: underline;
         }
 
-        /* Hide/Show Fields for Donors or Hospitals */
-        #donor-fields, #hospital-fields {
-            display: none; /* Initially hide donor and hospital-specific fields */
+        /* Flash Message Styles */
+        .flash-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
         }
 
-    </style>
+        .flash {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
 
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        .flash.danger {
+            background-color: #dc3545;
+        }
+    </style>
 </head>
 <body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="container">
         <h2>Register</h2>
         <form method="POST">
-            <div class="half">
+            <div class="form-half">
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" required>
@@ -145,6 +167,9 @@
                     <label>Password</label>
                     <input type="password" name="password" required>
                 </div>
+            </div>
+
+            <div class="form-half">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" name="email" required>
@@ -156,18 +181,15 @@
                         <option value="Hospital">Hospital</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" name="name" required>
-                </div>
             </div>
-            <div class="half">
-                <!-- Donor fields -->
-                <div class="form-group donor-fields">
-                    <label>Contact Info</label>
-                    <input type="text" name="contact_info">
-                </div>
-                <div class="form-group donor-fields">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="name" required>
+            </div>
+
+            <div class="form-half donor-fields">
+                <div class="form-group">
                     <label>Blood Type</label>
                     <select name="blood_type">
                         <option value="A+">A+</option>
@@ -180,44 +202,55 @@
                         <option value="AB-">AB-</option>
                     </select>
                 </div>
-                <!-- Hospital fields -->
-                <div class="form-group hospital-fields">
+                
+            </div>
+
+            <div class="form-half">
+                <div class="form-group">
                     <label>Contact Info</label>
                     <input type="text" name="contact_info">
                 </div>
                 <div class="form-group">
                     <label>City</label>
-                    <input type="text" name="city" required>
+                    <input type="text" name="city">
                 </div>
                 <div class="form-group">
                     <label>State</label>
-                    <input type="text" name="state" required>
+                    <input type="text" name="state">
                 </div>
                 <div class="form-group">
                     <label>Zip Code</label>
-                    <input type="text" name="zip_code" required>
+                    <input type="text" name="zip_code">
                 </div>
             </div>
+            
             <button type="submit">Register</button>
         </form>
+        <footer>
+            <p>Already have an account? <a href="/login">Login</a></p>
+        </footer>
     </div>
+
     <script>
         function toggleFields() {
             const role = document.getElementById('role').value;
-            // Show/hide donor-specific fields
-            const donorFields = document.querySelectorAll('.donor-fields');
-            donorFields.forEach(field => {
+            document.querySelectorAll('.donor-fields').forEach(field => {
                 field.style.display = role === 'Donor' ? 'block' : 'none';
             });
-
-            // Show/hide hospital-specific fields
-            const hospitalFields = document.querySelectorAll('.hospital-fields');
-            hospitalFields.forEach(field => {
+            document.querySelectorAll('.hospital-fields').forEach(field => {
                 field.style.display = role === 'Hospital' ? 'block' : 'none';
             });
         }
 
         window.onload = toggleFields;
     </script>
+    {% if redirect_to_login %}
+    <script type="text/javascript">
+        // Delay redirection by 1.5 seconds (1500 milliseconds)
+        setTimeout(function() {
+            window.location.href = '/login';  // Redirect to login page
+        }, 1500);  // 1500 milliseconds = 1.5 seconds
+    </script>
+{% endif %}
 </body>
 </html>

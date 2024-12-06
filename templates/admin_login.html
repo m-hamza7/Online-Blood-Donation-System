@@ -5,21 +5,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
+    <style>
+        /* Body Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #c0392b); /* Blood donation theme gradient */
+            position: relative;
+            overflow: hidden;
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite; /* Background animation */
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Form Container */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); /* White with transparency */
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #c0392b;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            text-align: left;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #e74c3c;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #e74c3c;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .flash-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .flash {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Success message (green) */
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        /* Danger message (red) */
+        .flash.danger {
+            background-color: #dc3545;
+        }
+
+        /* Optional fade-in effect */
+        .flash {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
-<body style="font-family: 'Poppins', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
-    <div class="container" style="max-width: 400px; margin: 50px auto; padding: 20px; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h1 style="text-align: center; font-size: 24px; color: #333;">Admin Login</h1>
-        <form method="POST" action="/admin" style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: flex; flex-direction: column; gap: 5px;">
-                <label for="username" style="font-size: 16px; color: #555;">Username:</label>
-                <input type="text" id="username" name="username" required style="padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
             </div>
-            <div style="display: flex; flex-direction: column; gap: 5px;">
-                <label for="password" style="font-size: 16px; color: #555;">Password:</label>
-                <input type="password" id="password" name="password" required style="padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+        <h1>Admin Login</h1>
+        <form method="POST" action="/admin">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
             </div>
-            <button type="submit" style=" width: 100%;padding: 12px;background: linear-gradient(90deg, #e74c3c, #c0392b);color: white;font-size: 16px;font-weight: bold;border: none;border-radius: 5px;cursor: pointer;transition: background 0.3s ease;">Login</button>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
         </form>
+        <footer>
+            <p><a href="/index">Back</a></p>
+        </footer>
     </div>
 </body>
 </html>

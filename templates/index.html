@@ -17,8 +17,8 @@
         /* Header Styling */
         header {
             width: 100%;
-            background: linear-gradient(90deg, #c0392b, #e74c3c);
-            color: white;
+            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
+            color: black;
             padding: 20px;
             text-align: center;
             position: relative;
@@ -39,7 +39,8 @@
             font-size: 35px;
             margin: 10px 0;
             display: inline-block;
-            color: white;
+            color: black;
+            font-weight: bold;
         }
 
         nav {
@@ -47,18 +48,22 @@
         }
 
         nav a {
+            display: inline-block;
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
             color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 15px;
+            padding: 8px 30px;
+            border-radius: 50px;
+            font-size: 18px;
             font-weight: bold;
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin-right: 15px;
         }
 
         nav a:hover {
-            background-color: rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         nav a.btn {
@@ -70,7 +75,7 @@
         /* Main Styling */
         main {
             margin: 120px auto 0;
-            max-width: 1000px;
+            margin-top: 5px;
             text-align: center;
             padding: 20px;
             background: white;
@@ -98,6 +103,7 @@
             background: #f9f9f9;
             padding: 15px;
             border-radius: 10px;
+            font-size:20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -110,6 +116,7 @@
 
         .article-content {
             flex-grow: 1;
+            font-size:25px;
         }
 
         .article-content h3 {

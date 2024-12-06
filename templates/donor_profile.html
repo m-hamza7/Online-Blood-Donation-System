@@ -12,14 +12,27 @@
             background: #f8f9fa;
             color: #333;
         }
-        header, footer {
+        footer {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
             color: white;
             text-align: center;
             padding: 20px;
         }
+        header {
+            width: 100%;
+            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
+            color: black;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom:10px;
+        }
         header img {
-            height: 50px;
+            height: 70px;
             vertical-align: middle;
         }
         section {
@@ -46,6 +59,9 @@
 
         header a:hover {
             background: #555;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            transform: scale(1.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         button {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
@@ -55,7 +71,6 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
 
         .articles img {
             width: 100%;
@@ -111,7 +126,7 @@
     </header>
 <main>
     {% if contact_admin %}
-<section style="margin: 20px auto; max-width: 800px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+<section style="margin: 20px auto;  padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
     <h2 style="color: #c0392b; text-align: center;">Chat with Admin</h2>
     <div style="max-height: 400px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         {% for message in chat %}
@@ -174,7 +189,7 @@
     {% endif %}
 
  <!-- Edit Profile Section -->
- <section style="padding: 20px; max-width: 800px; margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+ <section style="padding: 20px;  margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
     {% if edit_profile %}
     <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
     <form method="POST">
@@ -243,7 +258,7 @@
     {% endif %}
 
     <!-- Blood Requests Table -->
-    <section style="padding: 20px; max-width: 1000px; margin: auto;">
+    <section style="padding: 20px;  margin: auto;">
         <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
         {% if blood_requests %}
             <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">

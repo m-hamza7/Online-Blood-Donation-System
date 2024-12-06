@@ -15,7 +15,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(45deg, rgba(255, 0, 0, 0.8), rgba(0, 0, 255, 0.8)); /* Gradient background */
+            background: linear-gradient(45deg, #ff6b6b, #ff0000); /* Blood donation theme gradient */
             position: relative;
             overflow: hidden;
             background-size: 400% 400%; /* For animated background */
@@ -37,26 +37,28 @@
 
         /* Form Container */
         .container {
-            background-color: rgba(255, 255, 255, 0.8); /* White background with some transparency */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
             padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            position: relative;
         }
 
         h2 {
-            font-size: 2em;
+            font-size: 2.2em;
             margin-bottom: 20px;
-            color: #333;
+            color: #c0392b;
             text-transform: uppercase;
+            font-weight: bold;
         }
 
         label {
             display: block;
             font-size: 16px;
-            color: #555;
+            color: #333;
             margin-bottom: 8px;
             text-align: left;
         }
@@ -72,14 +74,14 @@
         }
 
         input:focus {
-            border-color: #c0392b;
+            border-color: #e74c3c;
             outline: none;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            background: linear-gradient(90deg, #ff6b6b, #e74c3c);
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -90,33 +92,87 @@
         }
 
         button:hover {
-            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            background: linear-gradient(90deg, #e74c3c, #ff6b6b);
         }
 
         footer {
-            position: fixed;
-            bottom:0;
+            margin-top: 20px;
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(90deg, #514556, #010101, #514556);
-            color: white;
-            right:0;
-            left:0;
-            z-index:10;
+            font-size: 14px;
+            color: #555;
         }
 
-        .footer a {
+        footer a {
             text-decoration: none;
-            color: #c0392b;
+            color: #e74c3c;
         }
 
-        .footer a:hover {
+        footer a:hover {
             text-decoration: underline;
         }
 
+        /* Flash Message Styles */
+        .flash-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .flash {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Success message (green) */
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        /* Danger message (red) */
+        .flash.danger {
+            background-color: #dc3545;
+        }
+
+        /* Optional fade-in effect */
+        .flash {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="container">
         <h2>Login</h2>
         <form method="POST">
@@ -129,9 +185,10 @@
             <button type="submit">Login</button>
         </form>
 
-        <div class="footer">
+        <footer>
             <p>Don't have an account? <a href="/register">Sign Up</a></p>
-        </div>
+            <p><a href="/index">Go back</a></p>
+        </footer>
     </div>
 </body>
 </html>

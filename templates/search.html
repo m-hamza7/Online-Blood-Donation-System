@@ -21,27 +21,28 @@
         /* Header Styling */
         header {
             width: 100%;
+            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
+            color: black;
             padding: 20px;
-            background: linear-gradient(90deg, #c0392b, #e74c3c);
-            color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            position: fixed; /* Keeps header at the top */
+            position: relative;
             top: 0;
             left: 0;
             z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom:10px;
         }
 
         header .logo {
-            max-width: 50px;
+            max-width: 70px;
             margin-right: 10px;
             vertical-align: middle;
         }
 
         header h1 {
-            font-size: 24px;
+            font-size:50px;
             margin: 10px 0;
-            color: #fff;
+            color: #000;
         }
 
         /* Main Container Styling */
@@ -120,10 +121,11 @@
 
         /* Footer Styling */
         footer {
-            position: fixed;
+            position: sticky;
             bottom:0;
             text-align: center;
             padding: 20px;
+            width:1500px;
             background: linear-gradient(90deg, #514556, #010101, #514556);
             color: white;
             right:0;

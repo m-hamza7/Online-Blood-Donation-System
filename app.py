@@ -1,9 +1,11 @@
 #admin
-
-from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-import mysql.connector
+import logging
+from flask import Flask, render_template, request, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+import mysql.connector
+import traceback
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -14,7 +16,25 @@ db_config = {
         'host': 'localhost',
         'database': 'bd'
     }
-
+logging.basicConfig(
+    filename='login_logs.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+def log_event_to_db(user_id, event_type, description):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    timestamp = datetime.now()
+    cursor.execute(
+        """
+        INSERT INTO Logs (user_id, event_type, description, timestamp)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (user_id, event_type, description, timestamp)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
     # Helper function to get a database connection
 def get_db_connection():
     return mysql.connector.connect(**db_config)
@@ -56,64 +76,72 @@ def register():
         cursor = conn.cursor(dictionary=True)
 
         # Check if location exists
-        cursor.execute(
-            "SELECT LOCATION_ID FROM LOCATIONS WHERE CITY=%s AND STATE=%s AND ZIP_CODE=%s",
-            (city, state, zip_code)  # Adjusted for correct variables
-        )
-        location = cursor.fetchone()
+        try:
+            # Check if the username already exists
+            cursor.execute("SELECT * FROM USERS WHERE USERNAME = %s", (username,))
+            existing_user = cursor.fetchone()
 
-        # Debugging: Print the location check result
-        print(f"Location found: {location}")
+            if existing_user:
+                flash('Username already exists. Please choose another one.', 'danger')
+                return render_template('register.html')  # Stay on the same page if username is taken
 
-        if not location:
-            # Insert new location if it doesn't exist
+            # Check if location exists
             cursor.execute(
-                "INSERT INTO LOCATIONS (CITY, STATE, ZIP_CODE) VALUES (%s, %s, %s)",
-                (city, state, zip_code)
+                "SELECT LOCATION_ID FROM LOCATIONS WHERE CITY=%s AND STATE=%s AND ZIP_CODE=%s",
+                (city, state, zip_code)  # Adjusted for correct variables
+            )
+            location = cursor.fetchone()
+
+            if not location:
+                # Insert new location if it doesn't exist
+                cursor.execute(
+                    "INSERT INTO LOCATIONS (CITY, STATE, ZIP_CODE) VALUES (%s, %s, %s)",
+                    (city, state, zip_code)
+                )
+                conn.commit()
+                location_id = cursor.lastrowid
+            else:
+                location_id = location['LOCATION_ID']
+
+            # Insert into Users table
+            cursor.execute(
+                "INSERT INTO USERS (USERNAME, PASSWORD, ROLE, EMAIL) VALUES (%s, %s, %s, %s)",
+                (username, password, role, email)
             )
             conn.commit()
-            location_id = cursor.lastrowid
-            # Debugging: Print new location ID
-            print(f"New Location ID: {location_id}")
-        else:
-            location_id = location['LOCATION_ID']
-            # Debugging: Print existing location ID
-            print(f"Existing Location ID: {location_id}")
+            user_id = cursor.lastrowid
 
-        # Insert into Users table
-        cursor.execute(
-            "INSERT INTO USERS (USERNAME, PASSWORD, ROLE, EMAIL) VALUES (%s, %s, %s, %s)",
-            (username, password, role, email)
-        )
-        conn.commit()
-        user_id = cursor.lastrowid
-        # Debugging: Print user ID
-        print(f"New User ID: {user_id}")
+            # Insert into Donors or Hospitals table based on role
+            if role == 'Donor':
+                blood_type = request.form['blood_type']
+                cursor.execute(
+                    "INSERT INTO DONORS (USER_ID, NAME, CONTACT_INFO, LOCATION_ID, BLOOD_TYPE) VALUES (%s, %s, %s, %s, %s)",
+                    (user_id, name, contact_info, location_id, blood_type)
+                )
+                conn.commit()
+                flash('Registration successful! Please login.', 'success')
+            elif role == 'Hospital':
+                cursor.execute(
+                    "INSERT INTO HOSPITALS (USER_ID, NAME, CONTACT_INFO, LOCATION_ID) VALUES (%s, %s, %s, %s)",
+                    (user_id, name, contact_info, location_id)
+                )
+                conn.commit()
+                flash('Registration successful! Please login.', 'success')
+            return render_template('register.html', redirect_to_login=True)
+        except mysql.connector.Error as e:
+            # Handle any database errors
+            flash(f'Database error: {str(e)}', 'danger')
+            conn.rollback()  # Rollback in case of error
 
-        # Insert into Donors or Hospitals table based on role
-        if role == 'Donor':
-            blood_type = request.form['blood_type']
-            cursor.execute(
-                "INSERT INTO DONORS (USER_ID, NAME, CONTACT_INFO, LOCATION_ID, BLOOD_TYPE) VALUES (%s, %s, %s, %s, %s)",
-                (user_id, name, contact_info, location_id, blood_type)
-            )
-            conn.commit()
-            # Debugging: Confirm Donor insertion
-            print(f"Donor record inserted with user_id: {user_id}, blood_type: {blood_type}")
-        elif role == 'Hospital':
-            cursor.execute(
-                "INSERT INTO HOSPITALS (USER_ID, NAME, CONTACT_INFO, LOCATION_ID) VALUES (%s, %s, %s, %s)",
-                (user_id, name, contact_info, location_id)
-            )
-            conn.commit()
-            # Debugging: Confirm Hospital insertion
-            print(f"Hospital record inserted with user_id: {user_id}")
+        except Exception as e:
+            # Handle any unexpected errors
+            flash(f'An unexpected error occurred: {str(e)}', 'danger')
 
-        cursor.close()
-        conn.close()
+        finally:
+            cursor.close()
+            conn.close()
 
-        flash('Registration successful! Please login.', 'success')
-        return redirect('/login')
+        return render_template('register.html')  # Stay on the same page after registration
 
     return render_template('register.html')
 
@@ -121,39 +149,68 @@ def register():
 
 
 # Login Page
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        # Database connection
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
 
-        # Authenticate user
-        cursor.execute("SELECT user_id, username, password, role FROM Users WHERE username = %s", (username,))
-        user = cursor.fetchone()
+            # Execute query to fetch the user by username
+            cursor.execute("SELECT user_id, username, password, role, active FROM Users WHERE username = %s", (username,))
+            user = cursor.fetchone()
 
-        cursor.close()
-        conn.close()
+            if user and user['active']==1 and check_password_hash(user['password'], password):
+                # Update last_login timestamp on successful login
+                cursor.execute("UPDATE Users SET last_login = %s WHERE user_id = %s", (datetime.now(), user['user_id']))
+                
+                conn.commit()
 
-        if user and check_password_hash(user['password'], password):
-            session['loggedin'] = True
-            session['user_id'] = user['user_id']
-            session['username'] = user['username']
-            session['role'] = user['role']
-            flash('Login Successful', 'success')
-            
-            # Role-based redirection
-            if user['role'] == 'Donor':
-                return redirect('/donor_profile')
-            elif user['role'] == 'Hospital':
-                return redirect('/hospital_dashboard')
-        else:
-            flash(f'Invalid username or password!', 'danger')
+                # Set session variables
+                session['loggedin'] = True
+                session['user_id'] = user['user_id']
+                session['username'] = user['username']
+                session['role'] = user['role']
+                flash('Login Successful', 'success')
+
+                # Role-based redirection
+                if user['role'] == 'Donor':
+                    return redirect('/donor_profile')
+                elif user['role'] == 'Hospital':
+                    return redirect('/hospital_dashboard')
+            else:
+                # Log failed login attempt manually
+                cursor.execute(
+                    "INSERT INTO Logs (user_id, event_type, description) VALUES (%s, %s, %s)",
+                    (None, 'Login', f"Failed login attempt for username: {username}.")
+                )
+                conn.commit()
+                flash('Invalid username or password!', 'danger')
+
+        except mysql.connector.Error as db_error:
+            # Handle database errors
+            flash(f'Database error: {str(db_error)}', 'danger')
+            app.logger.error(f'Database error during login attempt for username: {username}. Error: {str(db_error)}')
+        
+        except Exception as e:
+            # Catch any unexpected errors
+            flash('An unexpected error occurred. Please try again later.', 'danger')
+            app.logger.error(f'Unexpected error during login attempt for username: {username}. Error: {traceback.format_exc()}')
+        
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
 
     return render_template('login.html')
+
+
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
@@ -234,10 +291,12 @@ def admin_dashboard():
                     u.username, 
                     u.role, 
                     COALESCE(d.name, h.name) AS name, 
-                    d.blood_type
+                    d.blood_type,
+                    u.active
                 FROM Users u
                 LEFT JOIN Donors d ON u.user_id = d.user_id
                 LEFT JOIN Hospitals h ON u.user_id = h.user_id
+                where u.active = 1
             """)
             registered_users = cursor.fetchall()
             data = {'registered_users': registered_users}
@@ -252,7 +311,7 @@ def admin_dashboard():
                     br.quantity, 
                     br.requested_date,
                     br.status
-                FROM blood_requests br
+                FROM blood_requests br where active = 1
             """)
             blood_requests = cursor.fetchall()
             data = {'blood_requests': blood_requests}
@@ -267,7 +326,7 @@ def admin_dashboard():
                     a.date, 
                     a.time,
                     a.status
-                FROM appointments a
+                FROM appointments a where active = 1
             """)
             appointments = cursor.fetchall()
             data = {'appointments': appointments}
@@ -291,31 +350,28 @@ def admin_dashboard():
             return redirect(f'/admin_dashboard?view=donor_chats&donor_id={donor_id}')
         
         if request.method == 'POST':
-        # Handle user deletion
+            # Handle user soft deletion
             if 'delete_user_id' in request.form:
                 user_id = request.form['delete_user_id']
-                cursor.execute("DELETE FROM Appointments WHERE donor_id = %s", (user_id,))
-                cursor.execute("DELETE FROM Appointments WHERE hospital_id = %s", (user_id,))
-                cursor.execute("DELETE FROM Donors WHERE donor_id = %s", (user_id,))
-                cursor.execute("DELETE FROM Hospitals WHERE hospital_id = %s", (user_id,))
-                cursor.execute("DELETE FROM Users WHERE user_id = %s", (user_id,))
+                cursor.execute("UPDATE Users SET active = 0 WHERE user_id = %s", (user_id,))
+                cursor.execute("UPDATE Donors SET active = 0 WHERE user_id = %s", (user_id,))
+                cursor.execute("UPDATE Hospitals SET active = 0 WHERE user_id = %s", (user_id,))
                 conn.commit()
-                flash('User removed successfully!', 'success')
-
-            # Handle blood request deletion
+                flash('User deactivated successfully!, ', 'success')
+        
+            # Handle blood request soft deletion
             elif 'delete_request_id' in request.form:
                 request_id = request.form['delete_request_id']
-                cursor.execute("DELETE FROM Blood_Requests WHERE request_id = %s", (request_id,))
+                cursor.execute("UPDATE Blood_Requests SET active = 0 WHERE request_id = %s", (request_id,))
                 conn.commit()
-                flash('Blood request deleted successfully!', 'success')
-                print(view)
-                return render_template('admin_dashboard.html', view=viewbr, **data)
-            # Handle appointment deletion
+                flash('Blood request deactivated successfully!, Kindly refresh', 'success')
+                return render_template('admin_dashboard.html', view=viewbr,donors=donors,chat=chat,donor_id=donor_id,**data)
+            # Handle appointment soft deletion
             elif 'delete_appointment_id' in request.form:
                 appointment_id = request.form['delete_appointment_id']
-                cursor.execute("DELETE FROM Appointments WHERE appointment_id = %s", (appointment_id,))
+                cursor.execute("UPDATE Appointments SET active = 0 WHERE appointment_id = %s", (appointment_id,))
                 conn.commit()
-                flash('Appointment deleted successfully!', 'success')
+                flash('Appointment deactivated successfully!, kindly refresh', 'success')
                 return render_template('admin_dashboard.html', view=viewapp, **data)
 
         cursor.close()
@@ -770,7 +826,7 @@ def search():
 def logout():
     session.clear()
     flash(f'You have been logged out.', 'info')
-    return redirect('/index')
+    return redirect('/login')
 
 if __name__ == '__main__':
     app.run(debug=True)
