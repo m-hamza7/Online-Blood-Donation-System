@@ -3229,3 +3229,7 @@ NameError: name 'user_id' is not defined
 2024-12-06 18:42:42,688 - INFO -  * Restarting with stat
 2024-12-06 18:42:42,787 - INFO -  * Detected change in 'F:\\BCS-5E\\DB\\BLOOD DONATION\\app.py', reloading
 2024-12-06 18:42:42,829 - INFO -  * Restarting with stat
+2024-12-06 18:42:43,184 - WARNING -  * Debugger is active!
+2024-12-06 18:42:43,188 - INFO -  * Debugger PIN: 136-493-098
+2024-12-06 18:42:43,305 - WARNING -  * Debugger is active!
+2024-12-06 18:42:43,310 - INFO -  * Debugger PIN: 136-493-098
