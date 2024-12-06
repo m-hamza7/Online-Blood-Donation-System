@@ -1,62 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Blood Donation System - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        /* General Body Styling */
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: #ffe6e6;
             color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Header Styling */
         header {
-            width: 100%;
-            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
-            color: black;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(to right,#FF5B61,#FF5B61, #d64545, #FF5B61, #d64545);
+            color: #FFDEDE;
+            padding: 20px 15px;
+            position: fixed;
             top: 0;
             left: 0;
+            right: 0;
             z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom:10px;
         }
-        
-
         header img.logo {
-            max-width: 100px;
+            max-width: 80px;
             vertical-align: middle;
-            margin-right: 10px;
+            margin-right: 5px;
+            margin-left:300px;
         }
 
         header h1 {
-            font-size: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             margin: 0;
-            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background-color: #E23F44;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            background: white;
+            color: #a11e1e;
+            transform: scale(1.1);
         }
 
         /* Main Content Styling */
         .content {
-            margin: 120px auto 0;
-            
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            margin-top:200px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .article {
-            background-color: white;
+            background: white;
             border-radius: 10px;
-            max-width:800px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
             padding: 20px;
-            overflow: hidden;
-            margin-bottom:5px;
-            margin-left:350px
+            transition: transform 0.3s ease;
+        }
+
+        .article:hover {
+            transform: scale(1.05);
         }
 
         .article img {
@@ -67,139 +112,123 @@
         }
 
         .article h2 {
-            color: #c0392b;
+            color: #a11e1e;
+            font-size: 1.5rem;
             margin-bottom: 10px;
-            font-size: 20px;
         }
 
         .article p {
-            font-size: 20px;
+            font-size: 1rem;
             line-height: 1.6;
             color: #555;
         }
 
-        /* Donate Button Styling */
-        .donate-button {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .donate-button a {
-            display: inline-block;
-            background: linear-gradient(90deg, #e52835, #ff4040); /* Updated red gradient */
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: background 0.3s ease, transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .donate-button a:hover {
-            background: linear-gradient(90deg, #ff4040, #e52835); /* Reverse gradient on hover */
-            transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 64, 64, 0.8), 0 0 30px rgba(229, 40, 53, 0.5); /* Matching glow effect */
-        }
-        
-        /* Add glowing effect animation */
-        .donate-button a::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 50px;
-            background: radial-gradient(circle, rgba(255, 64, 64, 0.5) 20%, rgba(229, 40, 53, 0) 80%);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            animation: glow 1.5s infinite;
-        }
-        
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 10px rgba(255, 64, 64, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 64, 64, 0.8);
-            }
-            100% {
-                box-shadow: 0 0 10px rgba(255, 64, 64, 0.4);
-            }
-        }
-        
-        .donate-button a:hover::after {
-            opacity: 1;
-        }
-        
-        
-
         /* Footer Styling */
         footer {
-            position: fixed;
-            bottom:0;
             text-align: center;
-            padding: 20px;
-            background: linear-gradient(90deg, #514556, #010101, #514556);
+            padding: 10px 20px;
+            background: linear-gradient(to right, #a11e1e, #d64545);
             color: white;
-            right:0;
-            left:0;
-            z-index:10;
+            font-size: 0.9rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .nav-links a {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .article h2 {
+                font-size: 1.2rem;
+            }
+
+            .article p {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header img.logo {
+                max-width: 50px;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+
+            .article h2 {
+                font-size: 1rem;
+            }
+
+            .article p {
+                font-size: 0.8rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <header>
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-        <h1>Welcome to the Online Blood Donation System</h1>
-        <div class="donate-button">
-            <a href="/index">Donate Blood</a>
-        </div>
+        <h1>Blood Donation System</h1>
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/index">Explore</a>
+            <a href="/register">Sign Up</a>
+            <a href="/login">Login</a>
+        </nav>
     </header>
     <div class="content">
         <div class="article">
             <img src="{{ url_for('static', filename='home_image.jpg') }}" alt="Blood Donation Image">
             <h2>The Importance of Donating Blood</h2>
-            <p>
-                Blood donation is a noble act that can save lives. Every day, hospitals and emergency services require blood
-                for patients undergoing surgery, suffering from anemia, or facing trauma. A single donation can help save up to
-                three lives and make a significant difference in the world.
-            </p>
+            <p>Blood donation is a noble act that can save lives. A single donation can save up to three lives.</p>
         </div>
         <div class="article">
             <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Blood Donation Hero Image">
-            <h2>How Blood Donations Help Communities</h2>
-            <p>
-                Donating blood not only helps the recipient but also strengthens communities by building a culture of empathy
-                and care. Regular blood drives ensure that blood is available when it’s needed most, ensuring no life is lost
-                due to scarcity.
-            </p>
+            <h2>How Donations Help Communities</h2>
+            <p>Donating blood strengthens communities by building a culture of empathy and care.</p>
         </div>
         <div class="article">
             <img src="{{ url_for('static', filename='bg_img2.jpg') }}" alt="Blood Donation Campaign">
-            <h2>Blood Donation Drives: Making a Difference</h2>
-            <p>
-                Organizing blood donation drives in schools, colleges, workplaces, and communities plays a crucial role in
-                ensuring that blood is always available. It encourages a sense of responsibility, unity, and selflessness
-                among people, all of which are essential for saving lives.
-            </p>
+            <h2>Blood Drives: Making a Difference</h2>
+            <p>Blood donation drives play a crucial role in saving lives by ensuring blood availability.</p>
         </div>
-        <div class="article">
-            <img src="{{ url_for('static', filename='images.jpg') }}" alt="Blood Donation Process">
-            <h2>The Process of Donating Blood</h2>
-            <p>
-                Donating blood is a simple and safe process. The whole process typically takes around 30 minutes, including
-                a brief health check-up, blood collection, and post-donation rest. Your contribution is crucial for patients
-                who need transfusions during surgeries, accidents, and medical conditions like anemia.
-            </p>
-        </div>
-       
     </div>
-   
+    <footer>
+        &copy; 2024 Online Blood Donation System. All Rights Reserved.
+    </footer>
 </body>
+
 </html>

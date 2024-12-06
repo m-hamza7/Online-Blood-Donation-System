@@ -1,81 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blood Donation Management System</title>
     <style>
-        /* General Body Styling */
+        /* General Styling */
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background-color: #ffe6e6;
+            color: #333;
         }
 
         /* Header Styling */
         header {
-            width: 100%;
-            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
-            color: black;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(to right,#FF5B61,#FF5B61, #d64545, #FF5B61, #d64545);
+            color: #FFD2D3;
+            padding: 20px 15px;
+            position: fixed;
             top: 0;
             left: 0;
+            right: 0;
             z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom:10px;
         }
 
         header img.logo {
-            max-width: 100px;
+            max-width: 80px;
             vertical-align: middle;
-            margin-right: 10px;
+            margin-right: 5px;
+            margin-left:300px;
         }
 
         header h1 {
-            font-size: 35px;
-            margin: 10px 0;
-            display: inline-block;
-            color: black;
+            font-family: 'Montserrat', sans-serif;
             font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin: 0;
+            text-transform: uppercase;
+            margin-left:30px;
         }
 
         nav {
-            margin-top: 10px;
+            display: flex;
+            gap: 15px;
         }
 
         nav a {
-            display: inline-block;
-            background: linear-gradient(90deg, #c0392b, #e74c3c);
             color: white;
-            padding: 8px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
             text-decoration: none;
-            transition: background 0.3s ease, transform 0.3s ease;
-            margin-right: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease, transform 0.2s ease;
         }
 
         nav a:hover {
-            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            background: white;
+            color: #a11e1e;
             transform: scale(1.1);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         nav a.btn {
             background: black;
-            padding: 8px 15px;
-            border-radius: 5px;
+            color: white;
         }
 
-        /* Main Styling */
+        /* Main Section Styling */
         main {
-            margin: 120px auto 0;
-            margin-top: 5px;
+            max-width: 1200px;
+            margin: 20px auto;
             text-align: center;
             padding: 20px;
             background: white;
@@ -84,82 +89,154 @@
         }
 
         main h2 {
-            color: #c0392b;
-            font-size: 24px;
-            margin-bottom: 20px;
-            margin-top:20px;
+            color: #a11e1e;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-top: 120px;
         }
 
+        main p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Article Section Styling */
         .article-section {
             margin: 40px auto;
-            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .article {
-
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
             background: #f9f9f9;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
-            font-size:20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: left;
+        }
+
+        .article:hover {
+            transform: scale(1.05);
         }
 
         .article img {
-            width: 150px;
-            height: 150px;
+            width: 100%;
+            height: auto;
             border-radius: 10px;
-            object-fit: cover;
+            margin-bottom: 15px;
         }
 
-        .article-content {
-            flex-grow: 1;
-            font-size:25px;
+        .article h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #a11e1e;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
 
-        .article-content h3 {
-            color: #c0392b;
-            margin: 0 0 10px;
-        }
-
-        .article-content p {
-            font-size: 16px;
+        .article p {
+            font-size: 1rem;
             line-height: 1.5;
-            margin: 0 0 10px;
+            color: #555;
         }
 
-        .article-content a {
-            color: #c0392b;
-            text-decoration: none;
+        .article a {
+            color: #a11e1e;
             font-weight: bold;
+            text-decoration: none;
         }
 
-        .article-content a:hover {
+        .article a:hover {
             text-decoration: underline;
         }
 
+        /* Footer Styling */
         footer {
-            position: relative;
-            bottom: 0;
             text-align: center;
             padding: 20px;
-            background: linear-gradient(90deg, #514556, #010101, #514556);
+            background: linear-gradient(to right, #a11e1e, #d64545);
             color: white;
-            right: 0;
-            left: 0;
-            z-index: 10;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                text-align: center;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            main h2 {
+                font-size: 1.8rem;
+            }
+
+            main p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header img.logo {
+                max-width: 50px;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+
+            main h2 {
+                font-size: 1.5rem;
+            }
+
+            main p {
+                font-size: 0.9rem;
+            }
+
+            .article h3 {
+                font-size: 1.2rem;
+            }
+
+            .article p {
+                font-size: 0.9rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <header>
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
-        <h1>Blood Donation Management System</h1>
+        <h1>Blood Donation System</h1>
         <nav>
             <a href="/">Home</a>
-            <a href="/register">Sign Up</a> 
+            <a href="/register">Sign Up</a>
             <a href="/login">Login</a>
             <a href="/admin" class="btn">Admin</a>
         </nav>
@@ -170,44 +247,18 @@
         <p>Connecting donors and hospitals to save lives. Together, we can make a difference!</p>
 
         <section class="article-section">
-            <!-- Article 1 -->
             <div class="article">
                 <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Donate Blood">
-                <div class="article-content">
-                    <h3>Why Donate Blood?</h3>
-                    <p>Blood donation is a life-saving act that helps patients in need. Discover the importance of donating blood and how it benefits both the donor and the recipient.</p>
-                    <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Read More</a>
-                </div>
+                <h3>Why Donate Blood?</h3>
+                <p>Blood donation is a life-saving act that helps patients in need.</p>
+                <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Read More</a>
             </div>
 
-            <!-- Article 2 -->
             <div class="article">
                 <img src="{{ url_for('static', filename='health_benefits.jpg') }}" alt="Health Benefits">
-                <div class="article-content">
-                    <h3>Health Benefits of Blood Donation</h3>
-                    <p>Did you know that donating blood can help improve your heart health and reduce iron levels? Learn more about the health benefits for donors.</p>
-                    <a href="https://www.redcrossblood.org/" target="_blank">Learn More</a>
-                </div>
-            </div>
-
-            <!-- Article 3 -->
-            <div class="article">
-                <img src="{{ url_for('static', filename='blood_types.jpg') }}" alt="Blood Types">
-                <div class="article-content">
-                    <h3>Know Your Blood Type</h3>
-                    <p>Every blood type plays a critical role in saving lives. Find out which blood types are in high demand and how you can contribute.</p>
-                    <a href="https://www.blood.co.uk/" target="_blank">Discover More</a>
-                </div>
-            </div>
-
-            <!-- Article 4 -->
-            <div class="article">
-                <img src="{{ url_for('static', filename='universal_donor.jpg') }}" alt="Universal Donor">
-                <div class="article-content">
-                    <h3>Are You a Universal Donor?</h3>
-                    <p>If you have O-negative blood type, you are a universal donor. Learn how your blood can save lives in emergencies.</p>
-                    <a href="https://www.nhsbt.nhs.uk/" target="_blank">Find Out More</a>
-                </div>
+                <h3>Health Benefits of Blood Donation</h3>
+                <p>Donating blood can help improve your heart health and reduce iron levels.</p>
+                <a href="https://www.redcrossblood.org/" target="_blank">Learn More</a>
             </div>
         </section>
     </main>
@@ -216,4 +267,5 @@
         <p>&copy; 2024 Blood Donation Management System. Saving lives, one donation at a time.</p>
     </footer>
 </body>
+
 </html>

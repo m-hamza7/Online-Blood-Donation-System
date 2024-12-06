@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -7,34 +8,76 @@
     <title>Donor Profile</title>
     <style>
         body {
-            margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6e6;
             color: #333;
         }
+
+        footer,
+        header,
+        button,
+        a {
+            transition: all 0.3s ease-in-out;
+        }
+
         footer {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
             color: white;
             text-align: center;
             padding: 20px;
         }
+
         header {
-            width: 100%;
-            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
-            color: black;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(to right,#FF5B61,#FF5B61, #d64545, #FF5B61, #d64545);
+            color: #FFDEDE;
+            padding: 20px 15px;
+            position: sticky;
             top: 0;
-            left: 0;
-            z-index: 10;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom:10px;
         }
+
         header img {
             height: 70px;
             vertical-align: middle;
         }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        header a:hover {
+            background: white;
+            color: #a11e1e;
+            transform: scale(1.1);
+        }
+
+        header a.btn {
+            background: black;
+            color: white;
+        }
+
         section {
             margin: 20px auto;
             max-width: 1200px;
@@ -43,33 +86,110 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             color: #c0392b;
-        }
-        header a {
-            color: white;
-            text-decoration: none;
-            margin-left: 15px;
-            font-weight: bold;
-            padding: 5px 15px;
-            background: #e67e22;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            text-align: center;
         }
 
-        header a:hover {
-            background: #555;
-            background: linear-gradient(90deg, #e74c3c, #c0392b);
-            transform: scale(1.5);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
+
+        table th,
+        table td {
+            text-align: left;
+            padding: 10px;
+        }
+
+        table th {
+            background: #f5f5f5;
+        }
+
         button {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
             color: white;
             font-weight: bold;
             border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: #e74c3c;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .chat-message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .chat-message.admin {
+            justify-content: flex-start;
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .chat-bubble {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+            background: #eaeaea;
+            color: #333;
+        }
+
+        .chat-bubble.admin {
+            background: #c0392b;
+            color: white;
+        }
+
+        .chat-timestamp {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .notifications ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .notifications li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .articles img {
@@ -77,22 +197,32 @@
             border-radius: 10px;
             margin-bottom: 10px;
         }
+
         .articles h3 {
             color: #c0392b;
             margin: 10px 0;
         }
+
         .articles p {
             font-size: 16px;
             line-height: 1.5;
         }
-        .articles a {
-            color: #c0392b;
-            text-decoration: none;
-            font-weight: bold;
+        .flash-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
         }
-        .articles a:hover {
-            text-decoration: underline;
+         .Logout-button {
+            text-align: center;
+            margin-top: 20px;
         }
+
         .Logout-button a {
             background: #c0392b;
             color: white;
@@ -101,306 +231,392 @@
             text-decoration: none;
             font-weight: bold;
             transition: background 0.3s ease;
-            margin-top: 10px;
         }
 
         .Logout-button a:hover {
             background: #e74c3c;
         }
+        .flash {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Success message (green) */
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        /* Danger message (red) */
+        .flash.danger {
+            background-color: #dc3545;
+        }
+
+        /* Optional fade-in effect */
+        .flash {
+            opacity: 0;
+            animation: fadeIn 4s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Header -->
     <header>
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
-        <h1>Welcome, {{ donor.name }}</h1>
-        <p>Blood Type: {{ donor.blood_type }}</p>
-        <p>City: {{ donor.city }}</p>
+        <h1><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo"> Welcome, {{ donor.name }}</h1>
+        <p>Blood Type: {{ donor.blood_type }} | City: {{ donor.city }}</p>
         <a href="?view_profile=true">View Profile</a>
         <a href="?view_appointments=true">My Appointment History</a>
-        <a href="?contact_admin=true" style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">
-            Contact Admin
-        </a>
-        
+        <a href="?contact_admin=true">Contact Admin </a>
+
     </header>
-<main>
-    {% if contact_admin %}
-<section style="margin: 20px auto;  padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-    <h2 style="color: #c0392b; text-align: center;">Chat with Admin</h2>
-    <div style="max-height: 400px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-        {% for message in chat %}
-        <div style="margin-bottom: 20px; display: flex; justify-content: {% if message.sender_role == 'Admin' %}flex-start{% else %}flex-end{% endif %};">
-            <div style="max-width: 70%; padding: 10px; border-radius: 10px; background: {% if message.sender_role == 'Admin' %}#c0392b{% else %}#eaeaea{% endif %}; color: {% if message.sender_role == 'Admin' %}white{% else %}#333{% endif %}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                <strong>{{ 'Admin' if message.sender_role == 'Admin' else 'You' }}</strong>:<br>
-                {{ message.content }}
-                <div style="text-align: right; font-size: 12px; color: #aaa; margin-top: 5px;">{{ message.timestamp }}</div>
+    <main>
+        
+        {% if contact_admin %}
+        <section
+            style="margin: 20px auto;  padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #c0392b; text-align: center;">Chat with Admin</h2>
+            <div
+                style="max-height: 400px; overflow-y: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                {% for message in chat %}
+                <div
+                    style="margin-bottom: 20px; display: flex; justify-content: {% if message.sender_role == 'Admin' %}flex-start{% else %}flex-end{% endif %};">
+                    <div
+                        style="max-width: 70%; padding: 10px; border-radius: 10px; background: {% if message.sender_role == 'Admin' %}#c0392b{% else %}#eaeaea{% endif %}; color: {% if message.sender_role == 'Admin' %}white{% else %}#333{% endif %}; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                        <strong>{{ 'Admin' if message.sender_role == 'Admin' else 'You' }}</strong>:<br>
+                        {{ message.content }}
+                        <div style="text-align: right; font-size: 12px; color: #aaa; margin-top: 5px;">{{
+                            message.timestamp }}</div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-    </div>
 
-    <form method="POST">
-        <textarea name="message" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);" placeholder="Type your message..." required></textarea>
-        <button type="submit" name="send_message" style="margin-top: 10px; background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Send Message</button>
-    </form>
-</section>
-{% endif %}
+            <form method="POST">
+                <textarea name="message" rows="4"
+                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
+                    placeholder="Type your message..." required></textarea>
+                <button type="submit" name="send_message"
+                    style="margin-top: 10px; background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Send
+                    Message</button>
+            </form>
+        </section>
+        {% endif %}
 
-    <!-- View Profile Section -->
-    {% if view_profile %}
-    <section>
-        <h2>Your Profile Details</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-            <!-- Profile details table here -->
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th>
-                <td style="padding: 10px;">{{ donor.name }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Email</th>
-                <td style="padding: 10px;">{{ donor.email }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Contact Info</th>
-                <td style="padding: 10px;">{{ donor.contact_info }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Blood Type</th>
-                <td style="padding: 10px;">{{ donor.blood_type }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">City</th>
-                <td style="padding: 10px;">{{ donor.city }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">State</th>
-                <td style="padding: 10px;">{{ donor.state }}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px; background: #f5f5f5;">Zip Code</th>
-                <td style="padding: 10px;">{{ donor.zip_code }}</td>
-            </tr>
-        </table>
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="?edit_profile=true" style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">Edit Profile</a>
-        </div>
-    </section>
-    {% endif %}
+        <!-- View Profile Section -->
+        {% if view_profile %}
+        <section>
+            <h2>Your Profile Details</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <!-- Profile details table here -->
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Name</th>
+                    <td style="padding: 10px;">{{ donor.name }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Email</th>
+                    <td style="padding: 10px;">{{ donor.email }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Contact Info</th>
+                    <td style="padding: 10px;">{{ donor.contact_info }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Blood Type</th>
+                    <td style="padding: 10px;">{{ donor.blood_type }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">City</th>
+                    <td style="padding: 10px;">{{ donor.city }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">State</th>
+                    <td style="padding: 10px;">{{ donor.state }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; padding: 10px; background: #f5f5f5;">Zip Code</th>
+                    <td style="padding: 10px;">{{ donor.zip_code }}</td>
+                </tr>
+            </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="?edit_profile=true"
+                    style="text-decoration: none; background: #c0392b; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold;">Edit
+                    Profile</a>
+            </div>
+        </section>
+        {% endif %}
 
- <!-- Edit Profile Section -->
- <section style="padding: 20px;  margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-    {% if edit_profile %}
-    <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
-    <form method="POST">
-        <input type="hidden" name="action" value="edit_profile">
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-            <tr>
-                <th style="text-align: left; padding: 10px;">Name</th>
-                <td style="padding: 10px;">
-                    <input type="text" name="name" value="{{ donor.name }}" required style="width: 100%; padding: 8px;">
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">Email</th>
-                <td style="padding: 10px;"><input type="text" name=email value="{{ donor.email }}" required style="width: 100%; padding: 8px;"></td>
-                </td>  
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">Contact Info</th>
-                <td style="padding: 10px;">
-                    <input type="text" name="contact_info" value="{{ donor.contact_info }}" required style="width: 100%; padding: 8px;">
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">Blood Type</th>
-                <td style="padding: 10px;">
-                    <select name="blood_type" required style="width: 100%; padding: 8px;">
-                        <option value="A+" {% if donor.blood_type == 'A+' %}selected{% endif %}>A+</option>
-                        <option value="A-" {% if donor.blood_type == 'A-' %}selected{% endif %}>A-</option>
-                        <option value="B+" {% if donor.blood_type == 'B+' %}selected{% endif %}>B+</option>
-                        <option value="B-" {% if donor.blood_type == 'B-' %}selected{% endif %}>B-</option>
-                        <option value="O+" {% if donor.blood_type == 'O+' %}selected{% endif %}>O+</option>
-                        <option value="O-" {% if donor.blood_type == 'O-' %}selected{% endif %}>O-</option>
-                        <option value="AB+" {% if donor.blood_type == 'AB+' %}selected{% endif %}>AB+</option>
-                        <option value="AB-" {% if donor.blood_type == 'AB-' %}selected{% endif %}>AB-</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">City</th>
-                <td style="padding: 10px;">
-                    <input type="text" name="city" value="{{ donor.city }}" required style="width: 100%; padding: 8px;">
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">State</th>
-                <td style="padding: 10px;">
-                    <input type="text" name="state" value="{{ donor.state }}" required style="width: 100%; padding: 8px;">
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: left; padding: 10px;">Zip Code</th>
-                <td style="padding: 10px;">
-                    <input type="text" name="zip_code" value="{{ donor.zip_code }}" required style="width: 100%; padding: 8px;">
-                </td>
-            </tr>
-        </table>
-        <div style="text-align: center; margin-top: 20px;">
-            <button type="submit" style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
-            <a href="/donor_profile?view_profile=true" style="margin-left: 10px; text-decoration: none; color: #c0392b;">Cancel</a>
-        </div>
-    </form>
-    {% else %}
-    <!--<div style="text-align: center; margin-top: 20px;">
-        <a href="/donor_profile?edit_profile=true" style="background: #c0392b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Edit Profile</a>
-    </div>-->
-    {% endif %}
-
-    <!-- Blood Requests Table -->
-    <section style="padding: 20px;  margin: auto;">
-        <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
-        {% if blood_requests %}
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
-                <thead>
+        <!-- Edit Profile Section -->
+        <section
+            style="padding: 20px;  margin: auto; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            {% if edit_profile %}
+            <h2 style="color: #c0392b; text-align: center;">Edit Your Profile</h2>
+            <form method="POST">
+                <input type="hidden" name="action" value="edit_profile">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                     <tr>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in blood_requests %}
-                    
-                    <tr>
-                        <td style="padding: 10px;">{{ request.blood_type }}</td>
-                        <td style="padding: 10px;">{{ request.quantity }}</td>
-                        <td style="padding: 10px;">{{ request.requested_date }}</td>
-                        <td style="padding: 10px;">{{ request.name }}</td>
-                        <td style="padding: 10px;">{{ request.city }}</td>
+                        <th style="text-align: left; padding: 10px;">Name</th>
                         <td style="padding: 10px;">
-                            <form method="POST">
-                                <label for="date">Date:</label>
-                                <input type="date" name="date" required>
-                                <label for="time">Time:</label>
-                                <input type="time" name="time" required>
-                                <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
-                                <button type="submit" style="background: #c0392b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Book Appointment</button>
-                            </form>
+                            <input type="text" name="name" value="{{ donor.name }}" required
+                                style="width: 100%; padding: 8px;">
                         </td>
                     </tr>
-                    
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p style="text-align: center;">No matching blood requests found.</p>
-        {% endif %}
-    </section>
-
-    {% if view_appointments %}
-    <section>
-        <h2 style="color: #c0392b; text-align: center;">My Appointment History</h2>
-        {% if appointments %}
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
-                <thead>
                     <tr>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment ID</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Date</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Time</th>
-                        <th style="padding: 10px; background: #f5f5f5; text-align: left;">Status</th>
+                        <th style="text-align: left; padding: 10px;">Email</th>
+                        <td style="padding: 10px;"><input type="text" name=email value="{{ donor.email }}" required
+                                style="width: 100%; padding: 8px;"></td>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
                     <tr>
-                        <td style="padding: 10px;">{{ appointment.appointment_id }}</td>
-                        <td style="padding: 10px;">{{ appointment.hospital_name }}</td>
-                        <td style="padding: 10px;">{{ appointment.blood_type }}</td>
-                        <td style="padding: 10px;">{{ appointment.date }}</td>
-                        <td style="padding: 10px;">{{ appointment.time }}</td>
-                        <td style="padding: 10px;">{{ appointment.status }}</td>
+                        <th style="text-align: left; padding: 10px;">Contact Info</th>
+                        <td style="padding: 10px;">
+                            <input type="text" name="contact_info" value="{{ donor.contact_info }}" required
+                                style="width: 100%; padding: 8px;">
+                        </td>
                     </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p style="text-align: center;">You have no appointment history.</p>
-        {% endif %}
-    </section>
-    {% endif %}
-    
+                    <tr>
+                        <th style="text-align: left; padding: 10px;">Blood Type</th>
+                        <td style="padding: 10px;">
+                            <select name="blood_type" required style="width: 100%; padding: 8px;">
+                                <option value="A+" {% if donor.blood_type=='A+' %}selected{% endif %}>A+</option>
+                                <option value="A-" {% if donor.blood_type=='A-' %}selected{% endif %}>A-</option>
+                                <option value="B+" {% if donor.blood_type=='B+' %}selected{% endif %}>B+</option>
+                                <option value="B-" {% if donor.blood_type=='B-' %}selected{% endif %}>B-</option>
+                                <option value="O+" {% if donor.blood_type=='O+' %}selected{% endif %}>O+</option>
+                                <option value="O-" {% if donor.blood_type=='O-' %}selected{% endif %}>O-</option>
+                                <option value="AB+" {% if donor.blood_type=='AB+' %}selected{% endif %}>AB+</option>
+                                <option value="AB-" {% if donor.blood_type=='AB-' %}selected{% endif %}>AB-</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; padding: 10px;">City</th>
+                        <td style="padding: 10px;">
+                            <input type="text" name="city" value="{{ donor.city }}" required
+                                style="width: 100%; padding: 8px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; padding: 10px;">State</th>
+                        <td style="padding: 10px;">
+                            <input type="text" name="state" value="{{ donor.state }}" required
+                                style="width: 100%; padding: 8px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: left; padding: 10px;">Zip Code</th>
+                        <td style="padding: 10px;">
+                            <input type="text" name="zip_code" value="{{ donor.zip_code }}" required
+                                style="width: 100%; padding: 8px;">
+                        </td>
+                    </tr>
+                </table>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit"
+                        style="background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save
+                        Changes</button>
+                    <a href="/donor_profile?view_profile=true"
+                        style="margin-left: 10px; text-decoration: none; color: #c0392b;">Cancel</a>
+                </div>
+            </form>
+            {% else %}
+            <!--<div style="text-align: center; margin-top: 20px;">
+        <a href="/donor_profile?edit_profile=true" style="background: #c0392b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Edit Profile</a>
+    </div>-->
+            {% endif %}
 
-    <section>
-        <h2>Notifications</h2>
-        {% if notifications %}
-            <ul>
-                {% for notification in notifications %}
+            <!-- Blood Requests Table -->
+            <section style="padding: 20px;  margin: auto;">
+                <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
+                {% if blood_requests %}
+                <table
+                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in blood_requests %}
+
+<tr>
+    <td style="padding: 10px;">{{ request.blood_type }}</td>
+    <td style="padding: 10px;">{{ request.quantity }}</td>
+    <td style="padding: 10px;">{{ request.requested_date }}</td>
+    <td style="padding: 10px;">{{ request.name }}</td>
+    <td style="padding: 10px;">{{ request.city }}</td>
+    <td style="padding: 10px;">
+        <form method="POST">
+            <label for="date">Date:</label>
+            <input type="date" style="margin-bottom:9px;"name="date" id="appointment_date" required>
+
+            <label for="time" style="margin-top:9px;">Time:</label>
+            <input type="time" name="time" id="appointment_time" required>
+
+            <input type="hidden" name="hospital_id" value="{{ request.hospital_id }}">
+            <button type="submit"
+                style="background: #c0392b; margin-top:11px;color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; "onmouseover="this.style.background='#e74c3c'; this.style.color='white';"
+                onmouseout="this.style.background='#c0392b'; this.style.color='white';">Book
+                Appointment</button>
+        </form>
+    </td>
+</tr>
+
+{% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="text-align: center;">No matching blood requests found.</p>
+                {% endif %}
+            </section>
+
+            {% if view_appointments %}
+            <section>
+                <h2 style="color: #c0392b; text-align: center;">My Appointment History</h2>
+                {% if appointments %}
+                <table
+                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment ID</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Date</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Time</th>
+                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td style="padding: 10px;">{{ appointment.appointment_id }}</td>
+                            <td style="padding: 10px;">{{ appointment.hospital_name }}</td>
+                            <td style="padding: 10px;">{{ appointment.blood_type }}</td>
+                            <td style="padding: 10px;">{{ appointment.date }}</td>
+                            <td style="padding: 10px;">{{ appointment.time }}</td>
+                            <td style="padding: 10px;">{{ appointment.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="text-align: center;">You have no appointment history.</p>
+                {% endif %}
+            </section>
+            {% endif %}
+
+
+            <section>
+                <h2>Notifications</h2>
+                {% if notifications %}
+                <ul>
+                    {% for notification in notifications %}
                     <li>
-                        <strong>{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</strong>: 
+                        <strong>{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</strong>:
                         {{ notification.message }}
                     </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No notifications at this time.</p>
-        {% endif %}
-    </section>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No notifications at this time.</p>
+                {% endif %}
+            </section>
+
+            <!-- Articles Section -->
+            <!-- <section class="articles">
+                <h2>Informative Articles & Resources</h2>
+
+                --<-!--- Article 1 
+                <div>
+                    <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Blood Donation">
+                    <h3>The Importance of Regular Blood Donation</h3>
+                    <p>Discover why donating blood is not only a gift of life to others but also a healthy practice for
+                        you. Regular donation helps reduce iron overload and keeps your body healthy.</p>
+                    <a href="https://www.redcrossblood.org/donate-blood/blood-donation-process.html"
+                        target="_blank">Read More</a>
+                </div>
+
+                <-!-- Article 2 
+                <div>
+                    <img src="{{ url_for('static', filename='bg_img2.jpg') }}" alt="Health Benefits">
+                    <h3>Health Benefits of Donating Blood</h3>
+                    <p>Donating blood helps you stay healthier by maintaining balanced iron levels. Learn how regular
+                        donations can positively impact your health.</p>
+                    <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Learn More</a>
+                </div>
+
+                <-!-- Article 3 
+                <div>
+                    <img src="{{ url_for('static', filename='home_image.jpg') }}" alt="Universal Donor">
+                    <h3>Are You a Universal Donor?</h3>
+                    <p>If you have O-negative blood type, you are a universal donor. Find out how you can make a
+                        significant difference in emergency situations.</p>
+                    <a href="https://www.blood.co.uk/" target="_blank">Discover More</a>
+                </div>
+            </section> -->
+
+            <!-- Donation Tips Section -->
+            <section>
+                <h2>Quick Tips for Donors</h2>
+                <ul style="font-size: 16px; line-height: 1.8;">
+                    <li>Stay hydrated before and after your donation.</li>
+                    <li>Have a light, iron-rich snack an hour before donating.</li>
+                    <li>Avoid caffeine and alcohol before donation.</li>
+                    <li>Rest for a few minutes post-donation to ensure you're feeling well.</li>
+                </ul>
+            </section>
+            <div class="Logout-button">
+                <a href="/logout" class="Logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+            <!--{% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}-->
+    </main>
+
+    <script>
+        // JavaScript to ensure only future date and time can be selected
     
-    <!-- Articles Section -->
-    <section class="articles">
-        <h2>Informative Articles & Resources</h2>
-        
-        <!-- Article 1 -->
-        <div>
-            <img src="{{ url_for('static', filename='be_hero.jpg') }}" alt="Blood Donation">
-            <h3>The Importance of Regular Blood Donation</h3>
-            <p>Discover why donating blood is not only a gift of life to others but also a healthy practice for you. Regular donation helps reduce iron overload and keeps your body healthy.</p>
-            <a href="https://www.redcrossblood.org/donate-blood/blood-donation-process.html" target="_blank">Read More</a>
-        </div>
+        // Set the minimum date to today's date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("appointment_date").setAttribute("min", today);
+    
+        // Set the minimum time to current time
+        const currentTime = new Date().toTimeString().split(' ')[0].slice(0, 5); // Gets the current time in HH:MM format
+        document.getElementById("appointment_time").setAttribute("min", currentTime);
+    </script>
 
-        <!-- Article 2 -->
-        <div>
-            <img src="{{ url_for('static', filename='bg_img2.jpg') }}" alt="Health Benefits">
-            <h3>Health Benefits of Donating Blood</h3>
-            <p>Donating blood helps you stay healthier by maintaining balanced iron levels. Learn how regular donations can positively impact your health.</p>
-            <a href="https://www.who.int/campaigns/world-blood-donor-day" target="_blank">Learn More</a>
-        </div>
-
-        <!-- Article 3 -->
-        <div>
-            <img src="{{ url_for('static', filename='home_image.jpg') }}" alt="Universal Donor">
-            <h3>Are You a Universal Donor?</h3>
-            <p>If you have O-negative blood type, you are a universal donor. Find out how you can make a significant difference in emergency situations.</p>
-            <a href="https://www.blood.co.uk/" target="_blank">Discover More</a>
-        </div>
-    </section>
-
-    <!-- Donation Tips Section -->
-    <section>
-        <h2>Quick Tips for Donors</h2>
-        <ul style="font-size: 16px; line-height: 1.8;">
-            <li>Stay hydrated before and after your donation.</li>
-            <li>Have a light, iron-rich snack an hour before donating.</li>
-            <li>Avoid caffeine and alcohol before donation.</li>
-            <li>Rest for a few minutes post-donation to ensure you're feeling well.</li>
-        </ul>
-    </section>
-    <div class="Logout-button">
-        <a href="/logout" class="Logout-button">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-
-</main>   
     <!-- Footer -->
     <footer>
         <p>&copy; 2024 Online Blood Donation System</p>
     </footer>
 </body>
+
 </html>

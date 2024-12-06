@@ -16,46 +16,54 @@
 
         /* Header Styling */
         header {
-            width: 100%;
-            background:linear-gradient(#FFF,#FFF,#FFF,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#fff,#000);
-            color: black;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(to right,#FF5B61,#FF5B61, #d64545, #FF5B61, #d64545);
+            color: #FFDEDE;
+            padding: 20px 15px;
+            position: sticky;
             top: 0;
-            left: 0;
-            z-index: 10;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom:10px;
         }
 
-        header img.logo {
-            max-width: 70px;
-            margin-right: 10px;
+        header img {
+            height: 70px;
             vertical-align: middle;
         }
 
         header h1 {
-            font-size: 40px;
-            margin: 10px 0;
-            display: inline-block;
-            color: black;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin: 0;
+            text-transform: uppercase;
         }
 
         header a {
             color: white;
             text-decoration: none;
-            margin-left: 15px;
+            font-size: 1rem;
             font-weight: bold;
-            padding: 5px 15px;
-            background: #333;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease, transform 0.2s ease;
         }
 
         header a:hover {
-            background: #555;
+            background: white;
+            color: #a11e1e;
+            transform: scale(1.1);
         }
+
+        header a.btn {
+            background: black;
+            color: white;
+        }
+
 
         /* Main Container */
         main {
@@ -174,6 +182,69 @@
             left:0;
             z-index:10;
         }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: #e74c3c;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Flash Message Styles */
+        .flash-container {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .flash {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            width: auto;
+        }
+
+        /* Success message (green) */
+        .flash.success {
+            background-color: #28a745;
+        }
+
+        /* Danger message (red) */
+        .flash.danger {
+            background-color: #dc3545;
+        }
+
+        /* Optional fade-in effect */
+        .flash {
+            opacity: 0;
+            animation: fadeOut 4s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -187,6 +258,15 @@
     </header>
 
     <main>
+       <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}-->
+    {% endwith %}
         {% if view == 'chat' %}
         <section style="margin: 20px auto; max-width: 800px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
             <h2 style="color: #c0392b; text-align: center;">Chat with Admin</h2>

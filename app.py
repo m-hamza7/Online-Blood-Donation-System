@@ -185,6 +185,7 @@ def login():
                     return redirect('/hospital_dashboard')
             else:
                 # Log failed login attempt manually
+                flash('invalid username or password')
                 try:
                     cursor.execute("INSERT INTO Logs (user_id, event_type, description) VALUES (%s, %s, %s)",
                     (None, 'Login', f"Failed login attempt for username: {username}.")
@@ -193,7 +194,6 @@ def login():
                     print("Log inserted successfully.")  # Debugging
                 except mysql.connector.Error as err:
                     print(f"Error inserting log: {err}")
-
 
         except mysql.connector.Error as db_error:
             # Handle database errors
@@ -770,7 +770,7 @@ def hospital_dashboard():
 
                 # Delete the blood request if it is open
                 cursor.execute(
-                    "DELETE FROM blood_requests WHERE request_id = %s AND status = 'Open'", (delete_request_id,)
+                    "UPDATE blood_requests SET active = 0 WHERE request_id = %s AND status = 'Open'", (delete_request_id,)
                 )
                 conn.commit()
                 flash('Blood request deleted successfully.', 'success')
@@ -781,7 +781,7 @@ def hospital_dashboard():
             FROM appointments a
             JOIN donors d ON a.donor_id = d.donor_id
             JOIN blood_requests br ON br.hospital_id = a.hospital_id AND br.blood_type = d.blood_type OR d.blood_type = 'O-'
-            WHERE a.hospital_id = %s AND a.status = 'Pending' AND br.status = 'Open'
+            WHERE a.hospital_id = %s AND a.status = 'Pending' AND br.status = 'Open' AND a.active = 1
         """, (hospital_id,))
         appointments = cursor.fetchall()
 
@@ -789,7 +789,7 @@ def hospital_dashboard():
         cursor.execute("""
             SELECT request_id, blood_type, quantity, requested_date, status
             FROM blood_requests
-            WHERE hospital_id = %s
+            WHERE hospital_id = %s AND active = 1
         """, (hospital_id,))
         blood_requests = cursor.fetchall()
 
