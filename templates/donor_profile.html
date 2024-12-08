@@ -445,15 +445,15 @@
                 <h2 style="color: #c0392b; text-align: center;">Available Blood Requests</h2>
                 {% if blood_requests %}
                 <table
-                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: #f5f5f5; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
                     <thead>
                         <tr>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Quantity</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Requested Date</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">City</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Blood Type</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Quantity</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Requested Date</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Hospital Name</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">City</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Appointment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -495,15 +495,15 @@
                 <h2 style="color: #c0392b; text-align: center;">My Appointment History</h2>
                 {% if appointments %}
                 <table
-                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
+                    style="width: 100%; border-collapse: collapse; margin-top: 20px; background: #f5f5f5; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; overflow: hidden;">
                     <thead>
                         <tr>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Appointment ID</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Hospital Name</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Blood Type</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Date</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Time</th>
-                            <th style="padding: 10px; background: #f5f5f5; text-align: left;">Status</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Appointment ID</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Hospital Name</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Blood Type</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Date</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Time</th>
+                            <th style="padding: 10px; background: #FFDEDE; text-align: left;">Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -538,7 +538,7 @@
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p>No notifications at this time.</p>
+                <p style="text-align:center;">No notifications at this time.</p>
                 {% endif %}
             </section>
 
@@ -579,10 +579,10 @@
             <section>
                 <h2>Quick Tips for Donors</h2>
                 <ul style="font-size: 16px; line-height: 1.8;">
-                    <li>Stay hydrated before and after your donation.</li>
-                    <li>Have a light, iron-rich snack an hour before donating.</li>
-                    <li>Avoid caffeine and alcohol before donation.</li>
-                    <li>Rest for a few minutes post-donation to ensure you're feeling well.</li>
+                    <P style="text-align: center; font-weight:bold;">Stay hydrated before and after your donation.</P>
+                    <P style="text-align: center;  font-weight:bold;">Have a light, iron-rich snack an hour before donating.</P>
+                    <P style="text-align: center;  font-weight:bold;">Avoid caffeine and alcohol before donation.</P>
+                    <P style="text-align: center;  font-weight:bold;">Rest for a few minutes post-donation to ensure you're feeling well.</P>
                 </ul>
             </section>
             <div class="Logout-button">

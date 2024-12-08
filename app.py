@@ -537,7 +537,7 @@ def donor_profile():
                 FROM Appointments a
                 JOIN Hospitals h ON a.hospital_id = h.hospital_id
                 JOIN Donors d ON a.donor_id = d.donor_id
-                WHERE a.donor_id = %s
+                WHERE a.donor_id = %s AND a.active=1
                 ORDER BY a.date DESC, a.time DESC
             """, (donor['donor_id'],))
             appointments = cursor.fetchall() 
@@ -570,7 +570,7 @@ def donor_profile():
                 FROM blood_requests br
                 JOIN Hospitals h ON br.hospital_id = h.hospital_id
                 JOIN Locations l ON h.location_id = l.location_id
-                WHERE l.city = %s AND br.status = 'Open'
+                WHERE l.city = %s AND br.status = 'Open' AND br.active = 1
             """, (donor['city'],))
         else:
             # Match both blood type and city for other donors
@@ -579,7 +579,7 @@ def donor_profile():
                 FROM blood_requests br
                 JOIN Hospitals h ON br.hospital_id = h.hospital_id
                 JOIN Locations l ON h.location_id = l.location_id
-                WHERE br.blood_type = %s AND l.city = %s AND br.status = 'Open'
+                WHERE br.blood_type = %s AND l.city = %s AND br.status = 'Open' AND br.active=1
             """, (donor['blood_type'], donor['city']))
 
         blood_requests = cursor.fetchall()

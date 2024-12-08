@@ -74,7 +74,10 @@
             background-color: #E23F44;
             transition: background 0.3s ease, transform 0.2s ease;
         }
-
+        .nav-links a.btn {
+            background: black;
+            color: white;
+        }
         .nav-links a:hover {
             background: white;
             color: #a11e1e;
@@ -154,6 +157,10 @@
                 justify-content: center;
                 gap: 10px;
             }
+            .nav-links admin.btn {
+                background: black;
+                color: white;
+            }
 
             .nav-links a {
                 padding: 8px 12px;
@@ -203,10 +210,10 @@
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
         <h1>Blood Donation System</h1>
         <nav class="nav-links">
-            <a href="/">Home</a>
             <a href="/index">Explore</a>
             <a href="/register">Sign Up</a>
             <a href="/login">Login</a>
+            <a href="/admin" class="btn">Admin</a>
         </nav>
     </header>
     <div class="content">

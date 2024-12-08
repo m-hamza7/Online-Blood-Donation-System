@@ -40,7 +40,27 @@
             vertical-align: middle;
         }
 
-       
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        header a:hover {
+            background: white;
+            color: #a11e1e;
+            transform: scale(1.1);
+        }
+
+        header a.btn {
+            background: black;
+            color: white;
+        }
 
         /* Main Container Styling */
         main {
@@ -118,7 +138,7 @@
 
         /* Footer Styling */
         footer {
-            position: fixed;
+            position: relative;
             bottom:0;
             text-align: center;
             padding: 20px;
@@ -135,6 +155,8 @@
     <header>
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
         <h1>Search Donors</h1>
+        <a href="javascript:history.back()">Go Back</a>
+
     </header>
 
     <main>
