@@ -271,9 +271,11 @@ def admin_dashboard():
         elif view == 'donor_chats':
             # Fetch all donors who have sent messages
             cursor.execute("""
-                SELECT DISTINCT d.donor_id, d.name
+                SELECT DISTINCT d.donor_id, d.name,u.email
                 FROM donors d
                 JOIN messages m ON d.donor_id = m.donor_id
+                JOIN users u ON d.user_id = u.user_id
+                
             """)
             donors = cursor.fetchall()
 
@@ -351,7 +353,7 @@ def admin_dashboard():
             """)
             appointments = cursor.fetchall()
             data = {'appointments': appointments}
-
+        
         else:
             data = {}
         if request.method == 'POST' and 'send_reply' in request.form:
