@@ -234,6 +234,72 @@ def admin():
 
 
 
+#@app.route('/admin_dashboard')
+#def admin_dashboard():
+#    if 'loggedin' not in session or session['role'] != 'Admin':
+#        return redirect('/admin_login')
+#    
+#    try:
+#        conn = get_db_connection()
+#        cursor = conn.cursor(dictionary=True)
+#        
+#        # Get total users count
+#        cursor.execute("SELECT COUNT(*) as count FROM Users WHERE role != 'Admin'")
+#        total_users = cursor.fetchone()['count']
+#        
+#        # Get total hospitals count
+#        cursor.execute("SELECT COUNT(*) as count FROM Users WHERE role = 'Hospital'")
+#        total_hospitals = cursor.fetchone()['count']
+#        
+#        # Get total donations count
+#        cursor.execute("SELECT COUNT(*) as count FROM Donations")
+#        total_donations = cursor.fetchone()['count']
+#        
+#        # Calculate success rate (assuming you have a status field in Donations table)
+#        cursor.execute("SELECT COUNT(*) as successful FROM Donations WHERE status = 'Completed'")
+#        successful_donations = cursor.fetchone()['successful']
+#        success_rate = round((successful_donations / total_donations * 100) if total_donations > 0 else 0)
+#        
+#        # Get recent activities
+#        cursor.execute("""
+#            SELECT 
+#                DATE_FORMAT(l.timestamp, '%Y-%m-%d %H:%i') as date,
+#                u.username as user,
+#                l.event_type as description,
+#                l.event_type as status,
+#                CASE 
+#                    WHEN l.event_type = 'Login' THEN 'success'
+#                    WHEN l.event_type = 'Donation' THEN 'primary'
+#                    ELSE 'info'
+#                END as status_color
+#            FROM Logs l
+#            LEFT JOIN Users u ON l.user_id = u.user_id
+#            ORDER BY l.timestamp DESC
+#            LIMIT 10
+#        """)
+#        recent_activities = cursor.fetchall()
+#        
+#        # Get server load (this is a mock value, replace with actual server monitoring)
+#        server_load = 45  # Example value
+#        
+#        cursor.close()
+#        conn.close()
+#        
+#        return render_template('admin_dashboard.html',
+#                             total_users=total_users,
+#                             total_hospitals=total_hospitals,
+#                             total_donations=total_donations,
+#                             success_rate=success_rate,
+#                             recent_activities=recent_activities,
+#                             server_load=server_load)
+#                             
+#    except Exception as e:
+#        flash(f'Error loading dashboard: {str(e)}', 'danger')
+#        return redirect('/admin_login')
+
+
+
+
 @app.route('/admin_dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if 'loggedin' in session and session['role'] == 'Admin':

@@ -1,258 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <style>
-        /* Body Styling */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(45deg, #ff6b6b, #e74c3c); /* Blood donation theme gradient */
-            background-size: 400% 400%; /* For animated background */
-            animation: gradientAnimation 15s ease infinite; /* Background animation */
-            min-height: 100vh; /* Ensure the body takes full viewport height */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to the top to enable scrolling */
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Form Container */
-        .container {
-            background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 700px;
-            margin: 40px 0; /* Add margin for spacing from top/bottom */
-            text-align: center;
-        }
-
-        h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #c0392b;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        label {
-            display: block;
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 8px;
-            text-align: left;
-        }
-
-        .form-group {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .form-half {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-between;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus {
-            border-color: #e74c3c;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(90deg, #ff6b6b, #e74c3c);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background: linear-gradient(90deg, #e74c3c, #ff6b6b);
-            transform: scale(1.05);
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .footer a {
-            text-decoration: none;
-            color: #e74c3c;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Flash Message Styles */
-        .flash-container {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
-        .flash {
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .flash.success {
-            background-color: #28a745;
-        }
-
-        .flash.danger {
-            background-color: #dc3545;
-        }
-    </style>
-
-       
-</head>
-<body>
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-container">
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
+                    <div class="alert alert-{{ category }} alert-dismissible fade show text-center position-fixed" style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" role="alert">
+                        {% if category == 'danger' %}
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                        {% else %}
+                            <i class="fas fa-check-circle me-2"></i>
+                        {% endif %}
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="mb-4" style="height: 80px;">
+                    <h2 class="card-title" style="color: var(--primary-color);">Create Account</h2>
+                    <p class="text-muted">Join our blood donation community</p>
+                </div>
+                <form method="POST" class="needs-validation" novalidate id="registerForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" required pattern="[A-Za-z0-9_]{3,}" title="Username must be at least 3 characters long and can only contain letters, numbers, and underscores">
+                            <div class="invalid-feedback">Please enter a valid username (minimum 3 characters, letters, numbers, and underscores only).</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required pattern=".{6,}" title="Password must be at least 6 characters long">
+                            <div class="invalid-feedback">Password must be at least 6 characters long.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Donor">Donor</option>
+                                <option value="Hospital">Hospital</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a role.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" required pattern="[A-Za-z ]{2,}" title="Name must contain only letters and spaces">
+                        <div class="invalid-feedback">Please enter a valid name (letters and spaces only).</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Contact Info</label>
+                            <input type="tel" class="form-control" name="contact_info" required pattern="[0-9]{10}" title="Please enter a 10-digit phone number">
+                            <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+                        </div>
+                        <div class="col-md-6 mb-3" id="blood_type_field">
+                            <label class="form-label">Blood Type</label>
+                            <select class="form-select" name="blood_type">
+                                <option value="">Select Blood Type</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a blood type.</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" name="city" required pattern="[A-Za-z ]{2,}" title="City must contain only letters and spaces">
+                            <div class="invalid-feedback">Please enter a valid city name.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" name="state" required pattern="[A-Za-z ]{2,}" title="State must contain only letters and spaces">
+                            <div class="invalid-feedback">Please enter a valid state name.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">ZIP Code</label>
+                            <input type="text" class="form-control" name="zip_code" required pattern="[0-9]{6}" title="Please enter a valid 6-digit ZIP code">
+                            <div class="invalid-feedback">Please enter a valid 6-digit ZIP code.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+                </form>
             </div>
-        {% endif %}
-    {% endwith %}
-
-    <div class="container">
-        <h2>Register</h2>
-        <form method="POST">
-            <div class="form-half">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" required>
-                </div>
-            </div>
-
-            <div class="form-half">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <select name="role" id="role" onchange="toggleFields()" required>
-                        <option value="Donor">Donor</option>
-                        <option value="Hospital">Hospital</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Name</label>
-                <input type="text" name="name" required>
-            </div>
-
-            <div class="form-half donor-fields">
-                <div class="form-group">
-                    <label>Blood Type</label>
-                    <select name="blood_type">
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                    </select>
-                </div>
-                
-            </div>
-
-            <div class="form-half">
-                <div class="form-group">
-                    <label>Contact Info</label>
-                    <input type="text" name="contact_info">
-                </div>
-                <div class="form-group">
-                    <label>City</label>
-                    <input type="text" name="city">
-                </div>
-                <div class="form-group">
-                    <label>State</label>
-                    <input type="text" name="state">
-                </div>
-                <div class="form-group">
-                    <label>Zip Code</label>
-                    <input type="text" name="zip_code">
-                </div>
-            </div>
-            
-            <button type="submit">Register</button>
-        </form>
-        <footer>
-            <p>Already have an account? <a href="/login">Login</a></p>
-        </footer>
+        </div>
     </div>
+</div>
 
-    <script>
-        function toggleFields() {
-            const role = document.getElementById('role').value;
-            document.querySelectorAll('.donor-fields').forEach(field => {
-                field.style.display = role === 'Donor' ? 'block' : 'none';
-            });
-            document.querySelectorAll('.hospital-fields').forEach(field => {
-                field.style.display = role === 'Hospital' ? 'block' : 'none';
-            });
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.querySelector('select[name="role"]');
+    const bloodTypeField = document.getElementById('blood_type_field');
+    const form = document.getElementById('registerForm');
+
+    function toggleBloodType() {
+        const bloodTypeSelect = document.querySelector('select[name="blood_type"]');
+        bloodTypeField.style.display = roleSelect.value === 'Donor' ? 'block' : 'none';
+        bloodTypeSelect.required = roleSelect.value === 'Donor';
+    }
+
+    roleSelect.addEventListener('change', toggleBloodType);
+    toggleBloodType();
+
+    // Form validation
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Show dialog for the first invalid field
+            const invalidFields = form.querySelectorAll(':invalid');
+            if (invalidFields.length > 0) {
+                const firstInvalid = invalidFields[0];
+                alert(firstInvalid.title || 'Please fill out this field correctly.');
+                firstInvalid.focus();
+            }
         }
+        form.classList.add('was-validated');
+    });
 
-        window.onload = toggleFields;
-    </script>
-    {% if redirect_to_login %}
-    <script type="text/javascript">
-        // Delay redirection by 1.5 seconds (1500 milliseconds)
-        setTimeout(function() {
-            window.location.href = '/login';  // Redirect to login page
-        }, 1500);  // 1500 milliseconds = 1.5 seconds
-    </script>
+    // Real-time validation
+    const inputs = form.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        });
+    });
+});
+{% if redirect_to_login %}
+const successMessage = document.createElement('div');
+successMessage.className = 'alert alert-success text-center position-fixed';
+successMessage.style.cssText = 'top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; transition: opacity 0.5s;';
+successMessage.innerHTML = '<i class="fas fa-check-circle me-2"></i>Registration successful! Redirecting to login page...';
+document.body.appendChild(successMessage);
+
+setTimeout(function() {
+    successMessage.style.opacity = '0';
+}, 2500);
+
+setTimeout(function() {
+    window.location.href = '{{ url_for("login") }}';
+}, 3000);
 {% endif %}
-</body>
-</html>
+</script>
+{% endblock %}

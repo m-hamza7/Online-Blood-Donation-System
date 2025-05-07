@@ -1,194 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-
-    <style>
-        /* Body Styling */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(45deg, #ff6b6b, #ff0000); /* Blood donation theme gradient */
-            position: relative;
-            overflow: hidden;
-            background-size: 400% 400%; /* For animated background */
-            animation: gradientAnimation 15s ease infinite; /* Animation for background */
-        }
-
-        /* Keyframe for Background Animation */
-        @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Form Container */
-        .container {
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-        }
-
-        h2 {
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            color: #c0392b;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        label {
-            display: block;
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 8px;
-            text-align: left;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input:focus {
-            border-color: #e74c3c;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(90deg, #ff6b6b, #e74c3c);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: linear-gradient(90deg, #e74c3c, #ff6b6b);
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 14px;
-            color: #555;
-        }
-
-        footer a {
-            text-decoration: none;
-            color: #e74c3c;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Flash Message Styles */
-        .flash-container {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            z-index: 1000;
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
-        .flash {
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            display: inline-block;
-            width: auto;
-        }
-
-        /* Success message (green) */
-        .flash.success {
-            background-color: #28a745;
-        }
-
-        /* Danger message (red) */
-        .flash.danger {
-            background-color: #dc3545;
-        }
-
-        /* Optional fade-in effect */
-        .flash {
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-container">
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
+                    <div class="alert alert-{{ category }} alert-dismissible fade show text-center position-fixed" style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; transition: opacity 0.5s;" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="mb-4" style="height: 80px;">
+                    <h2 class="card-title" style="color: var(--primary-color);">Welcome Back</h2>
+                    <p class="text-muted">Please login to your account</p>
+                </div>
+                <form method="POST" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" name="username" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    <div class="text-center">
+                        <p class="mb-0">Don't have an account? <a href="/register" style="color: var(--primary-color);">Register here</a></p>
+                    </div>
+                </form>
             </div>
-        {% endif %}
-    {% endwith %}
-
-    <div class="container">
-        <h2>Login</h2>
-        <form method="POST">
-            <label>Username</label>
-            <input type="text" name="username" required>
-            
-            <label>Password</label>
-            <input type="password" name="password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-
-        <footer>
-            <p>Don't have an account? <a href="/register">Sign Up</a></p>
-            <p><a href="/index">Go back</a></p>
-        </footer>
+        </div>
     </div>
+</div>
+{% endblock %}
+<footer>
+    <p>Don't have an account? <a href="/register">Sign Up</a></p>
+    <p><a href="/index">Go back</a></p>
+</footer>
 </body>
 </html>

@@ -1,0 +1,51 @@
+/* Full-screen Overlay */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Show overlay */
+.page-transition.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Blood Drop Container */
+.blood-drop {
+    position: relative;
+    width: 100px;
+    height: 150px;
+    background: none;
+    border: 3px solid white;
+    border-radius: 50% 50% 0 0;
+    transform: rotate(45deg) translateY(-20px);
+    overflow: hidden;
+}
+
+/* Blood Fill */
+.blood-drop::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: red;
+    transition: height 1.5s ease;
+}
+
+/* Fill animation */
+.page-transition.active .blood-drop::before {
+    height: 100%;
+}
