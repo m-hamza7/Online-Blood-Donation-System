@@ -13,7 +13,7 @@ app.secret_key = 'your_secret_key'
 db_config = {
         'user': 'root',
         'password': '42692',
-        'host': 'localhost',
+        'host': '127.0.0.1',
         'database': 'bd'
     }
 logging.basicConfig(
@@ -925,4 +925,4 @@ def logout():
     return redirect('/login')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
