@@ -50,6 +50,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/ST_Notes_Template')
+def st_notes_template():
+    return render_template('ST_Notes_Template.html')
+
+
 
 
 

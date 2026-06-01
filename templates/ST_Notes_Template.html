@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Testing — Final Exam Study Guide</title>
+<style>
+:root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--border:#2e3250;--text:#e2e8f0;--text-muted:#94a3b8;--accent:#6366f1;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--pink:#ec4899}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.7}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:9999;transition:width .2s}
+.layout{display:flex;min-height:100vh}
+#sidebar{width:260px;min-width:260px;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1rem 0;scrollbar-width:thin}
+.sidebar-title{padding:.5rem 1.2rem 1rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-weight:700}
+.sidebar-search{padding:0 .8rem .8rem}
+.sidebar-search input{width:100%;padding:.4rem .7rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.85rem}
+.sidebar-search input:focus{outline:none;border-color:var(--accent)}
+.nav-item{display:block;padding:.35rem 1.2rem;color:var(--text-muted);text-decoration:none;font-size:.88rem;border-left:2px solid transparent;transition:all .15s}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(99,102,241,.08)}
+.nav-section{padding:.6rem 1.2rem .2rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);font-weight:700;margin-top:.5rem}
+main{flex:1;padding:2rem 3rem;max-width:1100px}
+.hero{background:linear-gradient(135deg,#1e1b4b 0%,#1a1d27 50%,#0f2027 100%);border:1px solid var(--border);border-radius:16px;padding:2.5rem;margin-bottom:2.5rem;text-align:center}
+.hero h1{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,#818cf8,#c084fc,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--text-muted);margin-top:.5rem}
+.hero-stats{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap}
+.hero-stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.7rem 1.4rem}
+.hero-stat .num{font-size:1.6rem;font-weight:800;color:var(--accent)}
+.hero-stat .lbl{font-size:.75rem;color:var(--text-muted)}
+.chapter{margin-bottom:3.5rem}
+.chapter-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.chapter-badge{background:var(--accent);color:white;font-size:.7rem;font-weight:700;padding:.25rem .6rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.chapter-header h2{font-size:1.5rem;font-weight:700}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin-bottom:1.2rem}
+.card h3{font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:.7rem}
+.card h4{font-size:.9rem;font-weight:600;color:var(--yellow);margin:.8rem 0 .4rem}
+.defbox{border-left:3px solid var(--accent);background:rgba(99,102,241,.07);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0}
+.defbox strong{color:var(--accent)}
+.examtip{border-left:3px solid var(--green);background:rgba(16,185,129,.07);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0}
+.examtip::before{content:"EXAM TIP  ";font-weight:700;color:var(--green);font-size:.8rem}
+.scenario{border-left:3px solid var(--blue);background:rgba(59,130,246,.07);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0}
+.scenario::before{content:"SCENARIO  ";font-weight:700;color:var(--blue);font-size:.8rem}
+.warn{border-left:3px solid var(--red);background:rgba(239,68,68,.07);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin:.8rem 0}
+.warn::before{content:"WATCH OUT  ";font-weight:700;color:var(--red);font-size:.8rem}
+.sticky-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;margin:1rem 0}
+.sticky{padding:1rem;border-radius:4px;font-size:.85rem;line-height:1.5;transform:rotate(-.3deg);box-shadow:2px 3px 10px rgba(0,0,0,.4)}
+.sticky:nth-child(even){transform:rotate(.4deg)}
+.sticky.yellow{background:#854d0e;color:#fef9c3}
+.sticky.blue{background:#1e3a5f;color:#bfdbfe}
+.sticky.green{background:#14532d;color:#bbf7d0}
+.sticky.pink{background:#831843;color:#fce7f3}
+.sticky.purple{background:#3b0764;color:#e9d5ff}
+.sticky strong{display:block;margin-bottom:.3rem;font-size:.9rem}
+.mnemonic-table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.88rem}
+.mnemonic-table th{background:var(--surface2);color:var(--accent);padding:.5rem .8rem;text-align:left;border:1px solid var(--border)}
+.mnemonic-table td{padding:.45rem .8rem;border:1px solid var(--border)}
+.mnemonic-table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.mnemonic-table .letter{color:var(--yellow);font-weight:700;font-size:1rem}
+.ascii{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;font-family:'Consolas','Courier New',monospace;font-size:.8rem;line-height:1.6;color:#79c0ff;overflow-x:auto;margin:.8rem 0;white-space:pre}
+ul,ol{padding-left:1.4rem}
+li{margin-bottom:.25rem}
+li::marker{color:var(--accent)}
+.gallery-label{font-size:.8rem;color:var(--text-muted);margin:1rem 0 .5rem;font-style:italic}
+.slide-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem;margin:.5rem 0 1.5rem}
+.slide-gallery img{width:100%;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:transform .15s,box-shadow .15s;background:#111}
+.slide-gallery img:hover{transform:scale(1.04);box-shadow:0 4px 20px rgba(0,0,0,.6);border-color:var(--accent)}
+#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:10000;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+#lightbox img{max-width:92vw;max-height:92vh;border-radius:8px}
+#lightbox-close{position:absolute;top:1rem;right:1.5rem;color:white;font-size:2rem;cursor:pointer;opacity:.7}
+#lightbox-close:hover{opacity:1}
+#btt{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--accent);color:white;border:none;border-radius:50%;width:42px;height:42px;font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(99,102,241,.4);z-index:999}
+#btt.show{display:flex}
+mark.hl{background:#d97706;color:#fff;border-radius:2px;padding:0 2px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.8rem 0}
+.formula{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'Consolas',monospace;font-size:.9rem;color:var(--yellow);margin:.6rem 0;text-align:center}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:.8rem 0}
+.compare-col{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.8rem}
+.compare-col h4{margin-bottom:.5rem;font-size:.9rem}
+.compare-col.left h4{color:var(--blue)}
+.compare-col.right h4{color:var(--green)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.6rem 0}
+.flow-step{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.82rem}
+.flow-arrow{color:var(--accent);font-size:1rem}
+@media(max-width:768px){.two-col,.compare{grid-template-columns:1fr}main{padding:1rem}#sidebar{display:none}}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div id="lightbox"><span id="lightbox-close" onclick="closeLightbox()">&times;</span><img id="lightbox-img" src="" alt=""></div>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<div class="layout">
+<nav id="sidebar">
+  <div class="sidebar-title">ST Study Guide</div>
+  <div class="sidebar-search"><input type="text" id="search-input" placeholder="Search notes..." oninput="doSearch(this.value)"></div>
+  <div class="nav-section">Overview</div>
+  <a class="nav-item" href="#hero">Home</a>
+  <div class="nav-section">Chapters</div>
+  <a class="nav-item" href="#chap2">Ch2 &mdash; STLC &amp; Bugs</a>
+  <a class="nav-item" href="#agile">Ch2 &mdash; Agile</a>
+  <a class="nav-item" href="#chap3">Ch3 &mdash; Static Testing</a>
+  <a class="nav-item" href="#chap4">Ch4 &mdash; Dynamic Testing</a>
+  <a class="nav-item" href="#chap5">Ch5 &mdash; Automation</a>
+  <a class="nav-item" href="#chap6">Ch6 &mdash; SQA &amp; Quality</a>
+  <a class="nav-item" href="#chap10">Ch10 &mdash; Six Sigma</a>
+  <a class="nav-item" href="#chap11">Ch11 &mdash; Risk Mgmt</a>
+  <a class="nav-item" href="#mcp">MCP Server</a>
+  <a class="nav-item" href="#testcase">Test Case Writing</a>
+</nav>
+<main>
+
+<section id="hero" class="hero">
+  <h1>Software Testing &mdash; Final Exam Guide</h1>
+  <p>All chapters &bull; Visual notes &bull; Slide galleries &bull; Exam tips</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num"><!-- TOTAL_IMAGES --></div><div class="lbl">Slide Images</div></div>
+    <div class="hero-stat"><div class="num">9</div><div class="lbl">Topics</div></div>
+    <div class="hero-stat"><div class="num">100+</div><div class="lbl">Exam Tips</div></div>
+  </div>
+</section>
+
+<section id="chap2" class="chapter">
+<div class="chapter-header"><span class="chapter-badge">Ch 2</span><h2>STLC, Bug Life Cycle &amp; Testing Fundamentals</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 2</div>
+<!-- GALLERY_CHAP2 -->
+<div class="card">
+<h3>Testing vs Debugging</h3>
+<div class="compare">
+<div class="compare-col left"><h4>Testing</h4><ul><li>Done by <strong>testers</strong></li><li>Finds <strong>failures</strong> (observable wrong behaviour)</li><li>Reveals defects exist</li></ul></div>
+<div class="compare-col right"><h4>Debugging</h4><ul><li>Done by <strong>developers</strong></li><li>Finds, analyses &amp; removes <strong>defects</strong></li><li>Fixes root cause in code</li></ul></div>
+</div>
+<div class="defbox"><strong>Error &rarr; Defect &rarr; Failure:</strong> Human makes an <em>error</em> &rarr; creates a <em>defect</em> in code &rarr; execution causes a <em>failure</em> (visible symptom).</div>
+</div>
+<div class="card">
+<h3>Testing Levels &mdash; The Pyramid</h3>
+<div class="ascii">  [UAT]            Test basis: user stories      Defects: business flow mismatches
+  [System]          Test basis: SRS              Defects: functional failures
+  [Integration]     Test basis: architecture     Defects: interface mismatches
+  [Component/Unit]  Test basis: code/data model  Defects: logic errors</div>
+<div class="two-col">
+<div><h4>Component Testing</h4><ul><li>Individual modules in isolation</li><li>Done by developers (TDD)</li><li>Stubs &amp; drivers used</li></ul></div>
+<div><h4>Integration Testing</h4><ul><li>Module interactions</li><li>Big Bang / Top-Down / Bottom-Up</li><li>Interface defects</li></ul></div>
+<div><h4>System Testing</h4><ul><li>End-to-end behaviour</li><li>Functional + Non-functional</li><li>Independent test team</li></ul></div>
+<div><h4>UAT</h4><ul><li>User validates against business needs</li><li>Alpha (internal) / Beta (external)</li><li>Final acceptance gate</li></ul></div>
+</div>
+<div class="examtip">Each level has its own test basis, objectives, and typical defect types &mdash; know all three for each level.</div>
+</div>
+<div class="card">
+<h3>Testing Types</h3>
+<div class="two-col">
+<div><h4>Functional (WHAT it does)</h4><ul><li><strong>Smoke</strong> &mdash; critical path gate before full testing</li><li><strong>Sanity</strong> &mdash; quick check after a small fix</li><li><strong>Regression</strong> &mdash; ensure new changes don't break old features</li></ul></div>
+<div><h4>Non-Functional (HOW it performs)</h4><ul><li><strong>Performance</strong> &mdash; load, stress, endurance</li><li><strong>Usability</strong> &mdash; ease of use</li><li><strong>Security</strong> &mdash; vulnerabilities</li><li>Reliability, Portability, Maintainability</li></ul></div>
+</div>
+<div class="examtip">Testing order: Smoke &rarr; Functional/Non-Functional &rarr; Regression</div>
+</div>
+<div class="card">
+<h3>Verification vs Validation</h3>
+<div class="compare">
+<div class="compare-col left"><h4>Verification &mdash; &ldquo;Building it RIGHT?&rdquo;</h4><ul><li>Static &mdash; reviews, walkthroughs, inspections</li><li>Checks process and documents</li></ul></div>
+<div class="compare-col right"><h4>Validation &mdash; &ldquo;Building the RIGHT thing?&rdquo;</h4><ul><li>Dynamic &mdash; actual execution</li><li>Checks final product vs user needs</li></ul></div>
+</div>
+<div class="warn">A product can PASS verification but FAIL validation (built to spec, but wrong spec!).</div>
+</div>
+<div class="card">
+<h3>V-Model</h3>
+<div class="ascii">Requirements    &lt;--- test basis ---&gt;  Acceptance Testing (UAT)
+  System Design  &lt;--- test basis ---&gt;  System Testing
+    HLD          &lt;--- test basis ---&gt;  Integration Testing
+      LLD        &lt;--- test basis ---&gt;  Unit/Component Testing
+        [Coding]</div>
+<div class="defbox"><strong>Key principle:</strong> Each design phase on the left maps to a test phase on the right. Test planning starts at design.</div>
+</div>
+<div class="card">
+<h3>Waterfall Model</h3>
+<ul><li>Sequential phases: Requirements &rarr; Design &rarr; Implementation &rarr; Testing &rarr; Deployment</li><li>Testing only after FULL development</li><li>High fix cost (defects found late)</li><li>No late changes accepted</li></ul>
+<div class="warn">Waterfall: testing is last. Most expensive defects are found too late.</div>
+</div>
+<div class="card">
+<h3>Bug Life Cycle</h3>
+<div class="flow">
+<div class="flow-step">New</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Assigned</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Open</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">In Progress</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Fixed</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Retest</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step" style="color:var(--green)">Closed</div>
+</div>
+<div class="flow" style="margin-top:.3rem">
+<div class="flow-step">Retest fails</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step" style="color:var(--red)">Reopened</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">In Progress (again)</div>
+</div>
+<div class="two-col" style="margin-top:.8rem">
+<div class="defbox"><strong>Rejected:</strong> Not a valid bug (working as designed)</div>
+<div class="defbox"><strong>Deferred:</strong> Valid but postponed to future release</div>
+</div>
+</div>
+<div class="card">
+<h3>Good Bug Report &mdash; 10 Elements</h3>
+<div class="sticky-grid">
+<div class="sticky yellow"><strong>1. Title</strong>Short, descriptive summary</div>
+<div class="sticky blue"><strong>2. Description</strong>What exactly went wrong</div>
+<div class="sticky green"><strong>3. Expected Result</strong>What SHOULD happen</div>
+<div class="sticky pink"><strong>4. Actual Result</strong>What DID happen</div>
+<div class="sticky purple"><strong>5. Steps to Reproduce</strong>Numbered, exact steps</div>
+<div class="sticky yellow"><strong>6. Platform/Environment</strong>OS, browser, version</div>
+<div class="sticky blue"><strong>7. Severity</strong>Technical impact level</div>
+<div class="sticky green"><strong>8. Visual (Screenshot)</strong>Screenshot/video proof</div>
+<div class="sticky pink"><strong>9. Tags</strong>Module, category labels</div>
+<div class="sticky purple"><strong>10. Assignee</strong>Who fixes it</div>
+</div>
+</div>
+<div class="card">
+<h3>Severity vs Priority</h3>
+<div class="compare">
+<div class="compare-col left"><h4>Severity (Technical Impact)</h4><ul><li>Set by <strong>tester/QA</strong></li><li>Critical / High / Medium / Low</li><li>App crashes = Critical severity</li></ul></div>
+<div class="compare-col right"><h4>Priority (Business Urgency)</h4><ul><li>Set by <strong>stakeholders/PM</strong></li><li>P1 / P2 / P3 / P4</li><li>CEO demo tomorrow = P1</li></ul></div>
+</div>
+<div class="scenario">Company logo wrong colour: Low severity (cosmetic) but High priority (board presentation today).<br>App crashes in rarely-used admin panel: High severity but Low priority (2 users affected).</div>
+</div>
+<div class="card">
+<h3>Defect Metrics</h3>
+<div class="formula">DLR (Defect Leakage Rate) = (Defects missed / Total defects) x 100</div>
+<div class="formula">DRR (Defect Removal Rate) = (Invalid reports / Total reported) x 100</div>
+<div class="scenario">Team found 39, missed 18: DLR = (18/58)x100 = <strong>31.2%</strong><br>Team raised 21, 5 invalid: DRR = (5/21)x100 = <strong>23.8%</strong></div>
+</div>
+</section>
+
+<section id="agile" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--green)">Ch 2</span><h2>Agile &mdash; SCRUM &amp; KANBAN</h2></div>
+<div class="card">
+<h3>Agile Overview</h3>
+<div class="defbox"><strong>Agile:</strong> Iterative-Incremental delivery. Frameworks: SCRUM, KANBAN, XP.</div>
+<div class="two-col">
+<div><h4>Advantages</h4><ul><li>Customer satisfaction via early delivery</li><li>Welcomes late requirement changes</li><li>Face-to-face daily communication</li><li>Rapid, frequent releases</li><li>Close developer-stakeholder cooperation</li></ul></div>
+<div><h4>Disadvantages</h4><ul><li>Hard to estimate at project start</li><li>Poor documentation</li><li>Requires experienced team</li><li>Scope creep risk</li><li>Constant customer availability required</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>SCRUM Roles</h3>
+<div class="sticky-grid">
+<div class="sticky blue"><strong>Product Owner</strong>Defines backlog, priorities. Customer's voice inside the team.</div>
+<div class="sticky green"><strong>Scrum Master</strong>Facilitator, removes impediments. NOT the project manager.</div>
+<div class="sticky purple"><strong>Development Team</strong>Cross-functional, self-organising. 3-9 people.</div>
+</div>
+</div>
+<div class="card">
+<h3>SCRUM Flow</h3>
+<div class="flow">
+<div class="flow-step">Product Backlog</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Sprint Planning</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Sprint Backlog</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Sprint (2-4 wks)</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Review</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Retrospective</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step" style="color:var(--green)">Increment</div>
+</div>
+<div class="defbox"><strong>Daily Standup:</strong> What did I do yesterday? What will I do today? Any blockers?</div>
+</div>
+<div class="card">
+<h3>KANBAN</h3>
+<div class="ascii">| Backlog | In Progress (WIP limit) | In Review | Done |
+|---------|------------------------|-----------|------|
+| task A  |  task C  task D        |  task E   |  F   |</div>
+<ul><li><strong>WIP Limits</strong> &mdash; cap work in progress to prevent bottlenecks</li><li><strong>Continuous flow</strong> &mdash; no fixed sprints, pull-based</li><li><strong>Visual board</strong> &mdash; full transparency</li></ul>
+</div>
+</section>
+
+<section id="chap3" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--purple)">Ch 3</span><h2>Static Testing</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 3</div>
+<!-- GALLERY_CHAP3 -->
+<div class="card">
+<h3>What is Static Testing?</h3>
+<div class="defbox"><strong>Static Testing</strong> = examining work products <em>WITHOUT executing the software</em>.</div>
+<div class="two-col">
+<div><h4>Work Products Reviewed</h4><ul><li>SRS, user stories, use cases</li><li>Architecture &amp; design docs</li><li>Source code</li><li>Test plans, test cases</li><li>Web pages, contracts</li></ul></div>
+<div><h4>Issues Found</h4><ul><li>Requirement defects (ambiguous, missing)</li><li>Design defects (high coupling, low cohesion)</li><li>Coding defects (undefined vars, dead code)</li><li>Standards violations, security vulns</li></ul></div>
+</div>
+<div class="examtip">Static testing finds defects that dynamic testing CANNOT (e.g., requirement ambiguities before code is written).</div>
+</div>
+<div class="card">
+<h3>Review Process &mdash; 5 Steps</h3>
+<div class="flow">
+<div class="flow-step">1. Planning</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">2. Initiate Review</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">3. Individual Review</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">4. Issue Communication &amp; Analysis</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">5. Fixing &amp; Reporting</div>
+</div>
+<h4>Roles</h4>
+<table class="mnemonic-table">
+<tr><th>Role</th><th>Responsibility</th></tr>
+<tr><td>Author</td><td>Created the work product; fixes issues found</td></tr>
+<tr><td><strong>Facilitator/Moderator</strong></td><td><strong>KEY person</strong> &mdash; leads meeting, ensures productivity</td></tr>
+<tr><td>Review Leader</td><td>Plans review, selects participants</td></tr>
+<tr><td>Reviewers</td><td>Find defects &mdash; domain experts, testers</td></tr>
+<tr><td>Scribe</td><td>Records defects and decisions</td></tr>
+<tr><td>Management</td><td>Allocates time &amp; resources</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Review Types &mdash; Formality Spectrum</h3>
+<div class="ascii">LEAST FORMAL                                      MOST FORMAL
+    |                                                     |
+ Informal       Walkthrough      Technical         Inspection
+(buddy check)  (AUTHOR leads,  (peers lead,      (root cause
+                scribe MUST)    NOT author,       analysis,
+                                prep required)    checklists)</div>
+<div class="two-col">
+<div class="defbox"><strong>Informal:</strong> No set process. No scribe needed.</div>
+<div class="defbox"><strong>Walkthrough:</strong> Author LEADS. Scribe MANDATORY. Education focus.</div>
+<div class="defbox"><strong>Technical Review:</strong> Peers lead. NOT the author. Prep required.</div>
+<div class="defbox"><strong>Inspection:</strong> Most formal. Root cause analysis. Checklists. Entry/exit criteria. Metrics tracked.</div>
+</div>
+<div class="examtip">Walkthrough = author leads (unique!). Inspection = most formal, root cause analysis.</div>
+</div>
+<div class="card">
+<h3>Cyclomatic Complexity</h3>
+<div class="formula">CC = E - N + 2P &nbsp;&nbsp; (E=edges, N=nodes, P=connected components)</div>
+<div class="defbox"><strong>Paths from slides:</strong><br>
+Path 1: 1-2-8-9-11<br>Path 2: 1-2-8-10-11<br>Path 3: 1-2-3-4-5-7<br>Path 4: 1-2-3-4-6-7</div>
+<div class="examtip">CC = minimum number of independent test cases needed. CC of 4 = 4 tests minimum.</div>
+</div>
+<div class="card">
+<h3>False Positive vs False Negative</h3>
+<div class="compare">
+<div class="compare-col left"><h4>False Positive</h4><ul><li>Test FAILS but no real bug exists</li><li>Annoying but not dangerous</li><li>Wastes investigation time</li></ul></div>
+<div class="compare-col right"><h4>False Negative</h4><ul><li>Test PASSES but a bug EXISTS</li><li><strong>MORE DANGEROUS</strong></li><li>Bug ships to production undetected</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>Quality Audits</h3>
+<div class="two-col">
+<div><h4>By Party</h4><ul><li><strong>First Party (Internal)</strong> &mdash; self-audit</li><li><strong>Second Party (External)</strong> &mdash; customer audits supplier</li><li><strong>Third Party</strong> &mdash; independent certifying body</li></ul></div>
+<div><h4>By Type</h4><ul><li><strong>Compliance Audit</strong> &mdash; follows standards?</li><li><strong>System Audit</strong> &mdash; whole QMS review</li><li><strong>Process Audit</strong> &mdash; specific process</li><li><strong>Product Audit</strong> &mdash; specific product</li></ul></div>
+</div>
+</div>
+</section>
+
+<section id="chap4" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--blue)">Ch 4</span><h2>Dynamic Testing Techniques</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 4</div>
+<!-- GALLERY_CHAP4 -->
+<div class="card">
+<h3>Experience-Based Techniques</h3>
+<div class="two-col">
+<div><h4>Error Guessing</h4><ul><li>Divide by zero</li><li>Null / empty inputs</li><li>Negative numbers</li><li>Max/min limits</li><li>Special characters (!@#$)</li><li>Very long strings</li></ul></div>
+<div><h4>Exploratory Testing</h4><ul><li>Simultaneous learning, design, execution</li><li><strong>Test charter</strong> &mdash; 1-2 hour time-boxed session</li><li>No pre-written scripts</li><li>Good for new/unknown features</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>White Box Coverage</h3>
+<div class="defbox"><strong>Statement Coverage</strong> = every executable statement executed at least once.</div>
+<div class="defbox"><strong>Branch Coverage</strong> = every branch (true/false) executed. Subsumes statement coverage.</div>
+<div class="defbox"><strong>Condition Coverage</strong> = each atomic condition is both true and false.</div>
+<table class="mnemonic-table">
+<tr><th>Technique</th><th>Test Case</th><th>Input</th></tr>
+<tr><td>Statement Coverage</td><td>TC01</td><td>P=51, Q=01</td></tr>
+<tr><td>Branch (true branch)</td><td>TC01</td><td>P=52, Q=01</td></tr>
+<tr><td>Branch (false branch)</td><td>TC02</td><td>P=01, Q=01</td></tr>
+<tr><td>Condition Coverage</td><td>TC01</td><td>P=00, Q=00</td></tr>
+</table>
+<div class="examtip">Branch Coverage is STRONGER than Statement Coverage. Always prefer branch when asked.</div>
+</div>
+<div class="card">
+<h3>Boundary Value Analysis (BVA)</h3>
+<div class="defbox"><strong>BVA:</strong> Test at the boundary, boundary-1, and boundary+1.</div>
+<div class="scenario"><strong>Age field: valid range 18-35</strong><br>Valid boundaries: 18, 19, 34, 35<br>Invalid boundaries: 17 (just below), 36 (just above)</div>
+<div class="examtip">Order numbers 10000-99999: test values are 9999, 10000, 50000, 99999, 100000. Typical answer = 10000, 50000, 99999.</div>
+<h4>Tax Bands Exercise</h4>
+<table class="mnemonic-table">
+<tr><th>Band</th><th>Range</th><th>Rate</th></tr>
+<tr><td>A</td><td>0-4000</td><td>0%</td></tr>
+<tr><td>B</td><td>4001-5500</td><td>10%</td></tr>
+<tr><td>C</td><td>5501-33500</td><td>22%</td></tr>
+<tr><td>D</td><td>&gt;33500</td><td>40%</td></tr>
+</table>
+<div class="examtip">Tax boundary: 33501 is the BVA value for the 40% band entry.</div>
+</div>
+<div class="card">
+<h3>Equivalence Partitioning (EP)</h3>
+<div class="defbox"><strong>EP:</strong> Divide input into classes where all values behave the same. Test one from each class.</div>
+<div class="scenario"><strong>Age field 18-35:</strong><br>Class 1 (Invalid): age &lt; 18 &mdash; test: 10<br>Class 2 (Valid): 18-35 &mdash; test: 25<br>Class 3 (Invalid): age &gt; 35 &mdash; test: 50</div>
+<div class="examtip">EP = 3 test cases (one per partition). BVA = 6 test cases (at each boundary). Combine for max coverage.</div>
+</div>
+<div class="card">
+<h3>Decision Table Testing</h3>
+<div class="ascii">Conditions          TC1   TC2   TC3   TC4
+Age &gt; 18            Y     Y     N     N
+Job Holder          Y     N     Y     N
+-------------------------------------------
+Action: Approve     X
+Action: Reject            X     X     X</div>
+<div class="examtip">N conditions = 2^N maximum columns. Decision table tests all combinations.</div>
+</div>
+<div class="card">
+<h3>Use Case Testing</h3>
+<div class="ascii">Main Success Scenario (ATM):
+  Insert card -&gt; Validate card -&gt; Enter PIN -&gt; Grant access
+
+Extensions (alternative flows):
+  2a. Invalid card -&gt; Eject card
+  3a. Wrong PIN (1st/2nd) -&gt; Prompt retry
+  3b. Wrong PIN (3rd time) -&gt; Retain/eat card</div>
+<div class="examtip">Use case tests cover the main flow PLUS all extensions.</div>
+</div>
+<div class="card">
+<h3>State Transition Testing</h3>
+<div class="ascii">State     | Insert Card | Enter PIN | Wrong PIN  | Correct PIN | Exit
+----------|-------------|-----------|------------|-------------|-----
+S1 Idle   | S2          |           |            |             |
+S2 Card   |             | S3        |            |             | S1
+S3 PIN    |             |           | S4 / S7x3  | S5 Access   |
+S4 Retry  |             |           | S4 / S7x3  | S5 Access   |
+S5 In Use |             |           |            |             | S1
+S7 Locked |             |           |            |             |</div>
+<div class="examtip">Invalid transition = any event that leads to a state NOT defined in the table for that state/event combination.</div>
+</div>
+</section>
+
+<section id="chap5" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--yellow);color:#000">Ch 5</span><h2>Test Automation</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 5</div>
+<!-- GALLERY_CHAP5 -->
+<div class="card">
+<h3>Testing vs Test Automation</h3>
+<div class="compare">
+<div class="compare-col left"><h4>Manual Testing</h4><ul><li>WHAT to test</li><li>Test cases (scenarios)</li><li>Application domain expertise</li><li>Human judgment &amp; creativity</li></ul></div>
+<div class="compare-col right"><h4>Test Automation</h4><ul><li>HOW to test</li><li>Test scripts (code)</li><li>Development expertise</li><li>Speed &amp; repeatability</li></ul></div>
+</div>
+<div class="warn">Automation does NOT replace manual testing. It does NOT improve test <strong>effectiveness</strong> &mdash; only <strong>efficiency</strong>.</div>
+</div>
+<div class="card">
+<h3>Automation Objectives &amp; Anti-Patterns</h3>
+<div class="two-col">
+<div><h4>Objectives</h4><ul><li>Improve testing efficiency</li><li>Wider coverage</li><li>Reduce long-term cost</li><li>Tests humans physically cannot do (load, concurrent)</li><li>Shorten test cycles (CI/CD)</li></ul></div>
+<div><h4>Anti-Patterns (Avoid)</h4><ul><li>Scripts sensitive to minor UI changes</li><li>Hardcoded data values in scripts</li><li>OS-context-sensitive tests</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>ROI &amp; Break-Even</h3>
+<div class="formula">Break-Even = Automation Cost / (Manual Cost Per Run - Automation Cost Per Run)</div>
+<div class="scenario">Automation costs 10,000. Manual run = 500, Automation run = 100.<br>Break-even = 10000 / (500 - 100) = <strong>25 runs</strong></div>
+</div>
+<div class="card">
+<h3>Framework Architecture (Pg 23-25)</h3>
+<div class="ascii">+--------------------------------------------------+
+|              TEST LAYER                          |
+|   Test scripts, test suites, test runner         |
++--------------------------------------------------+
+          |
++--------------------------------------------------+
+|           PAGE OBJECT LAYER                      |
+|   Encapsulates page elements and actions         |
++--------------------------------------------------+
+          |
++--------------------+  +------------------------+
+|  TEST DATA LAYER   |  |   UTILITY LAYER        |
+|  JSON/CSV/Excel    |  |   Helpers, wait utils  |
++--------------------+  +------------------------+
+          |
++--------------------------------------------------+
+|            REPORTING LAYER                       |
+|   HTML reports, screenshots, logs               |
++--------------------------------------------------+</div>
+<div class="examtip">Know all 5 layers: Test &rarr; Page Object &rarr; Test Data &rarr; Utility &rarr; Reporting.</div>
+</div>
+<div class="card">
+<h3>Framework Evolution</h3>
+<table class="mnemonic-table">
+<tr><th>Generation</th><th>Key Feature</th><th>Limitation</th></tr>
+<tr><td>Record &amp; Playback</td><td>No coding needed</td><td>Fragile, unmaintainable</td></tr>
+<tr><td>Linear</td><td>Simple scripts</td><td>No reuse</td></tr>
+<tr><td>Modular</td><td>Reusable modules</td><td>Hard-coded data</td></tr>
+<tr><td>Data-Driven</td><td>Data from files</td><td>No logic separation</td></tr>
+<tr><td>Keyword-Driven</td><td>Action keywords</td><td>Complex setup</td></tr>
+<tr><td>Hybrid</td><td>Data + Keyword</td><td>High complexity</td></tr>
+<tr><td>BDD</td><td>Gherkin (Given/When/Then)</td><td>Needs dev involvement</td></tr>
+<tr><td>AI-Driven</td><td>Self-healing, intelligent</td><td>New, evolving</td></tr>
+</table>
+<div class="defbox"><strong>Automation Framework</strong> = reusable set of libraries and classes. Reduces development AND maintenance cost.</div>
+</div>
+</section>
+
+<section id="chap6" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--pink)">Ch 6</span><h2>SQA, Quality Tools &amp; Cost of Quality</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 6</div>
+<!-- GALLERY_CHAP6 -->
+<div class="card">
+<h3>SQA vs SQC</h3>
+<div class="compare">
+<div class="compare-col left"><h4>SQA &mdash; Software Quality Assurance</h4><ul><li><strong>Process-focused</strong></li><li>PREVENTION</li><li>Ensures right processes are followed</li><li>Audits, standards, training</li></ul></div>
+<div class="compare-col right"><h4>SQC &mdash; Software Quality Control</h4><ul><li><strong>Product-focused</strong></li><li>DETECTION</li><li>Finds defects in the product</li><li>Testing, inspection, reviews</li></ul></div>
+</div>
+<div class="examtip">SQA = process (prevention). SQC = product (detection). Classic exam trap!</div>
+</div>
+<div class="card">
+<h3>3 SQA Principles</h3>
+<div class="sticky-grid">
+<div class="sticky blue"><strong>1. Know what you're doing</strong>Understand the current process thoroughly</div>
+<div class="sticky green"><strong>2. Know what you SHOULD be doing</strong>Understand the target/standard process</div>
+<div class="sticky purple"><strong>3. Know how to measure the difference</strong>Metrics to bridge current vs target gap</div>
+</div>
+</div>
+<div class="card">
+<h3>Cost of Quality (CoQ)</h3>
+<div class="sticky-grid">
+<div class="sticky blue"><strong>Prevention Cost</strong>Training, process documentation, quality planning. Spent BEFORE defects occur.</div>
+<div class="sticky green"><strong>Appraisal Cost</strong>Testing, reviews, audits. Finding defects early.</div>
+<div class="sticky yellow"><strong>Internal Failure</strong>Rework, retesting. Discovered BEFORE delivery.</div>
+<div class="sticky pink"><strong>External Failure</strong>Warranty, recalls, reputation damage. MOST EXPENSIVE!</div>
+</div>
+<div class="warn">External failure is the most expensive. Prevention is the cheapest. Pay now or pay much more later.</div>
+</div>
+<div class="card">
+<h3>Fishbone / Ishikawa Diagram</h3>
+<div class="ascii">          People          Process
+            \               /
+             \             /
+              \           /
+Technology ----+--PROBLEM--+---- Environment
+              /           \
+             /             \
+            /               \
+        Materials         Measurement</div>
+<div class="defbox"><strong>Head</strong> = problem. <strong>Bones</strong> = cause categories. <strong>Sub-bones</strong> = specific causes. Used for root cause analysis.</div>
+</div>
+<div class="card">
+<h3>7 Quality Tools (Ishikawa 1991)</h3>
+<div class="defbox">"95% of quality problems can be solved with these 7 tools" &mdash; Kaoru Ishikawa</div>
+<table class="mnemonic-table">
+<tr><th>#</th><th>Tool</th><th>Purpose</th></tr>
+<tr><td>1</td><td>Histogram</td><td>Frequency distribution of data</td></tr>
+<tr><td>2</td><td>Pareto Chart</td><td>80/20 rule &mdash; 20% causes 80% of problems</td></tr>
+<tr><td>3</td><td>Cause-Effect (Fishbone)</td><td>Root cause analysis</td></tr>
+<tr><td>4</td><td>Check Sheet</td><td>Structured data collection form</td></tr>
+<tr><td>5</td><td>Control Chart</td><td>Monitor process stability over time</td></tr>
+<tr><td>6</td><td>Scatter Diagram</td><td>Correlation between two variables</td></tr>
+<tr><td>7</td><td>Time Chart (Run Chart)</td><td>Data plotted against time</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Measurement Scales</h3>
+<table class="mnemonic-table">
+<tr><th>Scale</th><th>Properties</th><th>Example</th></tr>
+<tr><td><strong>Nominal</strong></td><td>Categories only, no order</td><td>Gender, bug category</td></tr>
+<tr><td><strong>Ordinal</strong></td><td>Ranked order, unequal intervals</td><td>Priority (P1/P2/P3), severity</td></tr>
+<tr><td><strong>Interval</strong></td><td>Equal intervals, NO true zero</td><td>Temperature (0C is not no-temp)</td></tr>
+<tr><td><strong>Ratio</strong></td><td>Equal intervals WITH true zero</td><td>Age, weight, execution time</td></tr>
+</table>
+<div class="examtip">Temperature = Interval (no true zero). Age = Ratio (0 = no age). True zero matters!</div>
+</div>
+</section>
+
+<section id="chap10" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--green)">Ch 10</span><h2>Six Sigma, Lean, CMMI &amp; ISO</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 10</div>
+<!-- GALLERY_CHAP10 -->
+<div class="card">
+<h3>CMMI &mdash; 5 Maturity Levels</h3>
+<table class="mnemonic-table">
+<tr><th>Level</th><th>Name</th><th>Description</th><th>Mnemonic</th></tr>
+<tr><td>1</td><td>Initial</td><td>Chaotic, ad hoc, unpredictable</td><td class="letter">I &mdash; "I do nothing"</td></tr>
+<tr><td>2</td><td>Managed</td><td>Basic project management, reactive</td><td class="letter">M &mdash; "Make plans"</td></tr>
+<tr><td>3</td><td>Defined</td><td>Organisation-wide standard processes</td><td class="letter">D &mdash; "Define standards"</td></tr>
+<tr><td>4</td><td>Quantitatively Managed</td><td>Metrics-driven, predictable</td><td class="letter">Q &mdash; "Quite measurable"</td></tr>
+<tr><td>5</td><td>Optimizing</td><td>Continuous process improvement</td><td class="letter">O &mdash; "Often improving"</td></tr>
+</table>
+<div class="examtip">Mnemonic: <strong>"I Make Donuts Quite Often"</strong></div>
+</div>
+<div class="card">
+<h3>Six Sigma</h3>
+<div class="defbox"><strong>Six Sigma</strong> = max <strong>3.4 Defects Per Million Opportunities (DPMO)</strong>.</div>
+<div class="two-col">
+<div><h4>DMAIC &mdash; Fix Existing Process</h4>
+<div class="flow" style="flex-direction:column;align-items:flex-start">
+<div class="flow-step">Define &mdash; the problem &amp; goals</div>
+<div class="flow-step">Measure &mdash; current performance</div>
+<div class="flow-step">Analyze &mdash; root causes</div>
+<div class="flow-step">Improve &mdash; implement solutions</div>
+<div class="flow-step">Control &mdash; sustain improvements</div>
+</div></div>
+<div><h4>DMADV &mdash; Build New Process</h4>
+<div class="flow" style="flex-direction:column;align-items:flex-start">
+<div class="flow-step">Define &mdash; requirements &amp; goals</div>
+<div class="flow-step">Measure &mdash; customer needs</div>
+<div class="flow-step">Analyze &mdash; design options</div>
+<div class="flow-step">Design &mdash; new process/product</div>
+<div class="flow-step">Verify &mdash; design works</div>
+</div></div>
+</div>
+<div class="examtip">DMAIC = fix existing. DMADV = design new. Both start with Define-Measure-Analyze.</div>
+</div>
+<div class="card">
+<h3>Six Sigma Roles</h3>
+<table class="mnemonic-table">
+<tr><th>Role</th><th>Responsibility</th><th>Time</th></tr>
+<tr><td>Quality Leader</td><td>Customer representative in quality</td><td>Full-time</td></tr>
+<tr><td>Master Black Belt</td><td>Functional area expert, mentors BBs</td><td>Full-time</td></tr>
+<tr><td>Process Owner</td><td>Owns a specific business process</td><td>Part-time</td></tr>
+<tr><td><strong>Black Belt</strong></td><td>Full-time quality project leader, coaches GBs</td><td><strong>Full-time</strong></td></tr>
+<tr><td>Green Belt</td><td>Assists Black Belts, smaller projects</td><td><strong>10-50%</strong></td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Lean &mdash; 8 Wastes (DOWNTIME)</h3>
+<table class="mnemonic-table">
+<tr><th class="letter">D</th><td>Defects</td><td>Bugs, rework, retesting</td></tr>
+<tr><th class="letter">O</th><td>Overproduction</td><td>Building features nobody asked for</td></tr>
+<tr><th class="letter">W</th><td>Waiting</td><td>Waiting for approvals, environments, builds</td></tr>
+<tr><th class="letter">N</th><td>Non-Utilized Talent</td><td>Skilled devs doing manual admin tasks</td></tr>
+<tr><th class="letter">T</th><td>Transportation</td><td>Unnecessary handoffs between teams</td></tr>
+<tr><th class="letter">I</th><td>Inventory</td><td>Unfinished features, backlog bloat</td></tr>
+<tr><th class="letter">M</th><td>Motion</td><td>Unnecessary meetings, tool switching</td></tr>
+<tr><th class="letter">E</th><td>Extra-Processing</td><td>More testing/documentation than needed</td></tr>
+</table>
+<div class="examtip">Mnemonic: <strong>DOWNTIME</strong></div>
+</div>
+<div class="card">
+<h3>ISO 9001:2015 &mdash; 14 Implementation Steps</h3>
+<div class="flow" style="flex-wrap:wrap">
+<div class="flow-step">1. Commitment</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">2. Implementation Team</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">3. Awareness</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">4. Training</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">5. Status Survey</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">6. Documented Plan</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">7. QMS Documentation</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">8. Document Control</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">9. Implementation</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">10. Internal Audit</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">11. Management Review</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">12. Pre-Assessment</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step" style="color:var(--green)">13. Certification (3 years)</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">14. Continual Improvement</div>
+</div>
+<div class="examtip">ISO 9001 certification is valid for <strong>3 years</strong>.</div>
+</div>
+</section>
+
+<section id="chap11" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--red)">Ch 11</span><h2>Risk Management</h2></div>
+<div class="gallery-label">Slide images &mdash; Chapter 11</div>
+<!-- GALLERY_CHAP11 -->
+<div class="card">
+<h3>Risk Fundamentals</h3>
+<div class="defbox"><strong>Risk</strong> = probability of loss OR gain while pursuing goals due to unpredictable factors.</div>
+<div class="compare">
+<div class="compare-col left"><h4>Internal Risk</h4><p>From process/organisational inadequacies. Within your control.</p><p>Examples: poor planning, skill gaps, tool failures</p></div>
+<div class="compare-col right"><h4>External Risk</h4><p>Uncontrollable external conditions.</p><p>Examples: new regulations, natural disasters, market shifts</p></div>
+</div>
+<h4>Risk Terms</h4>
+<table class="mnemonic-table">
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td>Risk ID</td><td>Unique identifier for the risk</td></tr>
+<tr><td>Probability</td><td>Likelihood of occurrence (0-1 or %)</td></tr>
+<tr><td>Impact</td><td>Consequence if it occurs (1-5 scale)</td></tr>
+<tr><td><strong>Exposure</strong></td><td><strong>Probability x Impact</strong></td></tr>
+<tr><td>Origin</td><td>Source/cause of the risk</td></tr>
+<tr><td>Category</td><td>Type (technical, organisational, etc.)</td></tr>
+<tr><td>Owner</td><td>Person responsible for managing the risk</td></tr>
+</table>
+<div class="formula">Risk Exposure = Probability x Impact</div>
+</div>
+<div class="card">
+<h3>Risk Management Process</h3>
+<div class="flow">
+<div class="flow-step">1. Identification</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">2. Analysis &amp; Assessment</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">3. Response Plan</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">4. Monitoring &amp; Control</div>
+</div>
+</div>
+<div class="card">
+<h3>Risk Identification Methods</h3>
+<div class="two-col">
+<div><h4>Type I &mdash; Intuitive</h4><ul><li><strong>Mind Mapping</strong> &mdash; visual risk brainstorm</li><li><strong>Brainstorming</strong> &mdash; 6 steps: Invite, Explain, Time Limit, Encourage, Filter, Finalise</li><li><strong>Out-of-Box Thinking</strong></li></ul></div>
+<div><h4>Type I &mdash; Historical</h4><ul><li><strong>Caper Jones Top 10:</strong> Creeping requirements, cancelled projects, excessive schedule pressure, inadequate design...</li><li><strong>Rex Black Top 10:</strong> Functionality, load, reliability, security, compatibility, usability...</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>Risk Screening Categories</h3>
+<div class="sticky-grid">
+<div class="sticky pink"><strong>Hazard</strong>Murphy's Law: if it CAN go wrong it WILL. Need early warning systems.</div>
+<div class="sticky yellow"><strong>Constraint</strong>100% certain to occur. Project always runs within these.</div>
+<div class="sticky blue"><strong>Normal</strong>Pareto: 20% of risks cause 80% of problems.</div>
+<div class="sticky green"><strong>Trivial</strong>Low significance. Keep aside, monitor occasionally.</div>
+</div>
+</div>
+<div class="card">
+<h3>Risk Quadrant Map</h3>
+<div class="ascii">            HIGH IMPACT
+                  |
+    Q2            |            Q1
+  High Impact     |       HIGH IMPACT
+  Low Prob        |       HIGH PROB
+  (MONITOR)       |    (TOP PRIORITY!)
+                  |
+LOW PROB ---------+--------- HIGH PROB
+                  |
+    Q4            |            Q3
+  Low Impact      |       Low Impact
+  Low Prob        |       High Prob
+  (ACCEPT/IGNORE) |       (MONITOR)
+                  |
+           LOW IMPACT</div>
+<div class="examtip">Q1 (High Impact + High Prob) = must address immediately. Q4 (Low+Low) = accept and ignore.</div>
+</div>
+<div class="card">
+<h3>Risk Responses &mdash; Negative Risks (Threats)</h3>
+<table class="mnemonic-table">
+<tr><th>Strategy</th><th>Action</th><th>Shark Example</th></tr>
+<tr><td><strong>Avoid</strong></td><td>Change strategy, remove root cause</td><td>Swim in a shark cage</td></tr>
+<tr><td><strong>Mitigate</strong></td><td>Reduce probability or impact</td><td>Use shark bait to distract</td></tr>
+<tr><td><strong>Transfer</strong></td><td>Change risk owner</td><td>Hire professional shark diver</td></tr>
+<tr><td><strong>Accept (Active)</strong></td><td>Prepare contingency plan</td><td>Carry a spear gun as Plan B</td></tr>
+<tr><td><strong>Accept (Passive)</strong></td><td>Acknowledge and do nothing</td><td>Swim and hope for the best</td></tr>
+<tr><td><strong>Contingency</strong></td><td>Plan B triggered when risk occurs</td><td>Emergency evacuation plan</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Risk Responses &mdash; Positive Risks (Opportunities)</h3>
+<table class="mnemonic-table">
+<tr><th>Strategy</th><th>Action</th><th>Bonus Example</th></tr>
+<tr><td><strong>Exploit</strong></td><td>Guarantee the opportunity happens</td><td>Assign senior programmer to deliver early</td></tr>
+<tr><td><strong>Enhance</strong></td><td>Increase probability of opportunity</td><td>Train programmer to speed up delivery</td></tr>
+<tr><td><strong>Share</strong></td><td>Distribute opportunity to partners</td><td>Contract out to specialist team</td></tr>
+<tr><td><strong>Accept</strong></td><td>Take advantage if it happens; do nothing special</td><td>Do nothing, hope bonus comes</td></tr>
+</table>
+<div class="examtip">Negative: Avoid, Mitigate, Transfer, Accept, Contingency. Positive: Exploit, Enhance, Share, Accept. "Accept" applies to BOTH!</div>
+</div>
+<div class="card">
+<h3>Causal Analysis</h3>
+<div class="ascii">Risk: Project Delay
+  |-- Cause: Scope Creep
+        |-- Sub-Cause: Unclear requirements
+              |-- Root Cause: No formal change control process</div>
+<div class="defbox">Causal analysis: Risk &rarr; Cause &rarr; Sub-Cause &rarr; Root Cause. Fix the root cause to prevent the risk recurring.</div>
+</div>
+</section>
+
+<section id="mcp" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--purple)">MCP</span><h2>MCP Server &amp; AI-Driven Test Automation</h2></div>
+<div class="gallery-label">Slide images &mdash; MCP Server PDF</div>
+<!-- GALLERY_MCP -->
+<div class="card">
+<h3>What is MCP?</h3>
+<div class="defbox"><strong>MCP (Model Context Protocol)</strong> = standard rules allowing an LLM to connect to external tools and ACT &mdash; not just generate text.</div>
+<div class="compare">
+<div class="compare-col left"><h4>LLM Alone</h4><ul><li>Can write code, queries, essays</li><li>CANNOT execute anything</li><li>No file system access</li><li>Text only</li></ul></div>
+<div class="compare-col right"><h4>LLM + MCP</h4><ul><li>Can execute tests</li><li>Can debug failures</li><li>Can self-heal broken tests</li><li>Full tool integration</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>Playwright MCP Setup</h3>
+<ul><li>Uses <strong>accessibility tree</strong> &mdash; NOT screenshots</li><li>LLM-friendly structured representation</li><li>Deterministic &amp; reliable locators</li></ul>
+<h4>Setup</h4>
+<div class="flow">
+<div class="flow-step">npm install @playwright/mcp</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Cursor: Tools &amp; MCP</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Add Custom MCP</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Configure mcp.json</div>
+</div>
+<div class="ascii">{ "mcpServers": { "playwright": { "command": "npx", "args": ["-y", "@playwright/mcp@latest"] } } }</div>
+</div>
+<div class="card">
+<h3>MCP Capabilities &amp; Self-Healing</h3>
+<div class="sticky-grid">
+<div class="sticky blue"><strong>Execute</strong>Automatically run test suites via MCP tools</div>
+<div class="sticky green"><strong>Intelligence</strong>Learns patterns from the entire codebase</div>
+<div class="sticky purple"><strong>Debugging</strong>Reads logs and screenshots to diagnose</div>
+<div class="sticky pink"><strong>Self-Healing</strong>Auto-fixes broken locators on UI changes</div>
+<div class="sticky yellow"><strong>File Access</strong>Full project read/write via MCP protocol</div>
+</div>
+<h4>Self-Healing Flow</h4>
+<div class="flow">
+<div class="flow-step">Locator breaks</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">AI detects failure</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Finds new locator via a11y tree</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Rewrites test</div><div class="flow-arrow">&rarr;</div>
+<div class="flow-step">Explains change</div>
+</div>
+</div>
+<div class="card">
+<h3>Project Rules</h3>
+<div class="ascii">playwright-JS-framework/
+  /pages    -- Page Object Model classes
+  /tests    -- Test files
+  /utils    -- Helper utilities
+  /fixtures -- Test fixtures
+  /Reports  -- HTML reports (unique names per test)</div>
+<div class="two-col">
+<div><h4>Required Standards</h4><ul><li>TypeScript</li><li>POM structure</li><li>async/await throughout</li><li>data-test-id selectors</li><li>Descriptive test names</li></ul></div>
+<div><h4>Forbidden Anti-Patterns</h4><ul><li>No hardcoded waits (Thread.sleep)</li><li>No hardcoded test data inline</li><li>No vague test names</li></ul></div>
+</div>
+<div class="defbox"><strong>Quote:</strong> "Begin with one workflow. Connect one intelligent tool. EXPLORE &rarr; ADAPT."</div>
+</div>
+</section>
+
+<section id="testcase" class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:var(--blue)">TC</span><h2>Test Case Writing</h2></div>
+<div class="card">
+<h3>Test Case Template Fields</h3>
+<table class="mnemonic-table">
+<tr><th>Field</th><th>Description</th></tr>
+<tr><td>TC ID</td><td>Unique identifier (e.g., TC_LOGIN_001)</td></tr>
+<tr><td>Title</td><td>Short descriptive name</td></tr>
+<tr><td>Module</td><td>Feature/component under test</td></tr>
+<tr><td>Type</td><td>Functional / Non-Functional / Regression</td></tr>
+<tr><td>Priority</td><td>P1 / P2 / P3</td></tr>
+<tr><td>Pre-conditions</td><td>System state required before execution</td></tr>
+<tr><td>Steps</td><td>Numbered action steps</td></tr>
+<tr><td>Test Data</td><td>Input values to use</td></tr>
+<tr><td>Expected Result</td><td>What SHOULD happen</td></tr>
+<tr><td>Actual Result</td><td>What DID happen (filled during execution)</td></tr>
+<tr><td>Status</td><td>Pass / Fail / Blocked / Not Run</td></tr>
+<tr><td>Tester</td><td>Name of tester</td></tr>
+<tr><td>Date</td><td>Execution date</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>4 E's of a Good Test Case</h3>
+<div class="sticky-grid">
+<div class="sticky blue"><strong>Effective</strong>Finds bugs! Covers meaningful scenarios.</div>
+<div class="sticky green"><strong>Exemplary</strong>Represents a class of scenarios well.</div>
+<div class="sticky yellow"><strong>Economical</strong>Does more with fewer steps. No redundancy.</div>
+<div class="sticky purple"><strong>Evolvable</strong>Easy to update when requirements change.</div>
+</div>
+</div>
+<div class="card">
+<h3>BVA + EP Age Field Example (18-35) &mdash; 10 TCs</h3>
+<table class="mnemonic-table">
+<tr><th>TC#</th><th>Input</th><th>Type</th><th>Expected</th></tr>
+<tr><td>TC01</td><td>17</td><td>BVA Invalid (min-1)</td><td>Error message</td></tr>
+<tr><td>TC02</td><td>18</td><td>BVA Valid Min</td><td>Accepted</td></tr>
+<tr><td>TC03</td><td>19</td><td>BVA Valid Min+1</td><td>Accepted</td></tr>
+<tr><td>TC04</td><td>25</td><td>EP Valid partition</td><td>Accepted</td></tr>
+<tr><td>TC05</td><td>34</td><td>BVA Valid Max-1</td><td>Accepted</td></tr>
+<tr><td>TC06</td><td>35</td><td>BVA Valid Max</td><td>Accepted</td></tr>
+<tr><td>TC07</td><td>36</td><td>BVA Invalid (max+1)</td><td>Error message</td></tr>
+<tr><td>TC08</td><td>10</td><td>EP Invalid low partition</td><td>Error message</td></tr>
+<tr><td>TC09</td><td>50</td><td>EP Invalid high partition</td><td>Error message</td></tr>
+<tr><td>TC10</td><td>0</td><td>Edge / Error Guessing</td><td>Error message</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Common Test Scenario Categories</h3>
+<div class="two-col">
+<div><h4>Login Module</h4><ul><li>Valid credentials &rarr; success</li><li>Invalid password &rarr; error</li><li>Empty fields &rarr; validation error</li><li>SQL injection in fields &rarr; safe error</li><li>Forgot password flow</li><li>Remember me functionality</li></ul></div>
+<div><h4>Registration Module</h4><ul><li>Valid new user &rarr; success</li><li>Duplicate email &rarr; error</li><li>Weak password &rarr; strength error</li><li>Invalid email format &rarr; error</li><li>Mandatory fields empty &rarr; error</li></ul></div>
+<div><h4>File Upload</h4><ul><li>Valid type/size &rarr; success</li><li>File exceeds size limit &rarr; error</li><li>Invalid file type &rarr; error</li><li>Empty file &rarr; error</li><li>Multiple files simultaneously</li></ul></div>
+<div><h4>Payment Module</h4><ul><li>Valid card &rarr; success</li><li>Insufficient funds &rarr; decline</li><li>Expired card &rarr; error</li><li>Invalid CVV &rarr; error</li><li>Network timeout &rarr; graceful error</li></ul></div>
+</div>
+</div>
+<div class="card">
+<h3>Sample Functional Test Cases &mdash; Save Feature</h3>
+<table class="mnemonic-table">
+<tr><th>TC</th><th>Scenario</th><th>Steps</th><th>Expected</th></tr>
+<tr><td>TC01</td><td>Save with valid data</td><td>Enter data &rarr; Click Save</td><td>Record saved, success msg</td></tr>
+<tr><td>TC02</td><td>Save with empty required fields</td><td>Leave blank &rarr; Click Save</td><td>Validation error shown</td></tr>
+<tr><td>TC03</td><td>Save duplicate record</td><td>Enter existing ID &rarr; Save</td><td>Duplicate error shown</td></tr>
+<tr><td>TC04</td><td>Save with max-length data</td><td>Enter 255-char string &rarr; Save</td><td>Saved successfully</td></tr>
+<tr><td>TC05</td><td>Cancel save operation</td><td>Enter data &rarr; Click Cancel</td><td>No record saved, cleared</td></tr>
+</table>
+</div>
+</section>
+
+<section class="chapter">
+<div class="chapter-header"><span class="chapter-badge" style="background:#374151">REF</span><h2>Quick Reference &mdash; Exam Cheat Sheet</h2></div>
+<div class="card">
+<h3>Key Mnemonics</h3>
+<table class="mnemonic-table">
+<tr><th>Topic</th><th>Mnemonic</th><th>Meaning</th></tr>
+<tr><td>CMMI Levels</td><td><strong>I Make Donuts Quite Often</strong></td><td>Initial, Managed, Defined, Quantitatively Managed, Optimizing</td></tr>
+<tr><td>Lean Wastes</td><td><strong>DOWNTIME</strong></td><td>Defects, Overproduction, Waiting, Non-Utilised, Transportation, Inventory, Motion, Extra-Processing</td></tr>
+<tr><td>DMAIC</td><td><strong>D-M-A-I-C</strong></td><td>Fix existing process (Six Sigma)</td></tr>
+<tr><td>DMADV</td><td><strong>D-M-A-D-V</strong></td><td>Build new process/product (Six Sigma)</td></tr>
+<tr><td>4 E's Test Case</td><td><strong>Effective Exemplary Economical Evolvable</strong></td><td>Good test case qualities</td></tr>
+<tr><td>CoQ Types</td><td><strong>PAIF</strong></td><td>Prevention, Appraisal, Internal Failure, External Failure</td></tr>
+</table>
+</div>
+<div class="card">
+<h3>Critical Distinctions to Remember</h3>
+<div class="examtip">SQA (process/prevention) vs SQC (product/detection)</div>
+<div class="examtip">Severity (set by tester, technical impact) vs Priority (set by stakeholders, business urgency)</div>
+<div class="examtip">Verification ("building it right?" = static) vs Validation ("building the right thing?" = dynamic)</div>
+<div class="examtip">False Positive (test fails, no bug) vs False Negative (test passes, bug exists) &mdash; FN is more dangerous!</div>
+<div class="examtip">DMAIC (fix existing) vs DMADV (design new) &mdash; both start with Define-Measure-Analyze</div>
+<div class="examtip">Static testing finds defects dynamic testing CANNOT (ambiguous requirements, design flaws)</div>
+<div class="examtip">Automation improves EFFICIENCY, not effectiveness. Does NOT replace manual testing.</div>
+<div class="examtip">Walkthrough = author leads. Technical Review = peers lead, NOT author. Inspection = most formal + root cause.</div>
+<div class="examtip">External Failure = most expensive CoQ. Prevention = cheapest.</div>
+<div class="examtip">Risk Exposure = Probability x Impact. Always know this formula.</div>
+</div>
+</section>
+
+</main>
+</div>
+<script>
+window.addEventListener('scroll',()=>{
+  const s=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('progress-bar').style.width=s+'%';
+  document.getElementById('btt').classList.toggle('show',window.scrollY>300);
+});
+const secs=document.querySelectorAll('section[id]');
+const navs=document.querySelectorAll('.nav-item');
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navs.forEach(n=>n.classList.remove('active'));
+      const a=document.querySelector('.nav-item[href="#'+e.target.id+'"]');
+      if(a)a.classList.add('active');
+    }
+  });
+},{threshold:0.2}).observe&&secs.forEach(s=>new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){navs.forEach(n=>n.classList.remove('active'));const a=document.querySelector('.nav-item[href="#'+e.target.id+'"]');if(a)a.classList.add('active');}});
+},{threshold:0.15}).observe(s));
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.slide-gallery img').forEach(img=>{img.addEventListener('click',()=>openLightbox(img.src));});
+});
+function doSearch(q){
+  document.querySelectorAll('mark.hl').forEach(m=>{const t=document.createTextNode(m.textContent);m.parentNode.replaceChild(t,m);});
+  if(!q||q.length<2)return;
+  const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  const walk=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  while(walk.nextNode()){if(re.test(walk.currentNode.textContent))nodes.push(walk.currentNode);}
+  nodes.forEach(node=>{const sp=document.createElement('span');sp.innerHTML=node.textContent.replace(re,'<mark class="hl">$1</mark>');node.parentNode.replaceChild(sp,node);});
+}
+</script>
+</body>
+</html>
