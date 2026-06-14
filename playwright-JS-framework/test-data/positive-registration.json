@@ -1,0 +1,29 @@
+[
+  {
+    "id": "POS-REG-001",
+    "title": "Register new donor with valid unique data",
+    "username": "__UNIQUE__",
+    "email": "__UNIQUE_EMAIL__",
+    "password": "DonorPass123",
+    "role": "Donor",
+    "name": "Positive Donor One",
+    "contact_info": "0300111222",
+    "blood_type": "A+",
+    "city": "Karachi",
+    "state": "Sindh",
+    "zip_code": "753000"
+  },
+  {
+    "id": "POS-REG-002",
+    "title": "Register new hospital with valid unique data",
+    "username": "__UNIQUE__",
+    "email": "__UNIQUE_EMAIL__",
+    "password": "HospitalPass123",
+    "role": "Hospital",
+    "name": "Positive Hospital One",
+    "contact_info": "0300333444",
+    "city": "Karachi",
+    "state": "Sindh",
+    "zip_code": "753001"
+  }
+]

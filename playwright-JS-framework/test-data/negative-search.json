@@ -1,0 +1,23 @@
+[
+  {
+    "id": "NEG-SEARCH-001",
+    "title": "Search with empty term blocked by HTML5 validation",
+    "search_by": "blood_type",
+    "search": "",
+    "validationType": "html5"
+  },
+  {
+    "id": "NEG-SEARCH-002",
+    "title": "Search with non-existent blood type ZZ shows no results",
+    "search_by": "blood_type",
+    "search": "ZZ",
+    "expectResults": false
+  },
+  {
+    "id": "NEG-SEARCH-003",
+    "title": "Search with non-existent city shows no results",
+    "search_by": "location",
+    "search": "NomatchvilleXYZ999",
+    "expectResults": false
+  }
+]

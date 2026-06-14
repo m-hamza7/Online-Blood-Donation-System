@@ -1,0 +1,30 @@
+[
+  {
+    "id": "NEG-LOGIN-001",
+    "title": "Login fails with invalid password for existing username",
+    "username": "hamza",
+    "password": "WrongPassword999!",
+    "expectedMessage": "invalid username or password"
+  },
+  {
+    "id": "NEG-LOGIN-002",
+    "title": "Login fails with non-existent username",
+    "username": "nonexistent_user_xyz_999",
+    "password": "SomePassword123",
+    "expectedMessage": "invalid username or password"
+  },
+  {
+    "id": "NEG-LOGIN-003",
+    "title": "Login fails with empty username",
+    "username": "",
+    "password": "SomePassword123",
+    "validationType": "html5"
+  },
+  {
+    "id": "NEG-LOGIN-004",
+    "title": "Login fails with empty password",
+    "username": "hamza",
+    "password": "",
+    "validationType": "html5"
+  }
+]

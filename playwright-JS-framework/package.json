@@ -1,0 +1,24 @@
+{
+  "name": "blood-donation-e2e-tests",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for Blood Donation System",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:positive": "playwright test tests/positive",
+    "test:negative": "playwright test tests/negative",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "allure generate ./allure-results --clean -o ./allure-report && allure open ./allure-report",
+    "report:generate": "allure generate ./allure-results --clean -o ./allure-report",
+    "install:browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "allure-commandline": "^2.32.0",
+    "allure-playwright": "^3.0.6",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.7.2"
+  }
+}

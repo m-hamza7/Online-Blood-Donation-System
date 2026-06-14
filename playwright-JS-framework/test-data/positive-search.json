@@ -1,0 +1,23 @@
+[
+  {
+    "id": "POS-SEARCH-001",
+    "title": "Search donors by blood type A+ returns results",
+    "search_by": "blood_type",
+    "search": "A+",
+    "expectResults": true
+  },
+  {
+    "id": "POS-SEARCH-002",
+    "title": "Search donors by location Karachi returns results",
+    "search_by": "location",
+    "search": "Karachi",
+    "expectResults": true
+  },
+  {
+    "id": "POS-SEARCH-003",
+    "title": "Search donors by blood type O+ returns results",
+    "search_by": "blood_type",
+    "search": "O+",
+    "expectResults": true
+  }
+]

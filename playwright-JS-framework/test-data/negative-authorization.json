@@ -1,0 +1,20 @@
+[
+  {
+    "id": "NEG-AUTH-001",
+    "title": "Unauthenticated access to donor profile redirects to login",
+    "path": "/donor_profile",
+    "expectedUrlPattern": "/login"
+  },
+  {
+    "id": "NEG-AUTH-002",
+    "title": "Unauthenticated access to hospital dashboard redirects to home",
+    "path": "/hospital_dashboard",
+    "expectedUrlPattern": "/$"
+  },
+  {
+    "id": "NEG-AUTH-003",
+    "title": "Unauthenticated access to admin dashboard redirects to home",
+    "path": "/admin_dashboard",
+    "expectedUrlPattern": "/$"
+  }
+]

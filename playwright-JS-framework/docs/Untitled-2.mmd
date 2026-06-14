@@ -1,0 +1,54 @@
+---
+query: "make the diagram vertical "
+references:
+  - |+
+    Reference: <skills>
+    Here is a list of skills that contain domain specific knowledge on a variety of topics.
+    Each skill comes with a description of the topic and a file path that contains the detailed instructions.
+    When a user asks you to perform a task that falls within the domain of a skill, use the #tool:readFile tool to acquire the full instructions from the file URI.
+    <skill>
+    <name>agent-customization</name>
+    <description>**WORKFLOW SKILL** — Create, update, review, fix, or debug VS Code agent customization files (.instructions.md, .prompt.md, .agent.md, SKILL.md, copilot-instructions.md, AGENTS.md). USE FOR: saving coding preferences; troubleshooting why instructions/skills/agents are ignored or not invoked; configuring applyTo patterns; defining tool restrictions; creating custom agent modes or specialized workflows; packaging domain knowledge; fixing YAML frontmatter syntax. DO NOT USE FOR: general coding questions (use default agent); runtime debugging or error diagnosis; MCP server configuration (use MCP docs directly); VS Code extension development. INVOKES: file system tools (read/write customization files), ask-questions tool (interview user for requirements), subagents for codebase exploration. FOR SINGLE OPERATIONS: For quick YAML frontmatter fixes or creating a single file from a known pattern, edit the file directly — no skill needed.</description>
+    <file>copilot-skill:/agent-customization/SKILL.md</file>
+    </skill>
+    <skill>
+    <name>project-setup-info-local</name>
+    <description>Provides information about how to setup various kinds of projects. Useful for initializing projects based on requirements and scaffolding the project.</description>
+    <file>c:\Users\muhmd\.vscode\extensions\github.copilot-chat-0.40.1\assets\prompts\skills\project-setup-info-local\SKILL.md</file>
+    </skill>
+    <skill>
+    <name>get-search-view-results</name>
+    <description>Get the current search results from the Search view in VS Code</description>
+    <file>c:\Users\muhmd\.vscode\extensions\github.copilot-chat-0.40.1\assets\prompts\skills\get-search-view-results\SKILL.md</file>
+    </skill>
+    </skills>
+
+
+    <agents>
+    Here is a list of agents that can be used when running a subagent.
+    Each agent has optionally a description with the agent's purpose and expertise. When asked to run a subagent, choose the most appropriate agent from this list.
+    Use the #tool:runSubagent tool with the agent name to run the subagent.
+    <agent>
+    <name>Explore</name>
+    <description>Fast read-only codebase exploration and Q&A subagent. Prefer over manually chaining multiple search and file-reading operations to avoid cluttering the main conversation. Safe to call in parallel. Specify thoroughness: quick, medium, or thorough.</description>
+    <argumentHint>Describe WHAT you're looking for and desired thoroughness (quick/medium/thorough)</argumentHint>
+    </agent>
+    </agents>
+
+generationTime: 2026-06-14T09:26:38.267Z
+---
+flowchart TD
+  A["Test Runner<br/>(Playwright Test CLI)"]
+  A --> B["Test Suites"]
+  B --> C["Test Cases / Specs"]
+
+  C --> D["Fixtures & Hooks<br/>(beforeEach/afterEach, beforeAll/afterAll)"]
+  C --> E["Page Objects (POM)"]
+  E --> F["Pages/*<br/>(BasePage, LoginPage, HomePage, ...)"]
+  C --> G["Test Data<br/>(test-data/*.json)"]
+  C --> H["Utilities<br/>(utils/*)"]
+  H --> I["Logging<br/>(utils/logger.js)"]
+  H --> J["Config<br/>(utils/config.js)"]
+  H --> K["Screenshots<br/>(utils/screenshotHelper.js)"]
+  C --> L["Reporters<br/>(Allure via allure-playwright)"]
+  L --> M["allure-results/ -> allure-report/"]

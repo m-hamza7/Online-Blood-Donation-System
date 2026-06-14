@@ -1,0 +1,23 @@
+[
+  {
+    "id": "NEG-ADMIN-001",
+    "title": "Admin login fails with wrong username",
+    "username": "wrongadmin",
+    "password": "admin",
+    "expectedMessage": "Invalid admin credentials"
+  },
+  {
+    "id": "NEG-ADMIN-002",
+    "title": "Admin login fails with wrong password",
+    "username": "admin",
+    "password": "wrongpassword",
+    "expectedMessage": "Invalid admin credentials"
+  },
+  {
+    "id": "NEG-ADMIN-003",
+    "title": "Admin login fails with empty credentials",
+    "username": "",
+    "password": "",
+    "validationType": "html5"
+  }
+]

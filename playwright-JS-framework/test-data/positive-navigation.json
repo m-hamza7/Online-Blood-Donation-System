@@ -1,0 +1,26 @@
+[
+  {
+    "id": "POS-NAV-001",
+    "title": "Home page loads with main heading",
+    "path": "/",
+    "expectedHeading": "Blood Donation System"
+  },
+  {
+    "id": "POS-NAV-002",
+    "title": "About page loads successfully",
+    "path": "/index",
+    "expectedHeading": "Welcome to the Blood Donation"
+  },
+  {
+    "id": "POS-NAV-003",
+    "title": "Login page displays Welcome Back heading",
+    "path": "/login",
+    "expectedHeading": "Welcome Back"
+  },
+  {
+    "id": "POS-NAV-004",
+    "title": "Register page displays Create Account heading",
+    "path": "/register",
+    "expectedHeading": "Create Account"
+  }
+]
